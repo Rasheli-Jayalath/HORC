@@ -1,0 +1,94 @@
+.normaltextsize {
+  font-size: 13px;
+}
+#tobeappliedtable th {
+  text-align: center;
+  background-color: rgb(169, 210, 248);
+}
+
+#tobeappliedtablemonthly th {
+  text-align: center;
+  background-color: rgb(169, 210, 248);
+}
+
+#tobeappliedtablemonthly td {
+  font-size: 12px;
+}
+
+#tobeappliedtable td {
+  font-size: 12px;
+}
+
+.navbarcustom {
+  margin-left: 30px;
+  /* background-color: #f4f5f7; */
+  background-color: #2f3d58;
+}
+
+@media (max-width: 991px) {
+  .navbar-toggler {
+    border-color: #fff;
+  }
+
+  .navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+  }
+}
+
+.navbarcustom .nav-item a {
+  font-weight: 900;
+  color: #fff;
+}
+
+.navbarcustom .dropdown-menu li a {
+  font-weight: 900;
+  color: rgb(90, 90, 90);
+}
+
+.navbarcustom .dropdown-menu li a:hover {
+  font-weight: 900;
+  color: #f0ad4e;
+}
+
+.navbarcustom a:hover {
+  color: #f0ad4e;
+  background-color: #2f3d58;
+}
+
+.navbarcustom .dropdown-menu li .mitemhead {
+  color: #2f3d58;
+  background-color: #f0ad4e;
+}
+
+.navbarcustom .dropdown-menu li .mitemhead:hover {
+  color: #2f3d58;
+  background-color: #f0ad4e;
+}
+
+.margintop {
+  margin-top: 15px;
+}
+
+.navbartext {
+  font-size: 20px;
+}
+
+.bg-form {
+  background: #2f3d58;
+}
+
+.bg-gradient-form {
+  background: linear-gradient(to bottom, #a0b8d1, #555f81);
+}
+
+.form-control-enhanced {
+  width: 70%;
+}
+
+.form-lable {
+  padding-left: 8%;
+}
+
+.nested-row {
+  background: #c3cbdb;
+}

@@ -290,9 +290,6 @@ if($total_amount!=0)
 
     <div class="container-fluid page-body-wrapper" id="pagebodywraper">
 
-      <!-- partial:partials/_settings-panel.html -->
-      <div id="partials-theme-setting-wrapper"></div>
-      <!-- partial -->
 
       <!-- partial:partials/_sidebar.html -->
       <div class="sidebar sidebar-offcanvas" id="partials-sidebar-offcanvas"></div>
@@ -407,6 +404,10 @@ if($total_amount!=0)
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                       <div>
                                         <h4 class="card-title card-title-dash">Videos</h4>
+                                        <video width="99.9%" height="240" loop="true" controls  >
+                                               <!-- if want to set up autoplay <video width="99.9%" height="240" loop="true" autoplay="autoplay" controls autoplay mute> -->
+                                          <source src="https://media.w3.org/2010/04/html5-meetup-paris-avril-2010.mp4" type=video/ogg>
+                                        </video>
                                       </div>
                                       <div>
                                         
@@ -481,8 +482,10 @@ $pdSQL = "SELECT phid, pid, al_file, ph_cap FROM t027project_photos WHERE pid = 
 			if($objDb->totalRecords() >= 1){
 				while($result = $objDb->dbFetchArray()){
 					?>
-		<li><img src="<?php echo $data_url.$result['al_file'];?>" alt="<?php echo $result['al_file'];?>" title="<?php echo $result['al_file'];?>" id="wows1_0"/></li>
-        <?php
+		<li><a  href=" <?php echo $data_url.$result['al_file']; ?>" data-lightbox="roadtrip" data-title="" style="text-decoration:none" >
+    <img width="100%" height="600px" src="<?php echo $data_url.$result['al_file'];?>" alt="<?php echo $result['al_file'];?>" title="<?php echo $result['al_file'];?>" id="wows1_0"/></a></li>
+
+      <?php
 				}
 			}
 		}
@@ -507,10 +510,9 @@ $pdSQL = "SELECT phid, pid, al_file, ph_cap FROM t027project_photos WHERE pid = 
 <!-- <div class="ws_script" style="position:absolute;left:-99%"><a href="http://wowslider.net">slider html</a> by WOWSlider.com v9.0</div> -->
 
 <!-- <div class="ws_shadow"></div> -->
-
+  <script src="lightbox/js/lightbox.min.js"></script>
+  <link href="lightbox/css/lightbox.css" rel="stylesheet"> 
 </div>	
-<script type="text/javascript" src="engine1/wowslider.js"></script>
-<script type="text/javascript" src="engine1/script.js"></script>
 
 <!-- End WOWSlider.com BODY section -->
 						</div>
@@ -927,12 +929,6 @@ else
 
   <script>
     $(function(){
-      $("#partials-theme-setting-wrapper").load("partials/_settings-panel.php");
-    });
-  </script>
-
-  <script>
-    $(function(){
       $("#partials-sidebar-offcanvas").load("partials/_sidebar.php");
     });
 </script>
@@ -948,4 +944,3 @@ else
 </body>
 
 </html>
-

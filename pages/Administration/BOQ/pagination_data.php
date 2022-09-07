@@ -7,6 +7,7 @@ $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
 $objDb5 		= new Database();
+$objDb8 		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -14,6 +15,7 @@ $uname 	= $_SESSION['ne_username'];
 $boq_flag			= $_SESSION['ne_boq'];
 	$boqadm_flag		= $_SESSION['ne_boqadm'];
 	$boqentry_flag		= $_SESSION['ne_boqentry'];
+	$pcd ='';
 
 if ($uname==null  ) {
 header("Location: ../../index.php?init=3");
@@ -104,6 +106,13 @@ if($_GET) {
 $start = ($page-1)*$per_page;
 
 ?>
+
+<?php 
+if($_GET['pcd']) {
+	$pcd = $_GET['pcd']; 
+}
+?>
+
 <table class="reference" style="width:100%">
       <tr bgcolor="#333333" style="text-decoration:inherit; color:#CCC">
 	  <th></th>
@@ -142,8 +151,19 @@ $start = ($page-1)*$per_page;
      </tr>
 
 <?php
-	$sSQL = "SELECT * FROM boqdata where stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+$sSQL = "";
+if($_GET['pcd']) {
+	$sqlCheck = "SELECT parentgroup, parentcd FROM boqdata where itemid= $pcd";	
+	$objDb8->dbQuery($sqlCheck);
+	$row = $objDb8->dbFetchArray();
+	$pGroup = $row['parentgroup'];
+	$oneParentcd = $row['parentcd'];
+	$sSQL .= "SELECT * FROM boqdata where  itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+}else{
+	$sSQL .= "SELECT * FROM boqdata where stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+}
 	$sqlresult = $objDb5->dbQuery($sSQL);
+	$recordsCount = $objDb5->totalRecords();
 while ($data = $objDb5->dbFetchArray()) {
 	$cdlist = array();
 	$items = 0;
@@ -430,3 +450,4 @@ function AddNewSizeProject<?php echo $itemid; ?>(){
 	?>
 
 	</table>
+	<h6 class="text-end  mt-1"> Number of Records : <?php echo $recordsCount ?> </h6>

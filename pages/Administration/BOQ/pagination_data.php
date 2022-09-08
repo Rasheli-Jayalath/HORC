@@ -159,6 +159,7 @@ if($_GET['pcd']) {
 	$pGroup = $row['parentgroup'];
 	$oneParentcd = $row['parentcd'];
 	$sSQL .= "SELECT * FROM boqdata where  itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+	echo $sSQL;
 }else{
 	$sSQL .= "SELECT * FROM boqdata where stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
 }

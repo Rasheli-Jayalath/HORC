@@ -760,13 +760,6 @@ if(isset($_POST['submit'])){
 ?>
 <!--  -->
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
-
-<script type="text/javascript"> var pcd = "<?php if(isset($_POST['submit'])){
-   echo $pcd; 
-   } ?>"; 
-</script>
-<script type="text/javascript" src="jquery_pagination.js"></script>
 
 
 <?php
@@ -790,7 +783,15 @@ if(isset($_POST['submit'])){
 	$result = $objDb1->dbQuery($sql);
 	$count =  $objDb1->totalRecords();
 	$pages = ceil($count/$per_page)
-	?>			
+	?>		
+  
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+
+<script type="text/javascript"> var pcd = "<?php if(isset($_POST['submit'])){echo $pcd; } ?>"; 
+var totalPages = "<?php if($pages>0){echo $pages; }else{echo 0 ;} ?>"; 
+</script>
+<script type="text/javascript" src="jquery_pagination.js"></script>
+
 	<?php 
 if(isset($_POST['submit']) && $_POST['level1']>0){ 
 

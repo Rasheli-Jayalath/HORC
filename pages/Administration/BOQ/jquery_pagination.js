@@ -76,13 +76,12 @@ $("#pagination li").click(function(){
 		
         $("#pagination li:last").css({'display' : 'block'}).css({'color' : '#031b8f'}).css({'border' : 'solid #a3a5b5 1px'});
 	    $(this).css({'color' : '#FF0084'}).css({'border' : 'none'});
-		if(pcd>0){
+
+	if(pcd>0){
 		$("#content").load("pagination_data.php?pcd=" + pcd+"&page=" + pageNum, Hide_Load());
 		
 	}else{
 		$("#content").load("pagination_data.php?page=" + pageNum, Hide_Load());
 	}
-
-    $("#content").load("pagination_data.php?page=" + pageNum, Hide_Load());
 });
 });

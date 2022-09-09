@@ -1,3 +1,7 @@
+<!-- 
+Please note: this filter option is work upto level 4,  can have any number of levels, all other records will display after level4. 
+ -->
+
 <?php
 include_once "../../../config/config.php";
 require_once('../../../rs_lang.admin.php');
@@ -153,16 +157,30 @@ if($_GET['pcd']) {
 <?php
 $sSQL = "";
 if($_GET['pcd']) {
-	$sqlCheck = "SELECT parentgroup, parentcd FROM boqdata where itemid= $pcd";	
+	$sqlCheck = "SELECT parentgroup, parentcd, activitylevel FROM boqdata where itemid= $pcd";	
 	$objDb8->dbQuery($sqlCheck);
 	$row = $objDb8->dbFetchArray();
 	$pGroup = $row['parentgroup'];
 	$oneParentcd = $row['parentcd'];
-	$sSQL .= "SELECT * FROM boqdata where  itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
-	echo $sSQL;
+	$activitylevel = $row['activitylevel'];
+
+	if($activitylevel==4){
+		$aLevel1 =  substr($pGroup,0,13);
+		$aLevel2 =  substr($pGroup,0,20);
+		$sSQL .= "SELECT * FROM boqdata where parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+	}else if($activitylevel==3){
+		$aLevel1 =  substr($pGroup,0,13);
+		$sSQL .= "SELECT * FROM boqdata where parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+	}else{
+		$sSQL .= "SELECT * FROM boqdata where  itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+	
+	}
+
+
 }else{
 	$sSQL .= "SELECT * FROM boqdata where stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
 }
+    $sSQL;     // this is necessary, dont remove this line. 
 	$sqlresult = $objDb5->dbQuery($sSQL);
 	$recordsCount = $objDb5->totalRecords();
 while ($data = $objDb5->dbFetchArray()) {

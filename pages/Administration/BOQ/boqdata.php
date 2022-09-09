@@ -771,12 +771,26 @@ if(isset($_POST['submit'])){
 	
 
   if(isset($_POST['submit']) && $_POST['level1']>0 ){
-    $sqlCheck = "SELECT parentgroup, parentcd FROM boqdata where itemid= $pcd";	
+    $sqlCheck = "SELECT parentgroup, parentcd, activitylevel FROM boqdata where itemid= $pcd";	
     $objDb8->dbQuery($sqlCheck);
     $row = $objDb8->dbFetchArray();
     $pGroup = $row['parentgroup'];
-	$oneParentcd = $row['parentcd'];
-    $sql .= "SELECT * FROM boqdata WHERE itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%' ";
+	  $oneParentcd = $row['parentcd'];
+    $activitylevel = $row['activitylevel'];
+
+        if($activitylevel==4){
+          $aLevel1 =  substr($pGroup,0,13);
+          $aLevel2 =  substr($pGroup,0,20);
+          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd ";
+        
+        }else if($activitylevel==3){
+          $aLevel1 =  substr($pGroup,0,13);
+          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd ";
+        
+        }else{
+          $sql .= "SELECT * FROM boqdata WHERE itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'  AND stage='BOQ' order by parentgroup, parentcd  ";
+        }
+
     }else{
       $sql .= "SELECT * FROM boqdata ";
     }

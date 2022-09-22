@@ -2,10 +2,12 @@
 include_once "../../../config/config.php";
 require_once('../../../rs_lang.admin.php');
 require_once('../../../rs_lang.eng.php');
-//$module		= MAINDATA;
+$module		= MAINDATA;
 $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
+$objDb3  		= new Database();
+$objDb4  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -64,6 +66,15 @@ else
 	require_once('rs_lang.admin_rus.php');
 
 }*/
+function RemoveSpecialChar($str){
+
+	// Using preg_replace() function
+	// to replace the word
+	$res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+
+	// Returning the result
+	return $res;
+}
 $edit			= $_GET['edit'];
 $delete			= $_GET['del'];
 if(isset($_GET['subaid']))
@@ -126,15 +137,21 @@ $next						= $_REQUEST['next'];
 $txtstage				 	= "Activity";
 $txtitemcode				= $_REQUEST['txtitemcode'];
 $txtitemname				= $_REQUEST['txtitemname'];
-
+$txtitemcode=RemoveSpecialChar($txtitemcode);
+$txtitemname=RemoveSpecialChar($txtitemname);
 $txtrid						= $_REQUEST['txtrid'];
 $startdate					= $_REQUEST['txtstartdate'];
 $enddate					= $_REQUEST['txtenddate'];
 $txtremaining_quantity		= $_REQUEST['remaining_quantity'];
 $txtused_quantity			= $_REQUEST['used_quantity'];
-$txtactivity				= $subaid;
+if($txtused_quantity==''||$txtused_quantity==NULL)
+{
+	$txtused_quantity=0;
+}
+$txtactivity				= $subaid; //parentcd
 $activitylevel				= $levelid;
 $txtisentry					= $_REQUEST['txtisentry'];
+	$_SESSION['codelength']		=6;
 if($txtisentry==1)
 {
 	$res_s						= $_REQUEST['res'];
@@ -172,7 +189,241 @@ $txtitemname 				= '';
 $txtweight					= '';
 $txtactivity				= '';
 }
+function removeActivity($itemid,$parentgroup)
+{
+$objDb11  		= new Database();
+$objDb4  		= new Database();
+$objDbp  		= new Database();
+$objDbaa  		= new Database();
+$objDba 		= new Database();
+$objDb 		= new Database();
+$objDbkpi 		= new Database();
+$objDpc 		= new Database();
+$objkpi 		= new Database();
+$aSql = "Select * from activity where itemid=$itemid";
+$objDb11->dbQuery($aSql);
+$res_a=$objDb11->dbFetchArray();
+$aid=$res_a['aid'];
+$startdate=$res_a['startdate'];
+$enddate=$res_a['enddate'];
+$baseline=$res_a['baseline'];
+$p_group=$parentgroup;
 
+$eSqlr = "Select * from maindata where parentgroup like '$p_group%'";
+$q_ryr=$objDb4->dbQuery($eSqlr);
+$res_sr=$objDb4->dbFetchArray();
+
+	$itemid			=$res_sr['itemid'];
+	$parentcd		=$res_sr['parentcd'];
+	$parentgroup	=$res_sr['parentgroup'];
+	$activitylevel  =$res_sr['activitylevel'];
+	$stage			=$res_sr['stage'];
+	$itemcode		=$res_sr['itemcode'];
+	$itemname		=$res_sr['itemname'];
+	$isentry  		=$res_sr['isentry'];
+	$txtactivities	="";
+	$txtresources	="";
+	 $ar_list=explode("_",$parentgroup);
+	
+	$arr_size=$activitylevel-1;
+	$itemids=0;
+	  	  $planned_array = array();
+	while($arr_size>=0)
+	{
+		$itemids=(int) $ar_list[$arr_size];
+		
+		 $pSql = "Select * from planned where itemid=$itemid";
+		$planned_ry=$objDbp->dbQuery($pSql);
+		while($res_planned=$objDbp->dbFetchArray())
+		{
+		
+		$budgetdate=$res_planned["budgetdate"];
+		$budgetqty=$res_planned["budgetqty"];
+		$actual_qty=$res_planned["actual_qty"];
+ $aaSql_child = "UPDATE activity0 SET total_baseline=total_baseline-$budgetqty, 
+		commulative_baseline=commulative_baseline-$budgetqty, total_progress=total_progress-$actual_qty, commulative_progress=commulative_progress-$actual_qty where itemid=$itemids AND 
+		budgetdate='$budgetdate'";
+		$objDbaa->dbQuery($aaSql_child);
+		echo $pcSql = "Select sum(budgetqty) as total_contract from planned where itemid=$itemid";
+		 $objDpc->dbQuery($pcSql);
+		 $res_kpi=$objDpc->dbFetchArray();
+		 $total_contract=$res_kpi["total_contract"];
+		$planned_perc=$res_planned["budgetqty"]/$total_contract;
+		$actual_perc=$res_planned["actual_qty"]/$total_contract;
+		
+		$kpiSql = "Select * from kpi_activity where itemid=$itemid";
+		 $objkpi->dbQuery($kpiSql);
+		 $kpi_count=$objkpi->totalRecords();
+		 
+		
+		if($kpi_count>0)
+		{
+			$res_kpidata=$objkpi->dbFetchArray();
+			$kpiid=$res_kpidata['kpiid'];
+			$kpiSql_child = "UPDATE kpidata0 SET perc_planned=perc_planned-$planned_perc, 
+		perc_com_planned=perc_com_planned-$planned_perc, perc_actual=perc_actual-$actual_perc, 
+		perc_com_actual=perc_com_actual-$actual_perc where kpiid=$kpiid AND 
+		budgetdate='$budgetdate'";
+		$objDbkpi->dbQuery($kpiSql_child);
+			
+		
+		}
+		}
+   
+   $arr_size--;
+	}
+	
+	
+		
+	$eSql_child = "delete from activity where itemid=$itemid";
+    $objDb->dbQuery($eSql_child);
+	$eSql_child1 = "delete from planned where itemid=$itemid";
+    $objDb->dbQuery($eSql_child1);
+	$eSql_child2 = "delete from progress where itemid=$itemid";
+    $objDb->dbQuery($eSql_child2);
+	$eSql_child3 = "delete from kpi_activity  where itemid=$itemid";
+    $objDb->dbQuery($eSql_child3);
+	$eSql_d = "delete from maindata where itemid=$itemid";
+   $objDb->dbQuery($eSql_d);
+
+
+}
+function removeActivityEdit($itemid,$parentgroup)
+{
+$objDb11  		= new Database();
+$objDb4  		= new Database();
+$objDbp  		= new Database();
+$objDbaa  		= new Database();
+$objDba 		= new Database();
+$objDb 		= new Database();
+$objDbkpi 		= new Database();
+$objDpc 		= new Database();
+$aSql = "Select * from activity where itemid=$itemid";
+$objDb11->dbQuery($aSql);
+$res_a=$objDb11->dbFetchArray();
+$aid=$res_a['aid'];
+$startdate=$res_a['startdate'];
+$enddate=$res_a['enddate'];
+$baseline=$res_a['baseline'];
+$p_group=$parentgroup;
+
+$eSqlr = "Select * from maindata where parentgroup like '$p_group%'";
+$q_ryr=$objDb4->dbQuery($eSqlr);
+$res_sr=$objDb4->dbFetchArray();
+
+	$itemid			=$res_sr['itemid'];
+	$parentcd		=$res_sr['parentcd'];
+	$parentgroup	=$res_sr['parentgroup'];
+	$activitylevel  =$res_sr['activitylevel'];
+	$stage			=$res_sr['stage'];
+	$itemcode		=$res_sr['itemcode'];
+	$itemname		=$res_sr['itemname'];
+	$isentry  		=$res_sr['isentry'];
+	$txtactivities	="";
+	$txtresources	="";
+	 $ar_list=explode("_",$parentgroup);
+	
+	$arr_size=$activitylevel-1;
+	$itemids=0;
+	  	  $planned_array = array();
+	while($arr_size>=0)
+	{
+		$itemids=(int) $ar_list[$arr_size];
+		
+		 $pSql = "Select * from planned where itemid=$itemid";
+		$planned_ry=$objDbp->dbQuery($pSql);
+		while($res_planned=$objDbp->dbFetchArray())
+		{
+		
+		$budgetdate=$res_planned["budgetdate"];
+		$budgetqty=$res_planned["budgetqty"];
+		$aaSql_child = "UPDATE activity0 SET total_baseline=total_baseline-$budgetqty, 
+		commulative_baseline=commulative_baseline-$budgetqty, total_progress=total_progress-$actual_qty, commulative_progress=commulative_progress-$actual_qty where itemid=$itemids AND 
+		budgetdate='$budgetdate'";
+		$objDbaa->dbQuery($aaSql_child);
+		
+		
+		 $pcSql = "Select sum(total_baseline) as total_contract from planned where itemid=$itemid";
+		 $objDpc->dbQuery($pcSql);
+		 $res_kpi=$objDpc->dbFetchArray();
+		 $total_contract=$res_kpi["total_contract"];
+		$planned_perc=$res_planned["budgetqty"]/$total_contract;
+		$actual_perc=$res_planned["actual_qty"]/$total_contract;
+		
+		$kpiSql = "Select * from kpi_activity where itemid=$itemid";
+		 $objkpi->dbQuery($kpiSql);
+		 $kpi_count=$objkpi->totalRecords();
+		 
+		 if($kpi_count>0)
+		{
+			$res_kpidata=$objkpi->dbFetchArray();
+			$kpiid=$res_kpidata['kpiid'];
+			$kpiSql_child = "UPDATE kpidata0 SET perc_planned=perc_planned-$planned_perc, 
+		perc_com_planned=perc_com_planned-$planned_perc, perc_actual=perc_actual-$actual_perc, 
+		perc_com_actual=perc_com_actual-$actual_perc where kpiid=$kpiid AND 
+		budgetdate='$budgetdate'";
+		$objDbkpi->dbQuery($kpiSql_child);
+			
+		
+		}
+		
+		}
+   
+   $arr_size--;
+	}
+	
+	
+		
+	$eSql_child = "delete from activity where itemid=$itemid";
+    $objDb->dbQuery($eSql_child);
+	$eSql_child1 = "delete from planned where itemid=$itemid";
+    $objDb->dbQuery($eSql_child1);
+	$eSql_child2 = "delete from progress where itemid=$itemid";
+    $objDb->dbQuery($eSql_child2);
+	$eSql_child3 = "delete from kpi_activity  where itemid=$itemid";
+    $objDb->dbQuery($eSql_child3);
+
+
+}
+function removeMainItem($itemid)
+{
+$objDb 		= new Database();
+$eSql_d = "delete from maindata where itemid=$itemid";
+$objDb->dbQuery($eSql_d);	
+$eSql_d = "delete from activity0 where itemid=$itemid";
+$objDb->dbQuery($eSql_d);	
+}
+function RemoveParentItem($itemid_parent)
+{
+$objDb111 		= new Database();
+$eSql = "Select * from maindata where parentcd=$itemid_parent";
+$q_ry=$objDb111->dbQuery($eSql);
+$eCount = $objDb111->totalRecords();
+ if($eCount>0)
+ {
+while($res_s=$objDb111->dbFetchArray())
+{
+$p_group=$res_s['parentgroup'];
+$itemid=$res_s['itemid'];
+if($res_s['isentry']==1)
+{
+removeActivity($itemid,$p_group);
+if($itemid_parent!=NULL&&$itemid_parent!=''&&$itemid_parent!=0)
+{
+removeMainItem($itemid_parent);
+}
+}
+else
+{
+RemoveParentItem($itemid);	
+}
+}
+}
+else
+ {
+	 removeMainItem($itemid_parent);
+ }
+}
 if($saveBtn != "")
 {
 if(!isset($_GET['levelid']))
@@ -222,7 +473,7 @@ $eSqls = "Select * from maindata where itemid='$txtactivity'";
 }	
 if($txtisentry==1)
 {	
-	echo  $ssSQL = ("INSERT INTO activity (itemid, startdate, enddate, rid,baseline,temp_id) VALUES ($itemids, '$startdate', '$enddate',$txtrid,$txtused_quantity,$temp_id)");
+	  $ssSQL = ("INSERT INTO activity (itemid, startdate, enddate, rid,baseline,temp_id) VALUES ($itemids, '$startdate', '$enddate',$txtrid,$txtused_quantity,$temp_id)");
 	$objDb2->dbQuery($ssSQL);
 	$txtid = $con->lastInsertId();
 	$aid = $txtid;	
@@ -251,7 +502,7 @@ if($txtisentry==1)
 if($updateBtn !=""){
 
 
-		 $eSql_s = "Select * from maindata where itemid='$txtactivity'";
+		 $eSql_s = "Select * from maindata where itemid='$txtactivity'"; //txtactvity==parentcd
   	$objDb -> dbQuery($eSql_s);
   	$eCount2 = $objDb->totalRecords();
 	if($eCount2 > 0){
@@ -266,8 +517,7 @@ if($updateBtn !=""){
 			 itemcode         		= '$txtitemcode',
 			 itemname   			= '$txtitemname',
 			 parentcd				= $txtactivity,
-			 parentgroup            = '$parentgroup',
-			 isentry				= '$txtisentry'
+			 parentgroup            = '$parentgroup'
 			where itemid 			= $edit ";
 		  
  	if($objDb->dbQuery($uSql)){
@@ -279,15 +529,28 @@ if($updateBtn !=""){
 		$res_t=$objDb1->dbFetchArray();
 	  $parentcd 					= $res_t['parentcd'];
 	  $parentgroup	 				= $res_t['parentgroup'];
+	  $isentry	 				= $res_t['isentry'];
 	  }
+	  if($isentry==1)
+	  {
 	  $eSql_s = "Select * from activity where itemid=".$edit;
   	$ms_res=$objDb->dbQuery($eSql_s);
-	$res_m=$objDb->dbFetchArray();
+	
 	$act_count=$objDb->totalRecords();
-	if($eCount1 > 0&&$act_count==0)
+	if($act_count>0)
 	{
-		 $ssSQL = ("INSERT INTO activity (itemid, startdate, enddate, rid,baseline,temp_id) VALUES ($edit, '$startdate', '$enddate',$txtrid,$txtused_quantity,$temp_id)");
+		$res_m=$objDb->dbFetchArray();
+		$a_startdate=$res_m["startdate"];
+		$a_enddate=$res_m["enddate"];
+		$baseline=$res_m["baseline"];
+		$rid=$res_m["rid"];
+		if($baseline!=$txtused_quantity || $txtrid!=$rid || $a_enddate!=$enddate || $a_startdate!=$startdate )
+		{
+			removeActivityEdit($edit,$parentgroup);
+			$ssSQL = ("INSERT INTO activity (itemid, startdate, enddate, rid,baseline,temp_id) VALUES ($edit, '$startdate', '$enddate',$txtrid,$txtused_quantity,$temp_id)");
 	$objDb2->dbQuery($ssSQL);
+		}
+		 
 	$txtid = $con->lastInsertId();
 	$aid = $txtid;	
 	$log_module  = $module." Module";
@@ -295,46 +558,15 @@ if($updateBtn !=""){
 	$log_ip      = $_SERVER['REMOTE_ADDR'];	
 	
 	$sSQL = ("INSERT INTO maindata_log (log_module,log_title,log_ip, parentcd, parentgroup,activitylevel, stage, itemcode, itemname, weight, activities	, isentry, resources,transaction_id) VALUES ('$log_module','$log_title','$log_ip',$txtparentcd,'$parentgroup',$activitylevel+1,'$txtstage', '$txtitemcode', '$txtitemname',$txtweight,'$txtactivities',$txtisentry, '$txtresources',$itemids)");
-	$objDb->dbQuery($sSQL);
+	//$objDb->dbQuery($sSQL);
 	
 		
 	}
-	else
-	{
-	$aid=$res_m['aid'];
-	$rid=$res_m['rid'];
-	 $uSql_act = "Update activity SET 			
-			 startdate         	= '$startdate',
-			 enddate  			= '$enddate',
-			 rid				= $txtrid,
-			 baseline      		= $txtused_quantity
-			where itemid 		= $edit ";
-		$objDb->dbQuery($uSql_act);  
 	
-	  $msg="Updated!";
-		
-	
-	$sSQL2 = ("INSERT INTO maindata_log (log_module,log_title,log_ip, parentcd, parentgroup,activitylevel, stage, itemcode, itemname, weight, activities,isentry,  resources,transaction_id) VALUES ('$log_module','$log_title','$log_ip',$parentcd,'$parentgroup',$activitylevel,'$txtstage', '$txtitemcode', '$txtitemname',$txtweight,'$txtactivities', $txtisentry, '$txtresources',$edit)");
-	//	$objDb1->dbQuery($sSQL2);
-	
-	
-	 
-	
-	
-		
-		$txtparentcd				= '';
-		$txtparentgroup				= '';
-		$txtstage					= '';
-		$txtitemcode 				= '';
-		$txtitemname 				= '';
-		$txtweight					= '';
-		$txtactivities				= '';
-		$txtisentry					= '';
-		$txtresources 				= '';
+	  }
 	}
-	}
-	print "<script type='text/javascript'>";
-				print "window.opener.location.reload();";
+		print "<script type='text/javascript'>";
+			print "window.opener.location.reload();";
 				print "self.close();";
 				print "</script>";  
 }
@@ -343,50 +575,26 @@ if($delete != ""){
 $eSql = "Select * from maindata where itemid=$delete";
 $q_ry=$objDb->dbQuery($eSql);
 $res_s=$objDb->dbFetchArray();
-$p_group=$res_s['parentgroup'];
-$aSql = "Select * from activity where itemid=$delete";
-$a_ry=$objDb->dbQuery($aSql);
-$res_a=$objDb->dbFetchArray();
-$aid=$res_a['aid'];
-$p_group=$res_s['parentgroup'];
-$eSqlr = "Select * from maindata where parentgroup like '$p_group%'";
-$q_ryr=$objDb2->dbQuery($eSqlr);
-while($res_sr=$objDb2->dbFetchArray())
+ $eCount = $objDb->totalRecords();
+ if($eCount>0)
+ {
+if($res_s['isentry']==1)
 {
-	$itemid			=$res_sr['itemid'];
-	$parentcd		=$res_sr['parentcd'];
-	$parentgroup	=$res_sr['parentgroup'];
-	$activitylevel  =$res_sr['activitylevel'];
-	$stage			=$res_sr['stage'];
-	$itemcode		=$res_sr['itemcode'];
-	$itemname		=$res_sr['itemname'];
-	$isentry  		=$res_sr['isentry'];
-	$txtactivities	="";
-	$txtresources	="";
 	
+	removeActivity($delete,$res_s['parentgroup']);
 	
-	 $msg="Deleted!";
-	$log_module  = $module." Module";
-	$log_title   = "Deleted".$module ."Record";
-	$log_ip      = $_SERVER['REMOTE_ADDR'];	
-	$sSQL7 = ("INSERT INTO maindata_log (log_module,log_title,log_ip, parentcd, parentgroup,activitylevel, stage, itemcode, itemname, weight, activities,isentry,  resources,transaction_id) VALUES ('$log_module','$log_title','$log_ip',$parentcd,'$parentgroup',$activitylevel,'$stage', '$itemcode', '$itemname',$weight,'$txtactivities', $isentry, '$txtresources',$itemid)");
-	//$objDb->dbQuery($sSQL7);
-	
-		
-	$eSql_child = "delete from activity where itemid=$itemid";
-   $objDb->dbQuery($eSql_child);
-	$eSql_child1 = "delete from planned where itemid=$itemid";
-   $objDb->dbQuery($eSql_child1);
-	$eSql_child2 = "delete from progress where itemid=$itemid";
-    $objDb->dbQuery($eSql_child2);
-	
-	$eSql_d = "delete from maindata where itemid=$itemid";
-    $objDb->dbQuery($eSql_d);
-
 }
+else
+{
+	RemoveParentItem($delete);
+}
+ }
+ 
+
 
 header("Location: maindata.php");	
 }
+  
 
 if($edit != ""){
 	$eSql = "Select * from maindata where itemid=$edit";
@@ -408,7 +616,7 @@ if($edit != ""){
 	}
 	
 	
-}
+} // end edit
 
 ?>
 <!DOCTYPE html>
@@ -591,6 +799,8 @@ var itemcode=document.frmresources.txtitemcode.value;
 var itemname=document.frmresources.txtitemname.value;
 var is_entry=document.frmresources.txtisentry.value;
 var rid=document.frmresources.txtrid.value;
+var startdate=document.frmresources.txtstartdate.value;
+var enddate=document.frmresources.txtenddate.value;
 
 if (itemcode==null || itemcode==""){  
   alert("Code is required field");  
@@ -606,6 +816,14 @@ if (itemcode==null || itemcode==""){
 	 alert("Baseline is required field");
 	 return false;    
 	}
+	else if(startdate==null || startdate==""){  
+  alert("Start Date is required field");  
+  return false;  
+  }
+  else if(enddate==null || enddate==""){  
+  alert("End Date is required field");  
+  return false;  
+  }
 	
   }
   
@@ -647,7 +865,8 @@ if (itemcode==null || itemcode==""){
 			$action=ADD." ";
 			}
 			?>
-<div class="form-style-2-heading" style="color:#FF9900;"><?php echo $action.$module; ?></div>
+<h2 style="text-align:center"><?php echo $action.$module; ?></h2>
+<hr>
 <form name="frmresources" id="frmresources"  action=""  method="post" onSubmit="return validateform()" enctype="multipart/form-data">
 <input type="hidden" name="txtparentcd" id="txtparentcd"   value="<?php echo $parentcd; ?>">
 
@@ -684,7 +903,8 @@ if (itemcode==null || itemcode==""){
 
                                 <div class="col-md-12">
                                 <label for="" class="col-sm-6" ><?php echo IS_ENTRY;?>:</label>
-                                <select name="txtisentry"  onChange="ShowDataDiv(this.value)" class="input-field" >
+                                <select name="txtisentry"  onChange="ShowDataDiv(this.value)" class="input-field" 
+								<?php if(isset($edit)&&$edit!=0&&$edit!=NULL&&$edit!='') {?> disabled <?php }?> >
 <option value="0"  <?php if($isentry==0){?>selected="selected"<?php }?>  >No</option>
 <option value="1" <?php if($isentry==1){?>selected="selected"<?php }?> >Yes</option>
 </select>
@@ -692,33 +912,10 @@ if (itemcode==null || itemcode==""){
                                 </div>
                               </div>
                             </div>
-                            <div class="col">
-                             <!--<div class="form-group row">
-
-                                <div class="col-md-12">
-                                <label for="" class="col-sm-6" ><?php echo IS_ENTRY;?>:</label>
-                                <select name="txtisentry"  onChange="ShowDataDiv(this.value)" class="input-field" >
-<option value="0"  <?php if($isentry==0){?>selected="selected"<?php }?>  >No</option>
-<option value="1" <?php if($isentry==1){?>selected="selected"<?php }?> >Yes</option>
-</select>
-                                   
-                                </div>
-                              </div>-->
-                            </div>
+                            
 						
 
 					</div>
-
-
-
-<!--<label for="field1"><span><?php echo CODE;?>: <span class="required">*</span></span><input type="text" class="input-field" name="txtitemcode" id="txtitemcode"  value="<?php echo $itemcode; ?>" /></label>
-<label for="field2"><span><?php echo NAME;?>: <span class="required">*</span></span><input type="text" class="input-field" name="txtitemname" id="txtitemname" value="<?php echo $itemname; ?>" /></label>
-<label for="field4"><span><?php echo IS_ENTRY;?>:</span>
-<select name="txtisentry"  onChange="ShowDataDiv(this.value)" class="select-field">
-<option value="0"  <?php if($isentry==0){?>selected="selected"<?php }?>  >No</option>
-<option value="1" <?php if($isentry==1){?>selected="selected"<?php }?> >Yes</option>
-</select>
-</label>-->
 
 <div id="data_div" <?php if($isentry==0){?>style="display:none"<?php }?>>
                <?php  $itemid_a=$edit;
@@ -738,13 +935,13 @@ if (itemcode==null || itemcode==""){
                              <div class="form-group row">
 
                                 <div class="col-md-12">
-                                <label for="" class="col-sm-6" ><?php echo SELECT_RESOR;?>:</label>
+                                <label for="" class="col-sm-12" ><?php echo "Select Baseline Item";?>:</label>
                                 <select name="txtrid" id="selUser" onChange="getQuantity(this.value)"   >
          <?php  
 			$sqlg="Select * from baseline ";
 			$resg=$objDb1->dbQuery($sqlg);
 			?>
-			<option value="0"><?php echo SELECT_RESOR;?></option>
+			<option value="0"><?php echo "Select Baseline Item";?></option>
 			<?php
 			while($row3g=$objDb1->dbFetchArray())
 			{

@@ -187,7 +187,7 @@ class ProjectSetup extends Database
 			default:
 				break;
 		}
-		//echo $Sql;
+		echo $Sql;
 	
 		return $this->dbQuery($Sql);
 	}

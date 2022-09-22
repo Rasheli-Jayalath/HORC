@@ -23,8 +23,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 {
 
 		 $title 		= trim($_POST['title1']);
+		 $title	= str_replace("'","999",$title);
 		 $newsdate 		= date('Y-m-d',strtotime($_POST['newsdate']));
 		 $details 		= trim($_POST['details']);
+		 $details	= str_replace("'","999",$details);
 		 $status 		= trim($_POST['status']);
 		 $newsfile      = $_FILES['newsfile'];
 		 $old_news_file =trim($_POST['old_news_file']);

@@ -74,7 +74,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 	$evaentry 		= $_POST['evaentry'];
 	
 	$padm			= $_POST["padm"];
-	$issueAdm		= $_POST["issueAdm"];
+	/*$issueAdm		= $_POST["issueAdm"];*/
 	
 	$actd 			= $_POST['actd'];
 	
@@ -88,26 +88,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 	
 	$evad 			= $_POST['evad'];
 	
-	$pic			= $_POST["pic"];
-	$picadm 		= $_POST['picadm'];
-	$picentry 		= $_POST['picentry'];
 	
-	
-	$draw			= $_POST["draw"];
-	$drawadm 		= $_POST['drawadm'];
-	$drawentry 		= $_POST['drawentry'];
-	
-	$ncf			= $_POST["ncf"];
-	$ncfadm 			= $_POST['ncfadm'];
-	$ncfentry 		= $_POST['ncfentry'];
-	
-	$dp			= $_POST["dp"];
-	$dpadm 			= $_POST['dpadm'];
-	$dpentry 		= $_POST['dpentry'];
-	
-	$process 			= $_POST['process'];
-	
-	
+	if($sadmin==1)
+	{
+		$user_type=1;
+	}
+	else
+	{
+		$user_type=2;
+	}
 	
 	
 	
@@ -123,6 +112,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 		$flag 	= false;
 		$objCommon->setMessage(USER_FLD_MSG_LASTNAME,'Error');
 	}
+	
 	if(empty($email)){
 		$flag 	= false;
 		$objCommon->setMessage(USER_FLD_MSG_EMAIL,'Error');
@@ -155,7 +145,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 		$objAdminUser->setProperty("phone", $phone);
 		$objAdminUser->setProperty("designation", $designation);
 		if($objAdminUser->ne_sadmin==1)
-		{ 
+		{
+			 
+		$objAdminUser->setProperty("user_type", $user_type);
 		$objAdminUser->setProperty("sadmin", $sadmin);
 		$objAdminUser->setProperty("news", $news);
 		$objAdminUser->setProperty("newsadm", $newsadm);
@@ -201,7 +193,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 		$objAdminUser->setProperty("evaentry", $evaentry);
 		
 		$objAdminUser->setProperty("padm", $padm);
-		$objAdminUser->setProperty("issueAdm", $issueAdm);
+		/*$objAdminUser->setProperty("issueAdm", $issueAdm);*/
 		
 		$objAdminUser->setProperty("actd", $actd);
 		
@@ -215,23 +207,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 		
 		$objAdminUser->setProperty("evad", $evad);
 		
-		$objAdminUser->setProperty("pic", $pic);
-		$objAdminUser->setProperty("picadm", $picadm);
-		$objAdminUser->setProperty("picentry", $picentry);
-		
-		$objAdminUser->setProperty("draw", $draw);
-		$objAdminUser->setProperty("drawadm", $drawadm);
-		$objAdminUser->setProperty("drawentry", $drawentry);
-		
-		$objAdminUser->setProperty("ncf", $ncf);
-		$objAdminUser->setProperty("ncfadm", $ncfadm);
-		$objAdminUser->setProperty("ncfentry", $ncfentry);
-		
-		$objAdminUser->setProperty("dp", $dp);
-		$objAdminUser->setProperty("dpadm", $dpadm);
-		$objAdminUser->setProperty("dpentry", $dpentry);
-		
-		$objAdminUser->setProperty("process", $process);
 		}
 		
 		
@@ -252,11 +227,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 				redirect('./?p=user_mgmt');
 				else
 				redirect('./?p=user_mgmt');*/
-				
+				redirect('./user_mangement.php');	
 
 		}
 	}
 	extract($_POST);
+	
 }
 else{
 if(isset($_GET['user_cd']) && !empty($_GET['user_cd']))
@@ -320,10 +296,23 @@ function doFilter(frm){
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script language="javascript" type="text/javascript">
 function frmValidate(frm){
+	//alert("dfsf");
 	var msg = "<?php echo _JS_FORM_ERROR;?>\r\n-----------------------------------------";
 	var flag = true;
 	if(frm.first_name.value == ""){
 		msg = msg + "\r\n<?php echo USER_FLD_MSG_FIRSTNAME;?>";
+		flag = false;
+	}
+	if(frm.last_name.value == ""){
+		msg = msg + "\r\n<?php echo USER_FLD_MSG_LASTNAME;?>";
+		flag = false;
+	}
+	if(frm.username.value == ""){
+		msg = msg + "\r\n<?php echo 'User Name is the Required Field';?>";
+		flag = false;
+	}
+	if(frm.passwd.value == ""){
+		msg = msg + "\r\n<?php echo 'Password is the Required Field';?>";
 		flag = false;
 	}
 
@@ -513,16 +502,15 @@ function frmValidate(frm){
 <div class="container-fluid">
     <div class=" grid-margin stretch-card " style = "margin-top: 3%;">
               <div class="card" style="background-image: linear-gradient(180deg, #f0f0fc, #f0f0fc);">
-                <div class="card-body text-center">
+                <div class="card-body text-center" >
 
               
                  
-				 <?php echo $objCommon->displayMessage();?>
+				<span style="color:red; font-weight:bold; font-size:16px"> <?php echo $objCommon->displayMessage();?></span>
 		
 		
         <br/>
-          <form name="frmProfile" id="frmProfile" action="" method="post" onSubmit="return 
-			frmValidate(this);">
+          <form name="frmProfile" id="frmProfile" action="" method="post" onSubmit="return  frmValidate(this);">
         <input type="hidden" name="mode" id="mode" value="<?php echo $mode;?>" />
         <input type="hidden" name="user_cd" id="user_cd" value="<?php echo $user_cd;?>" />
 
@@ -532,7 +520,7 @@ function frmValidate(frm){
                             <label class="col-sm-4 text-end"><?php echo "First Name";?>:</label>
                             <div class="col-sm-8 text-start">
                             <input class="form-control"   autocomplete="off" type="text" name="first_name" id="first_name" value="<?php echo 
-			$first_name;?>" /> 
+			$first_name;?>" maxlength="100"/> 
                            
                             </div>
                           </div>
@@ -543,7 +531,7 @@ function frmValidate(frm){
                             <label class="col-sm-4 text-end"><?php echo "Last Name";?>: </label>
                             <div class="col-sm-8 text-start">
                             <input class="form-control"   autocomplete="off"  type="text" name="last_name" id=
-			"last_name" value="<?php echo $last_name;?>" />
+			"last_name" value="<?php echo $last_name;?>" maxlength="100" />
                           
                            
                             </div>
@@ -558,7 +546,7 @@ function frmValidate(frm){
                             <label class="col-sm-4 text-end">  <?php echo "User Name";?>:</label>
                             <div class="col-sm-8 text-start">
                             <input class="form-control"   autocomplete="off"  type="text" name="username" id="username"
-			 value="<?php echo $username;?>" />
+			 value="<?php echo $username;?>" maxlength="100"/>
     
                             </div>
                           </div>
@@ -570,7 +558,7 @@ function frmValidate(frm){
                             <label class="col-sm-4 text-end"> <?php echo "Password";?>: </label>
                             <div class="col-sm-8 text-start">
                            <input class="form-control"   autocomplete="off"  ype="text" name="passwd" id="passwd" 
-			value="<?php echo $passwd;?>" />
+			value="<?php echo $passwd;?>" maxlength="32" />
                             </div>
                           </div>
                         </div>
@@ -592,7 +580,7 @@ function frmValidate(frm){
                             <div class="col-sm-8 text-start">
                             <input type="hidden" name="email_old" id="email_old" value="<?php 
 			echo $email;?>" />
-                            <input class="form-control"   autocomplete="off" type="text" name="email" id="email" value="<?php echo $email;?>"  /> 
+                            <input class="form-control"   autocomplete="off" type="text" name="email" id="email" value="<?php echo $email;?>"  maxlength="200"/> 
                            
                             </div>
                           </div>
@@ -602,7 +590,7 @@ function frmValidate(frm){
                           <div class="form-group row">
                             <label class="col-sm-4 text-end"><?php echo "Designation";?>:</label>
                             <div class="col-sm-8 text-start">
-                            <input class="form-control"   autocomplete="off"  name="designation" id="designation" value="<?php echo $designation;?>"  />
+                            <input class="form-control"   autocomplete="off"  name="designation" id="designation" value="<?php echo $designation;?>"   maxlength="255"/>
                           
                            
                             </div>
@@ -616,7 +604,7 @@ function frmValidate(frm){
                             <div class="col-sm-8 text-start">
                             
                             <input class="form-control"   autocomplete="off" type="text" name="phone" id="phone" value
-			="<?php echo $phone;?>"  /> 
+			="<?php echo $phone;?>"  maxlength="25"/> 
                            
                             </div>
                           </div>
@@ -691,7 +679,7 @@ function frmValidate(frm){
     </select></td>
 	</tr>
 	
-	<tr>
+	<?php /*?><tr>
 			<td align="right">&nbsp;</td>
 			<td colspan="7"  ><strong>Manage Issues</strong></td>
 			
@@ -703,7 +691,7 @@ function frmValidate(frm){
       <option value="0" <?php if ($issueAdm==0) {echo "selected='selected'";} ?>>Deny</option>
       <option value="1" <?php if ($issueAdm==1) {echo "selected='selected'";} ?>>Allow</option>
     </select></td>
-	</tr>
+	</tr> <?php */?>
 	
 	<tr>
 			<td align="right">&nbsp;</td>
@@ -1044,12 +1032,12 @@ function frmValidate(frm){
     </select></td>
     </tr>
 	
-	<tr>
+	<?php /*?><tr>
 			<td align="right">&nbsp;</td>
 			<td colspan="7"  ><strong>Pictorial Analysis</strong></td>
 			
-		  </tr>
-		  <tr>
+		  </tr><?php */?>
+		  <?php /*?><tr>
     <td align="right">&nbsp;</td>
     <td   valign="middle">Pictorial Analysis</td>
     <td    ><select name="pic" id="pic" class="form-control form-control-sm"  style="width:80px; height:35px; background-color:#FFF; color:black">
@@ -1057,16 +1045,16 @@ function frmValidate(frm){
       <option value="1" <?php if ($pic==1) {echo "selected='selected'";} ?>>Allow</option>
     </select></td>
     
-    </tr>
+    </tr><?php */?>
 	
 	
 	
-	<tr>
+	<!--<tr>
 			<td align="right">&nbsp;</td>
 			<td colspan="7"  ><strong>Maps and Drawings</strong></td>
 			
-		  </tr>
-		  <tr>
+		  </tr>-->
+		  <?php /*?><tr>
     <td align="right">&nbsp;</td>
     <td   valign="middle">Drawings</td>
     <td    ><select name="draw" id="draw" class="form-control form-control-sm"  style="width:80px; height:35px; background-color:#FFF; color:black">
@@ -1074,8 +1062,8 @@ function frmValidate(frm){
       <option value="1" <?php if ($draw==1) {echo "selected='selected'";} ?>>Allow</option>
     </select></td>
     
-    </tr>
-	<tr>
+    </tr><?php */?>
+	<?php /*?><tr>
 			<td align="right">&nbsp;</td>
 			<td colspan="7"  ><strong>Non Confirmity Notices</strong></td>
 			
@@ -1128,13 +1116,13 @@ function frmValidate(frm){
       <option value="0" <?php if ($process==0) {echo "selected='selected'";} ?>>Deny</option>
       <option value="1" <?php if ($process==1) {echo "selected='selected'";} ?>>Allow</option>
     </select></td>
-    </tr>
+    </tr><?php */?>
 			</table>
             </div>
 			<?php
 			}
 			?>
-             <button  type="submit" name="save" id="save" class="btn btn-primary me-2"  value="<?php echo ($mode == "U") ? " Update " : " Save ";?>" style="width:20%"> Save </button>
+             <button  type="submit" name="save" id="save" class="btn btn-primary me-2"  value="<?php echo ($mode == "U") ? " Update " : " Save ";?>" style="width:20%"><?php echo ($mode == "U") ? " Update " : " Save ";?> </button>
    <button class="btn btn-primary me-2" type="button"  style="width:20%" onClick="document.location='user_mangement.php';" >Cancel</button>
 			
 	           

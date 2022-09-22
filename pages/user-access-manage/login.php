@@ -78,7 +78,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			$objAdminUser->setProperty("evaentry", $rows['evaentry']);
 			
 			$objAdminUser->setProperty("padm", $rows['padm']);
-			$objAdminUser->setProperty("issueAdm", $rows['issueAdm']);
+			
 		
 			$objAdminUser->setProperty("actd", $rows['actd']);
 			
@@ -92,23 +92,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			
 			$objAdminUser->setProperty("evad", $rows['evad']);
 			
-			$objAdminUser->setProperty("pic", $rows['pic']);
-			$objAdminUser->setProperty("picadm", $rows['picadm']);
-			$objAdminUser->setProperty("picentry", $rows['picentry']);
 			
-			$objAdminUser->setProperty("draw", $rows['draw']);
-			$objAdminUser->setProperty("drawadm", $rows['drawadm']);
-			$objAdminUser->setProperty("drawentry", $rows['drawentry']);
-			
-			$objAdminUser->setProperty("ncf", $rows['ncf']);
-			$objAdminUser->setProperty("ncfadm", $rows['ncfadm']);
-			$objAdminUser->setProperty("ncfentry", $rows['ncfentry']);
-			
-			$objAdminUser->setProperty("dp", $rows['dp']);
-			$objAdminUser->setProperty("dpadm", $rows['dpadm']);
-			$objAdminUser->setProperty("dpentry", $rows['dpentry']);
-			
-			$objAdminUser->setProperty("process", $rows['process']);
 			$_SESSION['login_count']=1;
 			$_SESSION['user_pasword']=$passwd;
 			$objAdminUser->setAdminLogin();

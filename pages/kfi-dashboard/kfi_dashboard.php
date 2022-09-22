@@ -1,3 +1,4 @@
+<?php include('kfi-top-cache.php');?>
 <?php
 include_once("../../config/config.php");
 include_once("rs_lang.admin.php");
@@ -94,6 +95,9 @@ $ObjKfiDash3 = new KfiDashboard();
                     </div>
                   </div>
                 </div>
+                <div align="right" >
+                    <h6 style="color:chocolate" class="offcanvas-title" id="offcanvasExampleLabel">**All these amounts are inclusive of 18% GST**</h2>
+                    </div>
               </div>
             </div>
       </div>
@@ -478,10 +482,11 @@ function funcHideAndSeek(selector)
 }
 
     function reportgenButton(strval,itemname) {
-      //alert(strval+itemname);
+     // alert(strval+itemname);
       
       var strURL="newTableReport_testing.php?itemids="+strval+"&itemname="+itemname;
          // var strURL="tableReport.php?itemids="+str;
+		 showSpinner();
           var req= getXMLHTTP();
 
           if(req)
@@ -500,7 +505,8 @@ function funcHideAndSeek(selector)
                         alert("There was a problem while using XMLHTTP:7\n" + req.statusText);
                       }
                     }				
-                  }			
+                  }		
+				  // alert(strval+itemname);	
                   req.open("GET", strURL, true);
                   req.send(null);
             }
@@ -689,3 +695,4 @@ function funcHideAndSeek(selector)
 </body>
 
 </html>
+<?php include('kfi-bottom-cache.php');?>

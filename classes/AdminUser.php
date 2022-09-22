@@ -62,7 +62,7 @@ class AdminUser extends Database{
 	public $ne_evaentry;
 	
 	public $ne_padm;
-	public $ne_issueAdm;
+	/*public $ne_issueAdm;*/
 	
 	public $ne_actd;
 	
@@ -76,7 +76,7 @@ class AdminUser extends Database{
 	
 	public $ne_evad;
 	
-	public $ne_pic;
+	/*public $ne_pic;
 	public $ne_picadm;
 	public $ne_picentry;
 	
@@ -93,7 +93,7 @@ class AdminUser extends Database{
 	public $ne_dpentry;
 	
 	
-	public $ne_process;
+	public $ne_process;*/
 	
 
 	/*
@@ -159,7 +159,7 @@ class AdminUser extends Database{
 			$this->ne_evaentry 		= $_SESSION['ne_evaentry'];
 			
 			$this->ne_padm 			= $_SESSION['ne_padm'];
-			$this->ne_issueAdm 			= $_SESSION['ne_issueAdm'];
+			/*$this->ne_issueAdm 			= $_SESSION['ne_issueAdm'];*/
 			
 			$this->ne_actd 			= $_SESSION['ne_actd'];
 			$this->ne_miled 		= $_SESSION['ne_miled'];
@@ -169,7 +169,7 @@ class AdminUser extends Database{
 			$this->ne_kfid 			= $_SESSION['ne_kfid'];
 			$this->ne_evad 			= $_SESSION['ne_evad'];
 			
-			$this->ne_pic 			= $_SESSION['ne_pic'];
+			/*$this->ne_pic 			= $_SESSION['ne_pic'];
 			$this->ne_picadm 		= $_SESSION['ne_picadm'];
 			$this->ne_picentry 		= $_SESSION['ne_picentry'];
 			
@@ -185,7 +185,7 @@ class AdminUser extends Database{
 			$this->ne_dpadm 		= $_SESSION['ne_dpadm'];
 			$this->ne_dpentry 		= $_SESSION['ne_dpentry'];
 			
-			$this->ne_process 			= $_SESSION['ne_process'];
+			$this->ne_process 			= $_SESSION['ne_process'];*/
 			
 			
 			
@@ -300,8 +300,8 @@ class AdminUser extends Database{
 		if($this->isPropertySet("padm", "V"))
 			$_SESSION['ne_padm'] 		= $this->getProperty("padm");
 			
-		if($this->isPropertySet("issueAdm", "V"))
-			$_SESSION['ne_issueAdm'] 		= $this->getProperty("issueAdm");
+		/*if($this->isPropertySet("issueAdm", "V"))
+			$_SESSION['ne_issueAdm'] 		= $this->getProperty("issueAdm");*/
 			
 		if($this->isPropertySet("actd", "V"))
 			$_SESSION['ne_actd'] 		= $this->getProperty("actd");
@@ -321,7 +321,7 @@ class AdminUser extends Database{
 		if($this->isPropertySet("evad", "V"))
 			$_SESSION['ne_evad'] 		= $this->getProperty("evad");
 			
-		if($this->isPropertySet("pic", "V"))
+		/*if($this->isPropertySet("pic", "V"))
 			$_SESSION['ne_pic'] 		= $this->getProperty("pic");
 		if($this->isPropertySet("picadm", "V"))
 			$_SESSION['ne_picadm'] 		= $this->getProperty("picadm");
@@ -351,7 +351,7 @@ class AdminUser extends Database{
 			$_SESSION['ne_dpentry'] 		= $this->getProperty("dpentry");
 			
 		if($this->isPropertySet("process", "V"))
-			$_SESSION['ne_process'] 		= $this->getProperty("process");
+			$_SESSION['ne_process'] 		= $this->getProperty("process");*/
 			
 			
 			
@@ -418,16 +418,16 @@ class AdminUser extends Database{
 				$_SESSION['ne_evaentry'],
 				
 				$_SESSION['ne_padm'],
-				$_SESSION['ne_issueAdm'],
+				/*$_SESSION['ne_issueAdm'],*/
 				$_SESSION['ne_actd'],
 				$_SESSION['ne_miled'],
 				
 				$_SESSION['ne_kpid'],
 				$_SESSION['ne_camd'],
 				$_SESSION['ne_kfid'],
-				$_SESSION['ne_evad'],
+				$_SESSION['ne_evad']
 				
-				$_SESSION['ne_pic'],
+				/*$_SESSION['ne_pic'],
 				$_SESSION['ne_picadm'],
 				$_SESSION['ne_picentry'],
 				
@@ -445,7 +445,7 @@ class AdminUser extends Database{
 				$_SESSION['ne_dpentry'],
 				
 				
-				$_SESSION['ne_process']
+				$_SESSION['ne_process']*/
 				
 			);
 	}
@@ -506,27 +506,13 @@ class AdminUser extends Database{
 					evaadm,
 					evaentry,
 					padm,
-					issueAdm,
+					
 					actd,
 					miled,					
 					kpid,
 					camd,
 					kfid,
-					evad,
-					pic,
-					picadm,
-					picentry,					
-					draw,
-					drawadm,
-					drawentry,					
-					ncf,
-					ncfadm,
-					ncfentry,					
-					dp,
-					dpadm,
-					dpentry,
-					process
-					
+					evad
 					
 				FROM
 					mis_tbl_users
@@ -607,23 +593,12 @@ class AdminUser extends Database{
 						evaadm,
 						evaentry,
 						padm,
-						issueAdm,
 						actd,
 						miled,					
 						kpid,
 						camd,
 						kfid,
-						evad,
-						pic,
-						
-						draw,
-											
-						ncf,
-										
-						dp,
-						dpadm,
-						dpentry,
-						process
+						evad						
 						) 
 						VALUES(";
 				$Sql .= $this->isPropertySet("user_cd", "V") ? $this->getProperty("user_cd") : "NULL";
@@ -722,8 +697,7 @@ class AdminUser extends Database{
 				$Sql .= ",";
 				$Sql .= $this->isPropertySet("padm", "V") ?$this->getProperty("padm") : "0";
 				$Sql .= ",";
-				$Sql .= $this->isPropertySet("issueAdm", "V") ?$this->getProperty("issueAdm") : "0";
-				$Sql .= ",";
+				
 				$Sql .= $this->isPropertySet("actd", "V") ?$this->getProperty("actd") : "0";
 				$Sql .= ",";
 				$Sql .= $this->isPropertySet("miled", "V") ? $this->getProperty("miled") : "0";				
@@ -735,24 +709,6 @@ class AdminUser extends Database{
 				$Sql .= $this->isPropertySet("kfid", "V") ? $this->getProperty("kfid") : "0";				
 				$Sql .= ",";
 				$Sql .= $this->isPropertySet("evad", "V") ? $this->getProperty("evad") : "0";				
-				$Sql .= ",";
-				$Sql .= $this->isPropertySet("pic", "V") ?$this->getProperty("pic") : "0";
-				$Sql .= ",";
-				
-				$Sql .= $this->isPropertySet("draw", "V") ?$this->getProperty("pic") : "0";
-				$Sql .= ",";
-				
-				$Sql .= $this->isPropertySet("ncf", "V") ?$this->getProperty("ncf") : "0";
-				$Sql .= ",";
-				
-				$Sql .= $this->isPropertySet("dp", "V") ?$this->getProperty("dp") : "0";
-				$Sql .= ",";
-				$Sql .= $this->isPropertySet("dpadm", "V") ?$this->getProperty("dpadm") : "0";
-				$Sql .= ",";
-				$Sql .= $this->isPropertySet("dpentry", "V") ? $this->getProperty("dpentry") : "0";	
-				
-				$Sql .= ",";
-				$Sql .= $this->isPropertySet("process", "V") ? $this->getProperty("process") : "0";			
 				
 				 $Sql .= ")";
 				break;
@@ -928,10 +884,6 @@ class AdminUser extends Database{
 					$Sql .= "$con padm='" . $this->getProperty("padm") . "'";
 					
 				}
-				if($this->isPropertySet("issueAdm", "K")){
-					$Sql .= "$con issueAdm='" . $this->getProperty("issueAdm") . "'";
-					
-				}
 				if($this->isPropertySet("actd", "K")){
 					$Sql .= "$con actd='" . $this->getProperty("actd") . "'";
 					
@@ -955,39 +907,7 @@ class AdminUser extends Database{
 					
 				}
 				
-				if($this->isPropertySet("pic", "K")){
-					$Sql .= "$con pic='" . $this->getProperty("pic") . "'";
-					
-				}
 				
-				
-				
-				if($this->isPropertySet("draw", "K")){
-					$Sql .= "$con draw='" . $this->getProperty("draw") . "'";
-					
-				}
-				
-				
-				if($this->isPropertySet("ncf", "K")){
-					$Sql .= "$con ncf='" . $this->getProperty("ncf") . "'";
-					
-				}
-				
-				if($this->isPropertySet("dp", "K")){
-					$Sql .= "$con dp='" . $this->getProperty("dp") . "'";
-					
-				}if($this->isPropertySet("dpadm", "K")){
-					$Sql .= "$con dpadm='" . $this->getProperty("dpadm") . "'";
-					
-				}if($this->isPropertySet("dpentry", "K")){
-					$Sql .= "$con dpentry='" . $this->getProperty("dpentry") . "'";					
-				}
-				
-				
-				if($this->isPropertySet("process", "K")){
-					$Sql .= "$con process='" . $this->getProperty("process") . "'";
-					
-				}
 				
 				$Sql .= " WHERE 1=1";
 			 	$Sql .= " AND user_cd=" . $this->getProperty("user_cd");

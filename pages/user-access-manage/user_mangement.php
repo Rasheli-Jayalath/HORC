@@ -334,17 +334,16 @@ function doFilter(frm){
 
 
 
-    
+ 
 <h4 class="text-center text-34" style="  letter-spacing: 4px"> User Management</h4> 
 
-<div class="row pt-4 pb-4" >
+<div class="row" >
 	<div class="col-sm-2 " style="  font-weight: 600;">  
-	<?php //echo MAJ_ISS;?>
+	
 	</div>
 	<div class="col-sm-10 text-end" >  
 	
 
-<!--<button type="button" class="col-sm-2 button-33" onclick="window.open('project_issues_input.php', 'newwindow', 'left=600,top=60,width=1000,height=680');return false;"> <?php echo ADD_NEW_REC;?> </button>-->
 <button type="button" class="col-sm-2 button-33" onclick="location.href='update_profile.php';" >  <?php echo "Add New User";?> </button>
 
 	</div>
@@ -365,7 +364,7 @@ function doFilter(frm){
 	
 
 
-                              
+ 	<span style="color:green; font-weight:bold; font-size:20px"> <?php echo $objCommon->displayMessage();?></span>                                
 <div class="table-responsive">
   <table class="table table-striped">
                               <thead>
@@ -379,7 +378,6 @@ function doFilter(frm){
 		<th ><?php echo "NewsA";?></th>
 		<th ><?php echo "NewsE";?></th>
 		<th ><?php echo "ADDP";?></th>
-		<th ><?php echo "IssueA";?></th>
 		<th ><?php echo "Res";?></th>
 		<th ><?php echo "ResA";?></th>
 		<th ><?php echo "ResE";?></th>
@@ -416,23 +414,7 @@ function doFilter(frm){
 		<th ><?php echo "EVAA";?></th>
 		<th ><?php echo "EVAE";?></th>
 		<th ><?php echo "EVA-D";?></th>
-		<th ><?php echo "PIC";?></th>
-		<th ><?php echo "PICA";?></th>
-		<th ><?php echo "PICE";?></th>
 		
-		<th ><?php echo "Draw";?></th>
-		<th ><?php echo "DrawA";?></th>
-		<th ><?php echo "DrawE";?></th>
-		
-		<th ><?php echo "NCF";?></th>
-		<th ><?php echo "NCFA";?></th>
-		<th ><?php echo "NCFE";?></th>
-		
-		<th ><?php echo "DP";?></th>
-		<th ><?php echo "DPA";?></th>
-		<th ><?php echo "DPE";?></th>
-		
-		<th ><?php echo "PROCESS";?></th>
 
                                  
 								
@@ -468,6 +450,7 @@ function doFilter(frm){
                               <a  class="btn btn-outline-danger btn-fw px-1 py-1 m-0 "  style="margin-top: 0; margin-bottom: 0; " href="update_profile.php?user_cd=<?php echo $rows['user_cd'];?>" title="Edit">
                              <i class="ti-pencil btn-icon-prepend" ></i>
                               </a>
+                            
                    
 			<?php } ?></td>
 				<td ><?php echo $rows['user_cd'];?></td>
@@ -478,7 +461,6 @@ function doFilter(frm){
 				<td><?php echo $rows['newsadm'];?></td>
 				<td><?php echo $rows['newsentry'];?></td>
 				<td><?php echo $rows['padm'];?></td>
-				<td><?php echo $rows['issueAdm'];?></td>
 				<td><?php echo $rows['res'];?></td>
 				<td><?php echo $rows['resadm'];?></td>
 				<td><?php echo $rows['resentry'];?></td>
@@ -515,25 +497,6 @@ function doFilter(frm){
 				<td><?php echo $rows['evaadm'];?></td>
 				<td><?php echo $rows['evaentry'];?></td>
 				<td><?php echo $rows['evad'];?></td>
-				<td><?php echo $rows['pic'];?></td>
-				<td><?php echo $rows['picadm'];?></td>
-				<td><?php echo $rows['picentry'];?></td>
-				
-				
-				<td><?php echo $rows['draw'];?></td>
-				<td><?php echo $rows['drawadm'];?></td>
-				<td><?php echo $rows['drawentry'];?></td>
-				
-				<td><?php echo $rows['ncf'];?></td>
-				<td><?php echo $rows['ncfadm'];?></td>
-				<td><?php echo $rows['ncfentry'];?></td>
-				
-				<td><?php echo $rows['dp'];?></td>
-				<td><?php echo $rows['dpadm'];?></td>
-				<td><?php echo $rows['dpentry'];?></td>
-				
-				
-				<td><?php echo $rows['process'];?></td>
 				
 			
 				</tr>

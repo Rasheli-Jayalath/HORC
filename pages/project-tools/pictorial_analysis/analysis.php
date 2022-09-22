@@ -13,7 +13,7 @@ if ($uname==null  ) {
 header("Location: ../../../index.php?init=3");
 } 
 else if ($pic_flag==0  ) {
-header("Location: index.php?init=3");
+header("Location: ../../../index.php?init=3");
 }	
 $user_cd=$uid;
 
@@ -1309,7 +1309,7 @@ $cattid=$_REQUEST['album_id'];
                             <?php  
 			
 			 $cm=0;
-			 $pdSQL = "SELECT albumid, pid, album_name, status FROM t031project_albums  WHERE pid= ".$pid." and status=1 and parent_album=0 order by albumid desc";
+			 $pdSQL = "SELECT albumid, pid, album_name, status FROM t031project_albums  WHERE pid= ".$pid." and status=1 and parent_album=0 order by album_order asc";
 			 $pdSQLResult = $objDb1->dbQuery($pdSQL);
 			if($objDb1-> totalRecords() >= 1){
 				while($result =$objDb1->dbFetchArray()){

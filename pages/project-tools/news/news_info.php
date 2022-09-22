@@ -314,10 +314,13 @@ function doConfirm(msg){
 		   <?php
 		   }?>
                                           <div class="wrapper ms-3" style=" width:80%">
-                                           <h4 class="card-title"><?php echo substr($rows['title'],0,100);?></h4>
+										  <?php
+										   $title	= str_replace("999","'",$rows['title']);
+										  ?>
+                                           <h4 class="card-title"><?php echo substr($title,0,100);?></h4>
                                            
                   <p class="card-description wrapper">
-                  <?php print substr($rows['details'],0,300).'...'?>
+                  <?php print substr(str_replace("999","'",$rows['details']),0,300).'...'?>
                   <br/>
                    <a href="news_detail.php?news_cd=<?php echo $rows['news_cd'];?>" style="text-decoration:none"><?php echo "Read More";?> </a>
                   </p>
@@ -407,10 +410,10 @@ function doConfirm(msg){
 		   <?php
 		   }?>
                                           <div class="wrapper ms-3" style=" width:80%">
-                                           <h4 class="card-title"><?php echo substr($rows['title'],0,100);?></h4>
+                                           <h4 class="card-title"><?php echo substr(str_replace("999","'",$rows['title']),0,100);?></h4>
                                            
                   <p class="card-description wrapper">
-                  <?php print substr($rows['details'],0,300).'...'?>
+                  <?php print substr(str_replace("999","'",$rows['details']),0,300).'...'?>
                   <br/>
                    <a href="news_detail.php?news_cd=<?php echo $rows['news_cd'];?>" style="text-decoration:none"><?php echo "Read More";?> </a>
                   </p>

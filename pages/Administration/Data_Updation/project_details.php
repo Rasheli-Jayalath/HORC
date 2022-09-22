@@ -47,20 +47,25 @@ $cur_3					= $_REQUEST['cur_3'];
 $cur_3_rate				= trim($_REQUEST['cur_3_rate']);
 $txtpcode				= $_REQUEST['txtpcode'];
 $txtpdetail				= $_REQUEST['txtpdetail'];
-$txtpdetail	= str_replace("'","",$txtpdetail);
+$txtpdetail	= str_replace("'","999",$txtpdetail);
 
 //echo $txtpdetail				=  preg_replace('/\'\"/', '', $txtpdetail);
 $ptype				= $_REQUEST['txtptype'];
 $txtpstart				= date('Y-m-d',strtotime($_REQUEST['txtpstart']));
 $txtpend				= date('Y-m-d',strtotime($_REQUEST['txtpend']));
 $client					= $_REQUEST['client'];
+$client	= str_replace("'","999",$client);
 $funding_agency			= $_REQUEST['funding_agency'];
+$funding_agency	= str_replace("'","999",$funding_agency);
 $contractor				= $_REQUEST['contractor'];
+$contractor	= str_replace("'","999",$contractor);
 $pcost				    =str_replace(',','',$_REQUEST['pcost']);
 $sector_id				= $_REQUEST['sector_id'];
 $country_id				= $_REQUEST['country_id'];
 $location				= $_REQUEST['location'];
+$location	= str_replace("'","999",$location);
 $consultant				= $_REQUEST['consultant'];
+$consultant	= str_replace("'","999",$consultant);
 $smec_code				= $_REQUEST['smec_code'];
  $pcid				= $_REQUEST['pcid'];
 if($clear!="")
@@ -111,6 +116,7 @@ $objIC->setProperty("pid",$pid);
 		$objCur->actCurrency($_POST['mode']);
 		 #Check if the new dates are added
 			$arr_yh_title 	= $_POST['yh_title'];
+			
 			//print_r($arr_yh_title);
 			$arr_yh_date 	= $_POST['yh_date'];
 			
@@ -122,6 +128,7 @@ $objIC->setProperty("pid",$pid);
 					if($arr_yh_title[$i] != "" && $arr_yh_date[$i] != "" && $arr_yh_status[$i] != ""){
 						
 						$yh_title 	= $arr_yh_title[$i];
+						$yh_title	= str_replace("'","999",$yh_title);
 						$yh_status	= $arr_yh_status[$i];
 						$yh_date	= date('Y-m-d',strtotime($arr_yh_date[$i]));
 						$objYrHol->setProperty("yh_title",$yh_title);
@@ -235,12 +242,12 @@ $objIC->setProperty("pid",$pid);
 	
 	$sql_proresult=$objDb1->dbQuery($sql_pro);
 	
-	
-	
-	
-	////////////KPIDATA
-	
-	
+
+	////Baseline Template
+		$sql_btemp="INSERT INTO baseline_template(temp_title, temp_desc,  temp_is_default, use_data, active_temp) VALUES ('Baseline Template','Detail Here',1,0,1)";
+	$sql_base_tem=$objSDb->dbQuery($sql_btemp);
+		
+	////////////KPIDATA	
  	$sql_protem="INSERT INTO kpi_templates(kpi_temp_title, kpi_temp_desc, temp_id, is_default_temp, is_active, is_eva) VALUES ('KPI Dashboard','KPI Dashboard',1,1,1,0)";
 	$sql_pro_tem=$objDb3->dbQuery($sql_protem);
 		$kpi_temp_id=$con->lastInsertId();
@@ -320,9 +327,10 @@ $objIC->setProperty("pid",$pid);
 						{
 							
 						$yh_title 	= $_POST['yh_title_' .$yh_id];
+						$yh_title	= str_replace("'","999",$yh_title);
 						$yh_status	= $_POST['yh_status_' . $yh_id];
 						$yh_date 	= date('Y-m-d',strtotime($_POST['yh_date_' . $yh_id]));
-						$yhSQL = ("Update yearly_holidays SET yh_title='$yh_title',yh_date='$yh_date',yh_status='$yh_status'  where yh_id=$yh_id");
+						echo $yhSQL = ("Update yearly_holidays SET yh_title='$yh_title',yh_date='$yh_date',yh_status='$yh_status'  where yh_id=$yh_id");
 						$objDdb->dbQuery($yhSQL);
 						
 					  }
@@ -542,13 +550,17 @@ if($ffCount > 0){
 	  $pcode 					= $prows['pcode'];
 	  $pname	 				= $prows['pname'];
 	  $pdetail					= $prows['pdetail'];
+	  $pdetail	= str_replace("999","'",$pdetail); 
 	  $ptype					= $prows['ptype'];
 	  $pstart 					= $prows['pstart'];
 	  $pend 					= $prows['pend'];
 	  $client					= $prows['client'];
+	  $client	= str_replace("999","'",$client); 
 	  $funding_agency			= $prows['funding_agency'];
+	   $funding_agency	= str_replace("999","'",$funding_agency); 
 	  $contractor				= $prows['contractor'];
-	  $pcost					= $prows['pcost'];
+	   $contractor	= str_replace("999","'",$contractor); 
+	  $pcost					= $prows['pcost2'];
 	  $ssector_id				= $prows['sector_id'];
 	  if($ssector_id!=0)
 	  {
@@ -567,7 +579,9 @@ if($ffCount > 0){
 		  $country_name = $crows['country_name'];
 	  }
 	  $consultant				=$prows['consultant'];
+	  $consultant	= str_replace("999","'",$consultant); 
 	  $location				    =$prows['location'];
+	  $location	= str_replace("999","'",$location); 
 	  $smec_code				=$prows['smec_code'];
 	}
 	
@@ -740,24 +754,52 @@ function CheckProjectDetail(frm){
 	var flag = true;
 
 	if(frm.txtpdetail.value == ""){
-		msg = msg + "\r\n<?php echo "Project Detail is required field";?>";
+		msg = msg + "\r\n<?php echo "Project Name is required field";?>";
 		flag = false;
 	}
+	else
+	{
+	var detail=txtpdetail.value	;
+		if(detail.length>500)
+		{
+			msg = msg + "\r\n<?php echo "Project Name is too long, length is 500 characters";?>";
+			flag = false;
+		}
+	}
+	if(frm.txtptype.value == ""){
+		msg = msg + "\r\n<?php echo "Select Project Type";?>";
+		flag = false;
+	}
+	
 	if(frm.txtpstart.value == ""){
-		msg = msg + "\r\n<?php echo "Project Start Date is required field";?>";
+		msg = msg + "\r\n<?php echo "Start Date is required field";?>";
 		flag = false;
 	}
 	if(frm.txtpend.value == ""){
-		msg = msg + "\r\n<?php echo "Project End Date is required field";?>";
+		msg = msg + "\r\n<?php echo "End Date is required field";?>";
 		flag = false;
 	}
+	
+	if(frm.base_cur.value == ""){
+		msg = msg + "\r\n<?php echo " Base Currency is required field";?>";
+		flag = false;
+	}
+	
 	
 	if(flag == false){
 		alert(msg);
 		return false;
 	}
 }
+
+
+function putValue(base_cur)
+{
+	
+	document.getElementById("cur_1").value=base_cur;
+}
 </script>
+
 
   <!-- endinject -->
   <!-- Plugin css for this page -->
@@ -840,7 +882,8 @@ function CheckProjectDetail(frm){
         </tr>
             <tr>
               <td  ><strong>Project Name:</strong></td>
-              <td colspan="3" style="line-height:20px"><?php echo $pdetail; ?></td>
+           
+              <td colspan="3" style="line-height:20px"><?php echo wordwrap($pdetail,90,"<br>\n"); ?></td>
             </tr>
              <tr>
               <td  ><strong>Project Type:</strong></td>
@@ -857,11 +900,11 @@ function CheckProjectDetail(frm){
              </tr>
               <tr>
               <td ><strong>Client:</strong></td>
-              <td colspan="3" ><?php echo $client; ?></td>
+              <td colspan="3" ><?php echo wordwrap($client,90,"<br>\n"); ?></td>
              </tr>
                <tr>
               <td ><strong>Consultant:</strong></td>
-              <td colspan="3" ><?php echo wordwrap($consultant,100,"<br>\n"); ?></td>
+              <td colspan="3" ><?php echo wordwrap($consultant,90,"<br>\n"); ?></td>
              </tr>
              <tr>
               <td ><strong>Funding Agency:</strong></td>
@@ -869,11 +912,11 @@ function CheckProjectDetail(frm){
              </tr>
              <tr>
               <td ><strong>Contractor:</strong></td>
-              <td colspan="3" ><?php echo wordwrap($contractor,100,"<br>\n"); ?></td>
+              <td colspan="3" ><?php echo wordwrap($contractor,90,"<br>\n"); ?></td>
              </tr>
              <tr>
               <td ><strong>Contract Value:</strong></td>
-              <td colspan="3" ><?php echo number_format($pcost,0); ?></td>
+              <td colspan="3" ><?php echo number_format($pcost); ?></td>
              </tr>
              <tr>
               <td ><strong>Sector:</strong></td>
@@ -945,13 +988,22 @@ function CheckProjectDetail(frm){
              
               		 <?php  $swSQL = " Select * from yearly_holidays where yh_status=1 ";
 							$objDdb->dbQuery($swSQL);
-							 $iCount = $objDdb->totalRecords();
+							echo  $iCount = $objDdb->totalRecords();
 							 if($iCount>0)
 							 {
+								 $j=0;
 								while ($yrows = $objDdb->dbFetchArray())
 								{
+									$j++;
+									if($j%3==0)
+								  {
+									    echo "<br/><br/> ";
+								  }
+								  else
+								  {
 								  $yh_id=$yrows['yh_id'];
 								  $yh_title=$yrows['yh_title'];
+								  $yh_title	= str_replace("999","'",$yh_title); 
 								  $yh_date=$yrows['yh_date'];			
 								  $yh_status=$yrows['yh_status'];
 								  ?>
@@ -961,8 +1013,11 @@ function CheckProjectDetail(frm){
 								  {
 								  echo ", ";
 								  }
-								  }?>
+								 
+								  }
+								   ?>
                                   <?php
+								  }
 								}
 							}
 						?>
@@ -980,17 +1035,17 @@ function CheckProjectDetail(frm){
 			
     <tr>
               <td width="16%" ><strong>Project code:</strong></td>
-              <td colspan="3" ><input id="txtpcode" name="txtpcode" type="text" value="<?php echo $pcode; ?>" class="form-control" style="width:100px"/></td>
+              <td colspan="3" ><input id="txtpcode" name="txtpcode" type="text" value="<?php echo $pcode; ?>" class="form-control" style="width:100px" maxlength="200"/></td>
             </tr>
             <tr>
               <td ><strong>Project Name:<span style="color:#FF0000;">*</span></strong></td>
-              <td colspan="3" ><input id="txtpdetail" name="txtpdetail" type="text" value="<?php echo $pdetail; ?>"  required class="form-control"/></td>
+              <td colspan="3" ><input id="txtpdetail" name="txtpdetail" type="text" value="<?php echo $pdetail; ?>"   class="form-control" maxlength="500" style="width:500px"/></td>
             </tr>
              <tr>
               <td ><strong>Project Type:<span style="color:#FF0000;">*</span>:</strong></td>
               <td colspan="3">
              
-              <select id="txtptype" name="txtptype" class="form-control" required> 
+              <select id="txtptype" name="txtptype" class="form-control" style="width:500px"> 
               <option value="">Select Project Type</option>
               <option value="1" <?php if($ptype==1) {?> selected="selected" <?php }?>>Time-Based</option>
               <option value="2" <?php if($ptype==2) {?> selected="selected" <?php }?>>Milestone</option>
@@ -1005,12 +1060,12 @@ function CheckProjectDetail(frm){
             <tr>
               <td ><strong>Start Date<span style="color:#FF0000;">*</span>:</strong></td>
               <td colspan="3">
-              <input  name="txtpstart" type="text" value="<?php echo $pstart; ?>"  readonly class="form-control"/> &nbsp;<span style="color:#FF0000;">(Note: PMIS will use start and end date for calculations)</span>
+              <input  name="txtpstart" type="text" value="<?php echo $pstart; ?>"  readonly class="form-control" style="width:500px"/> &nbsp;<span style="color:#FF0000;">(Note: PMIS will use start and end date for calculations)</span>
               </td>
              </tr>
              <tr>
               <td ><strong>End Date<span style="color:#FF0000;">*</span>:</strong></td>
-              <td colspan="3" ><input  name="txtpend" type="text" value="<?php echo $pend; ?>" readonly class="form-control"/>
+              <td colspan="3" ><input  name="txtpend" type="text" value="<?php echo $pend; ?>" readonly class="form-control" style="width:500px"/>
               </td>
              </tr>
              <?php
@@ -1021,12 +1076,12 @@ function CheckProjectDetail(frm){
             <tr>
               <td ><strong>Start Date<span style="color:#FF0000;">*</span>:</strong></td>
               <td colspan="3">
-              <input  id="txtpstart" name="txtpstart" type="text" value="<?php echo $pstart; ?>"  required class="form-control"/> &nbsp;<span style="color:#FF0000;">(Note: PMIS will use start and end date for calculations)</span>
+              <input  id="txtpstart" name="txtpstart" type="text" value="<?php echo $pstart; ?>" readonly  class="form-control" style="width:500px"/> &nbsp;<span style="color:#FF0000;">(Note: PMIS will use start and end date for calculations)</span>
               </td>
              </tr>
              <tr>
               <td ><strong>End Date<span style="color:#FF0000;">*</span>:</strong></td>
-              <td colspan="3" ><input id="txtpend"  name="txtpend" type="text" value="<?php echo $pend; ?>"  required class="form-control"/>
+              <td colspan="3" ><input id="txtpend"  name="txtpend" type="text" value="<?php echo $pend; ?>"  readonly  class="form-control" style="width:500px"/>
               </td>
              </tr>
              <?php
@@ -1035,12 +1090,12 @@ function CheckProjectDetail(frm){
 			 <tr>
 			   <td ><strong>Client:</strong></td>
 			   <td colspan="3" >
-               <input id="client" name="client" type="text" value="<?php echo $client; ?>" class="form-control"/></td>
+               <input id="client" name="client" type="text" value="<?php echo $client; ?>" class="form-control" maxlength="255" style="width:500px"/></td>
 	    </tr>
 			 <tr>
 			   <td ><strong>Funding Agency:</strong></td>
 			   <td colspan="3" ><input id="funding_agency" name="funding_agency" type="text" 
-               value="<?php echo $funding_agency; ?>" class="form-control"/></td>
+               value="<?php echo $funding_agency; ?>" class="form-control" maxlength="255" style="width:500px"/></td>
 	    </tr>
 			 <tr>
 			   <td ><strong>Project Cost:</strong></td>
@@ -1049,23 +1104,23 @@ function CheckProjectDetail(frm){
                value="<?php if($pcost!=0&&$pcost!="")echo number_format($pcost,0); ?>" class="form-control"/>-->
 			   
 			   <input id="pcost" name="pcost" type="number" step="0.01"
-               value="<?php echo $pcost;?>" class="form-control"/>
+               value="<?php echo $pcost;?>" class="form-control" style="width:500px"/>
 			   </td>
 	    </tr>
 			 <tr>
 			   <td ><strong>Contractor:</strong></td>
 			   <td colspan="3" ><input id="contractor" name="contractor" type="text" 
-               value="<?php echo $contractor; ?>" class="form-control"/></td>
+               value="<?php echo $contractor; ?>" class="form-control" maxlength="255" style="width:500px"/></td>
 	    </tr>
 			 <tr>
 			   <td ><strong>Consultant:</strong></td>
 			   <td colspan="3" ><input id="consultant" name="consultant" type="text" 
-               value="<?php echo $consultant; ?>" class="form-control"/></td>
+               value="<?php echo $consultant; ?>" class="accordion-flush" maxlength="255" style="width:500px"/></td>
 	    </tr>
 			 <tr>
 			   <td ><strong>Sector:</strong></td>
-			   <td colspan="3" ><select id="sector_id" name="sector_id" class="form-control"> 
-               	<option value="">Select Sector</option>
+			   <td colspan="3" ><select id="sector_id" name="sector_id" class="form-control" style="width:500px"> 
+               	<option value="0">Select Sector</option>
               		 <?php  
 					 // $objDbS->setProperty("sector_id",$ssector_id);
 					  $objDbS->getSector();
@@ -1088,8 +1143,8 @@ function CheckProjectDetail(frm){
 	    </tr>
 			 <tr>
 			   <td ><strong>Country</strong></td>
-			   <td colspan="3" ><select id="country_id" name="country_id" class="form-control"> 
-               	<option value="">Select Country</option>
+			   <td colspan="3" ><select id="country_id" name="country_id" class="form-control" style="width:500px"> 
+               	<option value="0">Select Country</option>
               		 <?php  
 							  /* $objDbc->setProperty("country_id",$scountry_id);*/
 							   $objDbc->getCountry();
@@ -1110,39 +1165,39 @@ function CheckProjectDetail(frm){
 			 <tr>
 			   <td ><strong>Location</strong></td>
 			   <td colspan="3" >
-               <input id="location" name="location" type="text" value="<?php echo $location; ?>" class="form-control"/></td>
+               <input id="location" name="location" type="text" value="<?php echo $location; ?>" class="form-control" maxlength="200" style="width:500px"/></td>
 	    </tr>
 			 <tr>
 			   <td ><strong>SMEC Project Code</strong></td>
-			   <td colspan="3"><input id="smec_code" name="smec_code" type="text" value="<?php echo $smec_code; ?>" class="form-control"/></td>
+			   <td colspan="3"><input id="smec_code" name="smec_code" type="text" value="<?php echo $smec_code; ?>" class="form-control" maxlength="100" style="width:500px"/></td>
 	    </tr>
 			 
 			 <tr>
-              <td width="16%" ><strong>Base Currency:<span style="color:#FF0000;">*</span></strong></td>
-              <td colspan="3" ><input id="base_cur" name="base_cur" type="text" value="<?php echo $base_cur; ?>" required class="form-control"/></td>
+              <td width="16%" ><strong>Base Currency:<span style="color:#FF0000;">*</span></strong><br/>(e.g INR,USD,PKR)</td>
+              <td colspan="3" ><input id="base_cur" name="base_cur" type="text" value="<?php echo $base_cur; ?>"  onKeyUp="putValue(this.value)" class="form-control" maxlength="10" style="width:500px"/></td>
             </tr>
                 <tr>
                   <td ><strong>Currency 1:<span style="color:#FF0000;">*</span></strong></td>
-                  <td width="20%" ><input id="cur_1" name="cur_1" type="text" value="<?php echo $cur_1; ?>" required class="form-control"/></td>
+                  <td width="20%" ><input id="cur_1" name="cur_1" type="text" value="<?php echo $cur_1;?>"    class="form-control"  readonly maxlength="10" /></td>
                   <td width="18%" ><strong>Currency 1 Rate:<span style="color:#FF0000;">*</span></strong></td>
-                  <td width="46%" ><input id="cur_1_rate" name="cur_1_rate" type="text" value="<?php echo $cur_1_rate; ?>"  required class="form-control"/></td>
+                  <td width="46%" ><input id="cur_1_rate" name="cur_1_rate" type="text" value="1" readonly   class="form-control" style="width:175px"/></td>
                 </tr>
                 <tr>
-                   <td ><strong>Currency 2:</strong></td>
-                   <td ><input id="cur_2" name="cur_2" type="text" value="<?php echo $cur_2; ?>" class="form-control"/></td>
+                   <td ><strong>Currency 2:</strong> <br/>(e.g INR,USD,PKR)</td>
+                   <td ><input id="cur_2" name="cur_2" type="text" value="<?php echo $cur_2; ?>" class="form-control" maxlength="10"/></td>
                    <td ><strong>Currency 2 Rate:</strong></td>
-                   <td ><input id="cur_2_rate" name="cur_2_rate" type="text" value="<?php echo $cur_2_rate; ?>" class="form-control"/></td>
+                   <td ><input id="cur_2_rate" name="cur_2_rate" type="text" value="<?php echo $cur_2_rate; ?>" class="form-control" style="width:175px"/></td>
             </tr>
                 <tr>
-                   <td ><strong>Currency 3:</strong></td>
-                   <td ><input id="cur_3" name="cur_3" type="text" value="<?php echo $cur_3; ?>" class="form-control"/></td>
+                   <td ><strong>Currency 3:</strong> <br/>(e.g INR,USD,PKR)</td>
+                   <td ><input id="cur_3" name="cur_3" type="text" value="<?php echo $cur_3; ?>" class="form-control" maxlength="10"/></td>
                    <td ><strong>Currency 3 Rate:</strong></td>
-                   <td ><input id="cur_3_rate" name="cur_3_rate" type="text" value="<?php echo $cur_3_rate; ?>" class="form-control"/></td>
+                   <td ><input id="cur_3_rate" name="cur_3_rate" type="text" value="<?php echo $cur_3_rate; ?>" class="form-control" style="width:175px"/></td>
             </tr>
                 <tr>
 			  <td ><strong>Project Working Days:</strong></td>
               <td colspan="3" >
-              <select id="working_days[]" name="working_days[]" multiple="multiple" class="js-example-basic-multiple w-100"> 
+              <select id="working_days[]" name="working_days[]" multiple="multiple" class="js-example-basic-multiple" style="width:500px"> 
               <!--<option>Select Working Days</option>-->
               		 <?php  
 							 $objDbW->getWeekDays();
@@ -1153,7 +1208,7 @@ function CheckProjectDetail(frm){
 								  $wd_detail					=  $wrows['wd_detail'];
 								  $status						=  $wrows['status'];
 								  ?>
-                                  <option value="<?php echo $wd_id;?>" <?php if($status==1) {?> selected="selected" <?php }?>><?php echo $wd_detail; ?></option>
+                                  <option value="<?php echo $wd_id;?>" <?php if($status==1) {?> selected="selected" <?php }?> style="width:500px"><?php echo $wd_detail; ?></option>
                                   <?php
 							}
 							
@@ -1163,13 +1218,19 @@ function CheckProjectDetail(frm){
              </tr>
 			    <tr>
 					   <td  valign="middle"><strong>Project Annual Holidays</strong></td>
-					  <td colspan="3"  valign="top"><table class="clsTable" width="500" cellpadding="1" cellspacing="1">
+					  <td colspan="3"  valign="top"  style="width:100%">
+                      <table class="" style="width:50%" cellpadding="1" cellspacing="1">
             	<tbody id="tblPrdSizes">
+                <tr>
+                        <th style="width:5%; color:red; font-size:18px; text-align:left">Note:</th>
+						<th style="width:45%; color:red; text-align:left" colspan="2" > Date format is: yyyy-mm-dd <br/>example:  2010-01-25</th>
+                      
+                    </tr>
                     <tr>
                         <th style="width:5%;">&nbsp;</th>
-						<th style="width:45%;"><?php echo "Title";?></th>
-                        <th style="width:25%;"><?php echo "Date (yyyy-mm-dd)";?></th>
-                        <th style="width:25%;"><?php echo "Status";?></th>
+						<th style="width:25%;"><?php echo "Title";?></th>
+                        <th style="width:10%;"><?php echo "Date (yyyy-mm-dd)";?></th>
+                        <th style="width:10%;"><?php echo "Status";?></th>
                     </tr>
                     <?php
 					
@@ -1182,12 +1243,13 @@ function CheckProjectDetail(frm){
 							{
 								  $yh_id					= $yhrows['yh_id'];
 								  $yh_title					= $yhrows['yh_title'];
+								  $yh_title	= str_replace("999","'",$yh_title); 
 								  $yh_date					= $yhrows['yh_date'];
 								  $yh_status				= $yhrows['yh_status'];
 								?>
 					<tr>
 			        <td>
-                    <input type="checkbox" name="yh_id[]" value="<?php echo $yh_id;?>" />
+                    <input type="checkbox" name="yh_id[]" value="<?php echo $yh_id;?>"  width="20px"/>
                     </td>
 					<td><input type="text" name="yh_title_<?php echo $yh_id;?>" 
                     value="<?php echo $yh_title;?>" size="25" /></td>
@@ -1251,9 +1313,9 @@ function CheckProjectDetail(frm){
 
          
 
-        <!-- partial:../../../partials/_footer.html -->
+   
         <div id="partials-footer"></div>
-        <!-- partial -->
+      
 
          </div>     <!--content-wrapper ends -->
 
@@ -1279,10 +1341,7 @@ function CheckProjectDetail(frm){
   <!-- endinject -->
   <!-- Custom js for this page-->
   <script src="../../../js/chart.js"></script>
-  <!-- <script src="../../../js/navtype_session.js"></script> -->
-   <!--  commented because of date picker js files
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  -->
-  <!-- End custom js for this page-->
+   <!-- End custom js for this page-->
 
  <script>
       $(function(){
@@ -1307,129 +1366,6 @@ function CheckProjectDetail(frm){
     $("#partials-footer").load("../../../partials/_footer.php");
   });
 </script>
-
-
-<!-- Page Load Function -->
-
-<script>
-            $(document).ready(function() {
-
-                $(function() {
-                    $("#ipc_start_date").datepicker({});
-                });
-
-                $(function() {
-                    $("#ipc_end_date").datepicker({});
-                });
-
-                $(function() {
-                    $("#ipc_submit_date").datepicker({});
-                });
-
-                $(function() {
-                    $("#ipc_receive_date").datepicker({});
-                });
-
-                $('#ipc_start_date').change(function() {
-                    startDate = $(this).datepicker('getDate');
-                    $("#ipc_end_date").datepicker("option", "minDate", startDate);
-                })
-
-                $('#ipc_end_date').change(function() {
-                    endDate = $(this).datepicker('getDate');
-                    $("#ipc_start_date").datepicker("option", "maxDate", endDate);
-                })
-
-                $('#ipc_submit_date').change(function() {
-                    startDate = $(this).datepicker('getDate');
-                    $("#ipc_receive_date").datepicker("option", "minDate", startDate);
-                })
-
-                $('#ipc_receive_date').change(function() {
-                    endDate = $(this).datepicker('getDate');
-                    $("#ipc_submit_date").datepicker("option", "maxDate", endDate);
-                })
-            })
-        </script>
-
-<script language="javascript" type="text/javascript">
-
-function getXMLHTTP() { //fuction to return the xml http object
-		var xmlhttp;
-	if (window.XMLHttpRequest)
-	  {// code for IE7+, Firefox, Chrome, Opera, Safari
-	  xmlhttp=new XMLHttpRequest();
-	  }
-	else
-	  {// code for IE6, IE5
-	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	  }
-		return xmlhttp;
-    }
-
-function editbtnclick(ipcid){
-  //alert(ipcid);
-
-  var strURL="fetchipcdatafrm_id.php?ipcid="+ipcid;
-    var req= getXMLHTTP();
-
-    if(req)
-    {
-      req.onreadystatechange = function() {
-            if (req.readyState == 4) {
-              //alert(req.readyState);
-            // alert(req.status);
-              // only if "OK"
-              if (req.status == 200) {
-
-            //alert(req.responseText);
-
-            var ipcid,ipcno,ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status;
-
-                      var jsonData = JSON.parse(req.responseText);
-                      for (var i = 0; i < jsonData.Ipc_detail.length; i++) {
-                          var Ipc_detail = jsonData.Ipc_detail[i];
-
-                         ipcid = Ipc_detail.ipcid;
-                         ipcno = Ipc_detail.ipcno;
-                         ipcmonth = Ipc_detail.ipcmonth;
-                         ipcstartdate = Ipc_detail.ipcstartdate;
-                         ipcenddate = Ipc_detail.ipcenddate;
-                         ipcsubmitdate = Ipc_detail.ipcsubmitdate;
-                         ipcreceivedate = Ipc_detail.ipcreceivedate;
-                         status = Ipc_detail.status;
-                      }
-                      //alert(status);
-                      document.getElementById("ipc_ipcid").value = ipcid;
-                      document.getElementById("ipc_ipcno").value = ipcno;
-                      document.getElementById("ipc_month").value = ipcmonth;
-                      document.getElementById("ipc_start_date").value = ipcstartdate;
-                      document.getElementById("ipc_end_date").value = ipcenddate;
-                      document.getElementById("ipc_submit_date").value = ipcsubmitdate;
-                      document.getElementById("ipc_receive_date").value = ipcreceivedate;
-                      document.getElementById("ipc_status").value = status;
-                      document.getElementById("SubmitUpdate").style.display = "block";
-                      document.getElementById("SubmitAdd").style.display = "none";
-
-
-
-
-              } else {
-
-                alert("There was a problem while using XMLHTTP:7\n" + req.statusText);
-              }
-            }
-          }
-          req.open("GET", strURL, true);
-          req.send(null);
-    }
-
-
-
-}
-
-</script>
-
 </body>
 
 </html>

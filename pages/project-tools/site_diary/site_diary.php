@@ -167,7 +167,7 @@ if($prev!=$current)
 						{
 						?>
 						<tr>
-                          <td colspan="8" ><?php echo NO_RECORD;?></td>
+                          <td colspan="8" ><?php echo "No Record Found";?></td>
                         </tr>
 						<?php
 						}

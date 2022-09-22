@@ -17,7 +17,12 @@ $pData =$objDb->dbFetchArray();
   $dpentry_flag=1;
  $dpadm_flag=1;		
  
- 
+ function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+
+    return $res;
+}
 if(isset($_REQUEST['risk_con_id']))
 {
 $risk_con_id=$_REQUEST['risk_con_id'];
@@ -45,8 +50,8 @@ if(isset($_REQUEST['delete'])&&isset($_REQUEST['item_id'])&$_REQUEST['item_id']!
 }
 
 if(isset($_REQUEST['save']))
-{    $risk_con_code=$_REQUEST['risk_con_code'];
-    $ris_con_desc=$_REQUEST['ris_con_desc'];
+{    $risk_con_code=RemoveSpecialChar($_REQUEST['risk_con_code']);
+    $ris_con_desc=RemoveSpecialChar($_REQUEST['ris_con_desc']);
     $lid=$_REQUEST['lid'];
     if($risk_con_code!='0'){
         $pSQL = "SELECT max(risk_con_id) as risk_con_id from tbl_risk_register_context";
@@ -73,7 +78,7 @@ $risk_con_code=$pData["risk_con_id"]+1;
 
 if(isset($_REQUEST['update']))
 {
-$ris_con_desc=$_REQUEST['ris_con_desc'];
+$ris_con_desc=RemoveSpecialChar($_REQUEST['ris_con_desc']);
 
 $pdSQL = "SELECT * FROM  tbl_risk_register_context a WHERE risk_con_id = ".$risk_con_id."";
 $pdSQLResult = $objDb->dbQuery($pdSQL);
@@ -84,7 +89,7 @@ $pdData=$objDb->dbFetchArray();
 $risk_con_id=$_REQUEST['risk_con_id'];
 
 $risk_con_code=$pdData['risk_con_code'];
-$ris_con_desc=$_REQUEST['ris_con_desc'];
+$ris_con_desc=RemoveSpecialChar($_REQUEST['ris_con_desc']);
 $lid=$_REQUEST['lid'];
 
 		
@@ -182,6 +187,8 @@ window.opener.location.reload();
       box-shadow: 0px 2px 5px 1px  rgba(0, 0, 0, 0.3);
     }
   </style>
+  
+ 
     <div class="container-fluid">
 
     <div class=" grid-margin stretch-card " style = "margin-top: 3%;"></div>
@@ -189,14 +196,14 @@ window.opener.location.reload();
                 <div class="card-body text-center">
                   <h4 class="card-title">ADD RISK CONTEXT</h4>
 				  <?php echo $message; ?>
-                  <form class="forms-sample" action="risk_reg_item.php" target="_self" method="post"  enctype="multipart/form-data">
+                  <form class="forms-sample" action="risk_reg_item.php" target="_self" method="post"   enctype="multipart/form-data" >
                     
 				  <div class="form-group row">
 
-          <div class="text-end col-sm-6"> <label>Componet Area : </label> </div>
+          <div class="text-end col-sm-6"> <label>Component Area : </label> </div>
                       <div class="text-start col-sm-4">
                    <select class="form-control" style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);"  id="lid" name="lid"    Required>
-                        <option value="0"><?php echo COMP ?></option>
+                        <option value=""><?php echo COMP ?></option>
                         <?php $pdSQL = "SELECT * FROM  structures WHERE pid=".$pid." order by lid";
                               $objDb->dbQuery($pdSQL);
                               $i=0;
@@ -217,10 +224,12 @@ window.opener.location.reload();
                     }?>
                    </select>       
                           </div>
+                          </div>
+                           <div class="form-group row">
 
                     <div class="text-end col-sm-6"> <label>Item Description : </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control bg-light text-dark"  type="text"   name="ris_con_desc" id="ris_con_desc" value="<?php echo $ris_con_desc;?>"  style="width: 60%;" placeholder="Item Description " Required>
+					     <input class="form-control bg-light text-dark"  type="text"   name="ris_con_desc" id="ris_con_desc" value="<?php echo $ris_con_desc;?>" maxlength="250"  style="width: 60%;" placeholder="Item Description " Required>
                       </div>
                  </div>	
 

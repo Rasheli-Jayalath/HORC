@@ -4,9 +4,12 @@ include_once("../../../config/config.php");
 header("Content-Type: text/html; charset=utf-8");
 $module		= "Manage Photos";
 
-$pic_flag			= $_SESSION['ne_pic'];
+/*$pic_flag			= $_SESSION['ne_pic'];
 	$picadm_flag		= $_SESSION['ne_picadm'];
-	$picentry_flag		=$_SESSION['ne_picentry'];
+	$picentry_flag		=$_SESSION['ne_picentry'];*/
+	$pic_flag			= 1;
+	$picadm_flag		= 1;
+	$picentry_flag		=1;
 	$uid				= $_SESSION['ne_user_cd']; 
 	$uname				= $_SESSION['ne_username'];
 	$superadmin_flag 		= $_SESSION['ne_sadmin'];
@@ -19,6 +22,12 @@ header("Location: ../../../index.php?init=3");
 $edit			= $_GET['edit'];
 $objDb  		= new Database( );
 $objDb1 		= new Database( );
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+
 //@require_once("get_url.php");
 $file_path="photos/";
 $file_thumb_path="photos/thumb/";
@@ -90,7 +99,7 @@ if(isset($_REQUEST['save']))
 { 
     
 	
-	$ph_cap=$_REQUEST['ph_cap'];
+	$ph_cap=RemoveSpecialChar($_REQUEST['ph_cap']);
 	
 	
 		
@@ -205,7 +214,7 @@ $iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$a
 
 if(isset($_REQUEST['update']))
 {
-$ph_cap=$_REQUEST['ph_cap'];
+$ph_cap=RemoveSpecialChar($_REQUEST['ph_cap']);
 $pdSQL = "SELECT a.phid, a.pid, a.album_id, a.al_file FROM t027project_photos a WHERE pid = ".$pid." and album_id=".$album_id." and phid=".$phid." order by phid";
 $pdSQLResult = $objDb->dbQuery($pdSQL);
 $sql_num=$objDb->totalRecords();
@@ -511,7 +520,7 @@ function getDates(lid)
                       </div>
                       <div class="text-center col-sm-4">
                        
-                        <input type="text" class="form-control text-center"   name="ph_cap" id="ph_cap" value="<?php echo $ph_cap;?>"  placeholder="Enter The Photo Caption Here" Required>
+                        <input type="text" class="form-control text-center"   name="ph_cap" id="ph_cap" value="<?php echo $ph_cap;?>"  placeholder="Enter The Photo Caption Here" maxlength="250" Required>
                         <input class="form-control"  type="hidden" style="width:300px;" id="palid" name="palid" value="<?php echo $album_id;?>">
                       </div>
                       <div class="text-center col-sm-4">

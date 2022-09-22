@@ -93,10 +93,10 @@ $news_cdd=$_GET['news_cd'];
 		   <?php
 		   }?>
                                           <div class="wrapper ms-3" style=" width:80%">
-                                           <h4 class="card-title"><?php echo str_replace("999","'",$rows['title']);?></h4>
+                                           <h4 class="card-title"><?php echo $rows['title'];?></h4>
                                            
                   <p class="card-description wrapper">
-                  <?php print str_replace("999","'",$rows['details']);?>
+                  <?php print $rows['details'];?>
                  
                   </p>
                   <?php

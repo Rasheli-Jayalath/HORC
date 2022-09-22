@@ -4,9 +4,12 @@ include_once("../../../config/config.php");
 
 $module		= "Manage Photos";
 
-$pic_flag			= $_SESSION['ne_pic'];
+/*$pic_flag			= $_SESSION['ne_pic'];
 	$picadm_flag		= $_SESSION['ne_picadm'];
-	$picentry_flag		=$_SESSION['ne_picentry'];
+	$picentry_flag		=$_SESSION['ne_picentry'];*/
+	$pic_flag			= 1;
+	$picadm_flag		= 1;
+	$picentry_flag		=1;
 	$uid				= $_SESSION['ne_user_cd']; 
 	$uname				= $_SESSION['ne_username'];
 	$superadmin_flag 		= $_SESSION['ne_sadmin'];
@@ -22,6 +25,13 @@ $objDb1  		= new Database( );
 $objDb2  		= new Database( );
 //@require_once("get_url.php");
 //===============================================
+
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+
 $file_path="photos/";
 $user_cd=$uid;
  $pSQL = "SELECT max(pid) as pid from project";
@@ -85,7 +95,7 @@ $iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$a
 $max_size=($size * 1024 * 1024);*/
 if(isset($_REQUEST['save']))
 { 
-   $v_cap=$_REQUEST['v_cap'];
+   $v_cap=RemoveSpecialChar($_REQUEST['v_cap']);
 	// $file_name1 = $_FILES['v_al_file']['name'];
  //echo  $file_type = $_FILES['v_al_file']['type'];
     echo $file_size = $_FILES['v_al_file']['size'];
@@ -101,7 +111,7 @@ if(isset($_REQUEST['save']))
  $extension = pathinfo($_FILES['v_al_file']['name'], PATHINFO_EXTENSION);
 	//$extension=getExtention($_FILES["al_file"]["type"]);
 	echo $file_name=genRandom(5)."-".$pid. ".".$extension;
- echo   "test".$tmpFilePath = $_FILES['v_al_file']['tmp_name'];
+ echo   $tmpFilePath = $_FILES['v_al_file']['tmp_name'];
 
             //Make sure we have a filepath
             if($tmpFilePath != ""){
@@ -117,7 +127,7 @@ if(isset($_REQUEST['save']))
 	echo $tmpFilePath;
 	if(move_uploaded_file($tmpFilePath,$target_file))
 	{
-		echo "sdfndsjf";
+		
 	echo $sql_pro1="INSERT INTO t32project_videos(pid,album_id,v_cap,v_al_file) Values(".$pid.",".$album_id.", '".$v_cap."', '".$file_name."' )";
 	$sql_pro=$objDb2->dbQuery($sql_pro1);
 	$insert_id=$con->lastInsertId();
@@ -145,7 +155,7 @@ if(isset($_REQUEST['save']))
 
 if(isset($_REQUEST['update']))
 {
-$v_cap=$_REQUEST['v_cap'];
+$v_cap=RemoveSpecialChar($_REQUEST['v_cap']);
 $pdSQL = "SELECT a.vid, a.pid,a.album_id, a.v_al_file FROM t32project_videos a WHERE pid = ".$pid." and vid=".$vid." and album_id=".$album_id." order by vid";
 $pdSQLResult = $objDb->dbQuery($pdSQL);
 $sql_num=$objDb->totalRecords();

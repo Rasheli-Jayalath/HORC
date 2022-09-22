@@ -147,12 +147,18 @@ $pdData1 =$ObjMapDrawing2->dbFetchArray();
 //$pdData1 = mysql_fetch_array($pdSQLResult1);
 $status=$pdData1['status'];
 $album_name=$pdData1['album_name'];
-}
 
+}
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
 if(isset($_REQUEST['save']))
 { 
  
-	 $album_name=$_REQUEST['album_name'];
+	 $album_name=RemoveSpecialChar($_REQUEST['album_name']);
+	
 	 $status=$_REQUEST['status'];
 	 $sql2="INSERT INTO t031project_drawingalbums(parent_id,pid, album_name, status) Values( ".$parent_id.", ".$pid.",'".$album_name."', ".$status.")";
 	$ObjMapDrawing->dbQuery($sql2);
@@ -219,7 +225,7 @@ header("Location: sp_drawingalbum_input.php?parent_id=".$parent_id."&msg_flg=".$
 
 if(isset($_REQUEST['update']))
 {
-$album_name=$_REQUEST['album_name'];
+$album_name=RemoveSpecialChar($_REQUEST['album_name']);
 $status=$_REQUEST['status'];
 $sql_pro="UPDATE t031project_drawingalbums SET album_name='$album_name',status='$status' where albumid=$albumid and parent_id=$parent_id";
 	

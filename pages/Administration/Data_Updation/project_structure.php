@@ -23,6 +23,13 @@ $pSQL = "SELECT max(pid) as pid from project";
 						 $pData = $objDb->dbFetchArray();
 						 $pid=$pData["pid"];
 						 
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+
+						 
 if(isset($_REQUEST['lid']))
 {
 $lid=$_REQUEST['lid'];
@@ -30,7 +37,9 @@ $pdSQL1="SELECT * FROM structures WHERE  lid = ".$lid;
  $pdSQLResult1 = $objDb->dbQuery($pdSQL1);
  $pdData1 = $objDb->dbFetchArray();
  $title=$pdData1['title'];
+
  $code=$pdData1['code'];
+
  $lid=$pdData1['lid'];
 }
 if(isset($_REQUEST['action'])&&$_REQUEST['action']=='del'&&isset($_REQUEST['lid'])&$_REQUEST['lid']!="")
@@ -84,8 +93,11 @@ if(isset($_REQUEST['save']))
 	 $parentcd_kpi=$bData_kpi["itemid"];
 	  $parentgroup1_kpi=$bData_kpi["parentgroup"];
 						
-    $title=$_REQUEST['title'];
-	$code=$_REQUEST['code'];
+    $title=RemoveSpecialChar($_REQUEST['title']);
+
+	$code=RemoveSpecialChar($_REQUEST['code']);
+	
+	
 	$parent_album=0;
 	$lid=$objAdminUser->genCode("structures", "lid");
 	$sql_pro=$objDb->dbQuery("INSERT INTO  structures(pid, title,code) Values(".$pid.", '".$title."' , '".$code."' )");
@@ -147,7 +159,7 @@ if(isset($_REQUEST['save']))
 	
 	//End Maps and Drawing Entry
 	
-	///////////////////////////BOQ Entry//////////////////////
+	/*///////////////////////////BOQ Entry//////////////////////
 		//$itemid=$objAdminUser->genCode("boqdata", "itemid");
 		$activitylevel=1;
 		$stage="BOQ";
@@ -311,7 +323,7 @@ if(isset($_REQUEST['save']))
 		 $parent_group=$parentgroup1_kpi."_".$parent_group;
 	 $sql_pro="UPDATE kpidata SET parentgroup='$parent_group' where kpiid=$itemid_kpi";
 	
-	$sql_proresult=$objDb2->dbQuery($sql_pro);
+	$sql_proresult=$objDb2->dbQuery($sql_pro);*/
 	// KPI Data end
 	
     $message=  "New record added successfully";
@@ -328,8 +340,12 @@ if(isset($_REQUEST['save']))
 
 if(isset($_REQUEST['action'])&&$_REQUEST['action']=="edit"&&$_SERVER['REQUEST_METHOD'] == "POST"&&isset($_REQUEST['lid']))
 {
- $title=$_REQUEST['title'];
-	$code=$_REQUEST['code'];	
+	 $title=RemoveSpecialChar($_REQUEST['title']);
+ 	
+	$code=RemoveSpecialChar($_REQUEST['code']);
+	
+ 
+
 
  $lid=$_REQUEST['lid'];
 	  $sql_pro="UPDATE  structures SET title='$title', code='$code' where lid=$lid";
@@ -344,10 +360,10 @@ if(isset($_REQUEST['action'])&&$_REQUEST['action']=="edit"&&$_SERVER['REQUEST_ME
 	
 	$sql_proresult=$objDb->dbQuery($sql_pro);
 	
-		$sql_pro="UPDATE  boqdata SET itemname='$title', itemcode='$code' where lid=$lid";
+		/*$sql_pro="UPDATE  boqdata SET itemname='$title', itemcode='$code' where lid=$lid";
 	
 	$sql_proresult=$objDb->dbQuery($sql_pro);
-	
+	*/
 	
 		if ($sql_proresult == TRUE) {
 		$message=  "Record updated successfully";
@@ -490,7 +506,7 @@ function CheckProjectDetail(frm){
 
                                 <div class="col-md-12">
                                 <label for="" class="col-sm-6" >Structure Code </label>
-                                    <input placeholder="Enter Code" type="text" name="code" id="code"   minlength="" maxlength="" value="<?php echo $code;?>"     required  class="form-control form-control-enhanced" >
+                                    <input placeholder="Enter Code" type="text" name="code" id="code"   maxlength="190" value="<?php echo $code;?>"     required  class="form-control form-control-enhanced" >
                                 </div>
                               </div>
                             </div>
@@ -500,7 +516,7 @@ function CheckProjectDetail(frm){
 
                                     <div class="col-md-12">
                                     <label >Structure Title </label>
-                                      <input placeholder="Enter Title" type="text" name="title" id="title"   minlength="" maxlength=""   value="<?php echo $title;?>"  required  class="form-control form-control-enhanced" >
+                                      <input placeholder="Enter Title" type="text" name="title" id="title"   maxlength="250"   value="<?php echo $title;?>"  required  class="form-control form-control-enhanced" >
                                        
                                     </div>
                               </div>

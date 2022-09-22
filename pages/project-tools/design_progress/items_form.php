@@ -9,6 +9,13 @@ $objSDb  		= new Database( );
 $objVSDb  		= new Database( );
 $_SESSION['ne_user_type']=1;
 $user_cd=1;
+
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+
+    return $res;
+}
 $pSQL = "SELECT max(pid) as pid from project";
 $objDb->dbQuery($pSQL);
 $pData =$objDb->dbFetchArray();
@@ -44,7 +51,7 @@ if(isset($_REQUEST['delete'])&&isset($_REQUEST['item_id'])&$_REQUEST['item_id']!
 
 if(isset($_REQUEST['save']))
 {    $lid=$_REQUEST['lid'];
-    $title=$_REQUEST['title'];
+    $title=RemoveSpecialChar($_REQUEST['title']);
     if($lid!='0'){
 	$sql_pro=$objDb->dbQuery("INSERT INTO  t014majoritems(pid, title,lid) Values(".$pid.", '".$title."', '".$lid."' )");
 	if ($sql_pro == TRUE) {
@@ -65,7 +72,7 @@ if(isset($_REQUEST['save']))
 
 if(isset($_REQUEST['update']))
 {
-$title=$_REQUEST['title'];
+$title=RemoveSpecialChar($_REQUEST['title']);
 $pdSQL = "SELECT a.item_id, a.pid, lid FROM  t014majoritems a WHERE pid = ".$pid." and item_id=".$item_id." order by item_id";
 $pdSQLResult = $objDb->dbQuery($pdSQL);
 $sql_num=$objDb-> totalRecords();
@@ -180,10 +187,11 @@ window.opener.location.reload();
                     
 				  <div class="form-group row">
 
-          <div class="text-end col-sm-6"> <label>Componet Area : </label> </div>
+          <div class="text-end col-sm-6"> 
+          <label>Componet Area : </label> </div>
                       <div class="text-start col-sm-4">
-                   <select class="form-control" style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);"  id="lid" name="lid"    Required>
-                        <option value="0"><?php echo COMP ?></option>
+                   <select class="form-control" style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);"  id="lid" name="lid"  required>
+                        <option value=""><?php echo COMP ?></option>
                         <?php $pdSQL = "SELECT * FROM  structures WHERE pid=".$pid." order by lid";
                               $objDb->dbQuery($pdSQL);
                               $i=0;
@@ -204,7 +212,8 @@ window.opener.location.reload();
                     }?>
                    </select>       
                           </div>
-
+                          </div>
+ <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Item Description : </label> </div>
                       <div class="text-start col-sm-6">
 					     <input class="form-control bg-light text-dark"  type="text"   name="title" id="title" value="<?php echo $title;?>"  style="width: 60%;" placeholder="Item Description " Required>
@@ -243,7 +252,7 @@ window.opener.location.reload();
   <thead class="" style="background-image: linear-gradient(180deg, #c9c9f5, #c9c9f5);">
                                 <tr style="">
                                   <th style="font-weight: 900; text-align:center; vertical-align:middle">S#</th>
-                                  <th style="font-weight: 900; text-align:center; vertical-align:middle">Componet</th>
+                                  <th style="font-weight: 900; text-align:center; vertical-align:middle">Component</th>
                                   <th width="70%" style="font-weight: 900; text-align:center">Title</th>
                                 
 								  <?php if($dpentry_flag==1 || $dpadm_flag==1)

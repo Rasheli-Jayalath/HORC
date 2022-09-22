@@ -1,69 +1,4 @@
 <?php
-/*error_reporting(E_ALL & ~E_NOTICE);
-@require_once("requires/session.php");
-$module			= "Non Confirmity Notices";
-if ($uname==null)
-{
-	header("Location:index.php?init=3");
-}
-else if ($ncf_flag==0)
-{
-	header("Location: index.php?init=3");
-}
-$defaultLang = 'en';
-
-//Checking, if the $_GET["language"] has any value
-//if the $_GET["language"] is not empty
-if (!empty($_GET["language"])) { //<!-- see this line. checks 
-    //Based on the lowecase $_GET['language'] value, we will decide,
-    //what lanuage do we use
-    switch (strtolower($_GET["language"])) {
-        case "en":
-            //If the string is en or EN
-            $_SESSION['lang'] = 'en';
-            break;
-        case "rus":
-            //If the string is tr or TR
-            $_SESSION['lang'] = 'rus';
-            break;
-        default:
-            //IN ALL OTHER CASES your default langauge code will set
-            //Invalid languages
-            $_SESSION['lang'] = $defaultLang;
-            break;
-    }
-}
-
-//If there was no language initialized, (empty $_SESSION['lang']) then
-if (empty($_SESSION["lang"])) {
-    //Set default lang if there was no language
-    $_SESSION["lang"] = $defaultLang;
-}
-if($_SESSION["lang"]=='en')
-{
-require_once('rs_lang.admin.php');
-
-}
-else
-{
-	require_once('rs_lang.admin_rus.php');
-
-}
-$log_id = $_SESSION['log_id'];
-$edit			= $_GET['edit'];
-$revert			= $_GET['revert'];
-$objDb  		= new Database( );
-$objSDb  		= new Database( );
-$objVSDb  		= new Database( );
-$objCSDb  		= new Database( );
-@require_once("get_url.php");
-$user_cd=$uid;
-$msg						= "";
- $pSQL = "SELECT max(pid) as pid from project";
-						 $pSQLResult = mysql_query($pSQL);
-						 $pData = mysql_fetch_array($pSQLResult);
-						 $pid=$pData["pid"];
-*/
 require_once('../../../rs_lang.admin.php');
 require_once('../../../rs_lang.eng.php');
 include_once("../../../config/config.php");
@@ -75,8 +10,7 @@ $objDb  		= new Database( );
 $objSDb  		= new Database( );
 $objVSDb  		= new Database( );
 $objCSDb  		= new Database( );
-//@require_once("get_url.php");
-//$user_cd=$uid;
+
 $_SESSION['ne_user_type']=1;
 $user_cd=1;
 $msg						= "";
@@ -106,15 +40,22 @@ function getExtention($type){
 		return "doc";
 		
 }
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+
+    return $res;
+}
+
 if(isset($_REQUEST['save']))
 {
 	
 	$iss_no=$_REQUEST['iss_no'];
-	$iss_title=$_REQUEST['iss_title'];
-	$iss_detail=$_REQUEST['iss_detail'];
+	$iss_title=	RemoveSpecialChar($_REQUEST['iss_title']);
+	$iss_detail=RemoveSpecialChar($_REQUEST['iss_detail']);
 	$iss_status=$_REQUEST['iss_status'];
-	$iss_action=$_REQUEST['iss_action'];
-	$iss_remarks=$_REQUEST['iss_remarks'];
+	$iss_action=RemoveSpecialChar($_REQUEST['iss_action']);
+	$iss_remarks=RemoveSpecialChar($_REQUEST['iss_remarks']);
 	$lid=$_REQUEST['lid'];
 	$message="";
 	$pgid=1;
@@ -140,7 +81,8 @@ if(isset($_REQUEST['save']))
 	
 	}
 	}
- $sql_pro=$objDb->dbQuery("INSERT INTO t013nonconformitynotice (pid, iss_no, iss_title, iss_detail, iss_status, iss_action, iss_remarks,attachment,lid) Values(".$pid.",'".$iss_no."', '".$iss_title."', '".$iss_detail."', '".$iss_status."', '".$iss_action."', '".$iss_remarks."', '".$flink."', '".$lid."')");
+	 $sql_r="INSERT INTO t013nonconformitynotice (pid, iss_no, iss_title, iss_detail, iss_status, iss_action, iss_remarks,attachment,lid) Values(".$pid.",'".$iss_no."', '".$iss_title."', '".$iss_detail."', '".$iss_status."', '".$iss_action."', '".$iss_remarks."', '".$flink."', '".$lid."')";
+  $sql_pro=$objDb->dbQuery($sql_r);
   $insertid=$con->lastInsertId();
 	if ($sql_pro == TRUE) {
     $message=  "New record added successfully";
@@ -152,7 +94,10 @@ if(isset($_REQUEST['save']))
 }
 $iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$activity')");
 $objSDb->dbQuery($iSQL);
-
+print "<script type='text/javascript'>";
+    print "window.opener.location.reload();";
+    print "self.close();";
+    print "</script>";
 	
 	$iss_no='';
 	$iss_title='';
@@ -185,11 +130,11 @@ if(isset($_REQUEST['update']))
 	
 	$nos_id=$_REQUEST['nos_id'];
 	$iss_no=$_REQUEST['iss_no'];
-	$iss_title=$_REQUEST['iss_title'];
-	$iss_detail=$_REQUEST['iss_detail'];
+	$iss_title=RemoveSpecialChar($_REQUEST['iss_title']);
+	$iss_detail=RemoveSpecialChar($_REQUEST['iss_detail']);
 	$iss_status=$_REQUEST['iss_status'];
-	$iss_action=$_REQUEST['iss_action'];
-	$iss_remarks=$_REQUEST['iss_remarks'];
+	$iss_action=RemoveSpecialChar($_REQUEST['iss_action']);
+	$iss_remarks=RemoveSpecialChar($_REQUEST['iss_remarks']);
 	$lid=$_REQUEST['lid'];
 	$message="";
 	$pgid=1;
@@ -248,7 +193,10 @@ $objSDb->dbQuery($iSQL);
 //	$price='';
 //	$display_order='';
 	
-header("Location: project_nonconfirmity_info.php");
+print "<script type='text/javascript'>";
+    print "window.opener.location.reload();";
+    print "self.close();";
+    print "</script>";
 }
 
 ?>
@@ -257,21 +205,7 @@ header("Location: project_nonconfirmity_info.php");
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php //include ('includes/metatag.php'); ?>
-<script>
-function doFilter(frm){
-	var qString = '';
-	if(frm.lid.value != ""){
-		qString += 'lid=' + escape(frm.lid.value);
-	}
-	if(frm.iss_status.value != ""){
-		qString += '&iss_status=' + escape(frm.iss_status.value);
-	}
-	
-	document.location = 'project_issues_info.php?' + qString;
-}
 
-
-</script>
 
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -453,11 +387,17 @@ table{
   function required(){
 	
 	var x =document.getElementById("lid").value;
+	
+	var iss_no =document.getElementById("iss_no").value;
 	var file =document.getElementById("al_file").value;
 	var old_file =document.getElementById("old_al_file").value;
 	
 	 if (x == 0) {
     alert("Select Component First");
+    return false;
+  		}
+		 if (iss_no == "") {
+    alert("Add Notice Number");
     return false;
   		}
 		if (file == "" && old_file=="" ) {
@@ -548,7 +488,7 @@ table{
                           <div class="form-group row">
                             <label class="col-sm-4 text-end"> <?php echo NON_CON_NOTE_NO;?>: </label>
                             <div class="col-sm-8 text-start">
-							<input  type="text" name="iss_no"class="form-control" id="iss_no" value="<?php echo $iss_no; ?>" />
+							<input  type="text" name="iss_no"class="form-control" id="iss_no" value="<?php echo $iss_no; ?>" maxlength="100" />
                             </div>
                           </div>
                         </div>
@@ -597,37 +537,14 @@ table{
                           </div>
                         </div>
             </div>
-            <div class="row">
-                       <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-4 text-end"> Image 1 : </label>
-                            <div class="col-sm-8 text-start">
-
-                               <input class="form-control" type="file" name="" id="" value="" />
-                               <input  type="hidden" name="" id="" value="" />
-
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-4 text-end"> Image 2 : </label>
-                            <div class="col-sm-8 text-start">
-
-                               <input class="form-control" type="file" name="" id="" value="" />
-                               <input  type="hidden" name="" id="" value="" />
-
-                            </div>
-                          </div>
-                        </div>
-            </div>
+            
             <div class="row">
                        <div class="col-md-6">
                           <div class="form-group row">
                             <label class="col-sm-4 text-end">  <?php echo ATTACH;?>:  </label>
                             <div class="col-sm-8 text-start">
-							<input class="form-control"  type="file" name="al_file" id="al_file" value="<?php echo $old_attachment; ?>" />
+							<input class="form-control"  type="file" name="al_file" id="al_file" value="<?php echo $old_attachment; ?>" /><br/>
+                           
                             <input  type="hidden" name="old_al_file" id="old_al_file" value="<?php echo $old_attachment; ?>" />
 
 						   </div>

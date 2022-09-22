@@ -49,9 +49,12 @@ $file_path="drawings/";
 //$category = $_REQUEST['category'];
  $dwg_type = $_REQUEST['dwg_type'];
 $dwg_no = $_REQUEST['dwg_no'];
+
 $dwg_title = $_REQUEST['dwg_title'];
+
 $dwg_date = $_REQUEST['dwg_date'];
 $revision_no = $_REQUEST['revision_no'];
+
 $dwg_status = $_REQUEST['dwg_status'];
 
 
@@ -227,9 +230,12 @@ while($sSQL3=$ObjMapDrawing3->dbFetchArray())
 		$album_id 			= $sSQL3['album_id'];
 		$dwgid 					= $sSQL3['dwgid'];
 		$dwg_no  				= $sSQL3['dwg_no'];
+		
 		$dwg_title  			= $sSQL3['dwg_title'];
+		
 		$al_file  				= $sSQL3['al_file'];
 		$revision_no  				= $sSQL3['revision_no'];
+		
 		$dwg_status  				= $sSQL3['dwg_status'];
 		
 		

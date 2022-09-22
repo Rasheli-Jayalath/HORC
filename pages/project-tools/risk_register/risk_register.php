@@ -245,7 +245,7 @@ table{
     <?php  if($dpentry_flag==1 || $dpadm_flag==1){?>
    <?php if($pid != ""&&$pid!=0){?>  
     <button  class="  col-sm-2 button-33" href="risk_reg_item.php" onclick="window.open('risk_reg_item.php', 'Upload Photos ','width=800px,height=650px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');" >Add Risk Context</button> 
-    <button class="  col-sm-2 button-33" href="risk_reg_input.php"     onclick="window.open('risk_reg_input.php', 'Upload Photos ','width=800px,height=750px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  class="button">Add New Risk</button>
+    <button class="  col-sm-2 button-33" href="risk_reg_input.php"     onclick="window.open('risk_reg_input.php', 'Upload Photos ','width=800px,height=750px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  >Add New Risk</button>
     <?php }}?>
   
 
@@ -421,7 +421,7 @@ table{
                 if($current2!=$current){?>
                   <tr class="">
                              
-                  <td align="left" colspan="16" class="" style=" text-transform:capitalize; background: #BEBEBE   ; font-size:20px"><span ><strong><?php echo $current?></strong></span></td>
+                  <td align="left" colspan="17" class="" style=" text-transform:capitalize; background: #BEBEBE   ; font-size:20px"><span ><strong><?php echo $current?></strong></span></td>
                  
                 </tr>
                
@@ -480,20 +480,26 @@ table{
 								   ?>
 							<td align="right">
               <span style="float:right">
-              <form action="risk_reg_input.php?risk_id=<?php echo $pdData['risk_id'] ?>" method="post">
-               <button type="submit" title="Edit" class="btn btn-outline-warning btn-fw px-1 py-1 "  name="edit" id="edit" value="<?php echo $pdData['risk_id'];?>" >
-               <i class="ti-pencil btn-icon-prepend" ></i>  
-                            </button></form></span>
+              
+                  <button class="btn btn-outline-warning btn-fw px-1 py-1 " href="risk_reg_input.php"     onclick="window.open('risk_reg_input.php?risk_id=<?php echo $pdData['risk_id'] ?>', 'Risk Register ','width=800px,height=750px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  ><i class="ti-pencil btn-icon-prepend" ></i></button>
+
+              </span>
 						   <!-- <span style="float:right"><form action="project_risk_input.php?risk_id=<?php echo $pdData['risk_id'] ?>" method="post">
                <input type="submit" name="edit" id="edit" value="Edit" /></form></span> -->
 						     </td>
 						   <?php  
 							}
-							if($ncfadm_flag==1)
+							if($dpadm_flag==1)
 								  {
 								   ?>
 						   <td align="right">
-						   <span style="float:right"><form action="project_risk_info.php?risk_id=<?php echo $pdData['risk_id'] ?>" method="post"><input type="submit" name="delete" id="delete" value="Del" onclick="return confirm('Are you sure?')" /></form></span></td>
+						  
+                           
+                             <span style="float:right"><form action="risk_register.php?risk_id=<?php echo $pdData['risk_id'] ?>" method="post">
+               <button type="submit" title="Delete" class="btn btn-outline-danger btn-fw px-1 py-1 " name="delete" id="delete" value="Del" onclick="return confirm('Are you sure?')" >
+               <i class="ti-trash btn-icon-prepend" ></i> 
+        					</button></form></span>
+                         
 						  <?php
 						   }
 						   ?>

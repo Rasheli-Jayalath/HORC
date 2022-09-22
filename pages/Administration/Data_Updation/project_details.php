@@ -32,41 +32,47 @@ $txtstage				 	= "Project";
  $objPD->getProject();
   $PCount=$objPD->totalRecords();
   
+  function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+  
   if($PCount==1)
   {
 	  $pdrows = $objPD->dbFetchArray();
 	  $pid=$pdrows["pid"];
   }
  
-$base_cur				= $_REQUEST['base_cur'];
-$cur_1					= $_REQUEST['cur_1'];
+$base_cur				= RemoveSpecialChar($_REQUEST['base_cur']);
+$cur_1					= RemoveSpecialChar($_REQUEST['cur_1']);
 $cur_1_rate			    = trim($_REQUEST['cur_1_rate']);
-$cur_2					= $_REQUEST['cur_2'];
+$cur_2					= RemoveSpecialChar($_REQUEST['cur_2']);
 $cur_2_rate				= trim($_REQUEST['cur_2_rate']);
-$cur_3					= $_REQUEST['cur_3'];
+$cur_3					= RemoveSpecialChar($_REQUEST['cur_3']);
 $cur_3_rate				= trim($_REQUEST['cur_3_rate']);
-$txtpcode				= $_REQUEST['txtpcode'];
-$txtpdetail				= $_REQUEST['txtpdetail'];
-$txtpdetail	= str_replace("'","999",$txtpdetail);
+$txtpcode				= RemoveSpecialChar($_REQUEST['txtpcode']);
+$txtpdetail				= RemoveSpecialChar($_REQUEST['txtpdetail']);
+
 
 //echo $txtpdetail				=  preg_replace('/\'\"/', '', $txtpdetail);
 $ptype				= $_REQUEST['txtptype'];
 $txtpstart				= date('Y-m-d',strtotime($_REQUEST['txtpstart']));
 $txtpend				= date('Y-m-d',strtotime($_REQUEST['txtpend']));
-$client					= $_REQUEST['client'];
-$client	= str_replace("'","999",$client);
-$funding_agency			= $_REQUEST['funding_agency'];
-$funding_agency	= str_replace("'","999",$funding_agency);
-$contractor				= $_REQUEST['contractor'];
-$contractor	= str_replace("'","999",$contractor);
+$client					= RemoveSpecialChar($_REQUEST['client']);
+
+$funding_agency			= RemoveSpecialChar($_REQUEST['funding_agency']);
+
+$contractor				= RemoveSpecialChar($_REQUEST['contractor']);
+
 $pcost				    =str_replace(',','',$_REQUEST['pcost']);
 $sector_id				= $_REQUEST['sector_id'];
 $country_id				= $_REQUEST['country_id'];
-$location				= $_REQUEST['location'];
-$location	= str_replace("'","999",$location);
-$consultant				= $_REQUEST['consultant'];
-$consultant	= str_replace("'","999",$consultant);
-$smec_code				= $_REQUEST['smec_code'];
+$location				= RemoveSpecialChar($_REQUEST['location']);
+
+$consultant				= RemoveSpecialChar($_REQUEST['consultant']);
+
+$smec_code				= RemoveSpecialChar($_REQUEST['smec_code']);
  $pcid				= $_REQUEST['pcid'];
 if($clear!="")
 {
@@ -127,8 +133,8 @@ $objIC->setProperty("pid",$pid);
 				for($i = 0; $i < count($arr_yh_title); $i++){
 					if($arr_yh_title[$i] != "" && $arr_yh_date[$i] != "" && $arr_yh_status[$i] != ""){
 						
-						$yh_title 	= $arr_yh_title[$i];
-						$yh_title	= str_replace("'","999",$yh_title);
+						$yh_title 	= RemoveSpecialChar($arr_yh_title[$i]);
+						
 						$yh_status	= $arr_yh_status[$i];
 						$yh_date	= date('Y-m-d',strtotime($arr_yh_date[$i]));
 						$objYrHol->setProperty("yh_title",$yh_title);
@@ -326,8 +332,8 @@ $objIC->setProperty("pid",$pid);
 						if($_POST['yh_title_' . $yh_id] && $_POST['yh_date_'. $yh_id])
 						{
 							
-						$yh_title 	= $_POST['yh_title_' .$yh_id];
-						$yh_title	= str_replace("'","999",$yh_title);
+						$yh_title 	= RemoveSpecialChar($_POST['yh_title_' .$yh_id]);
+					
 						$yh_status	= $_POST['yh_status_' . $yh_id];
 						$yh_date 	= date('Y-m-d',strtotime($_POST['yh_date_' . $yh_id]));
 						echo $yhSQL = ("Update yearly_holidays SET yh_title='$yh_title',yh_date='$yh_date',yh_status='$yh_status'  where yh_id=$yh_id");
@@ -550,17 +556,17 @@ if($ffCount > 0){
 	  $pcode 					= $prows['pcode'];
 	  $pname	 				= $prows['pname'];
 	  $pdetail					= $prows['pdetail'];
-	  $pdetail	= str_replace("999","'",$pdetail); 
+	 
 	  $ptype					= $prows['ptype'];
 	  $pstart 					= $prows['pstart'];
 	  $pend 					= $prows['pend'];
 	  $client					= $prows['client'];
-	  $client	= str_replace("999","'",$client); 
-	  $funding_agency			= $prows['funding_agency'];
-	   $funding_agency	= str_replace("999","'",$funding_agency); 
+	  
+	   $funding_agency			= $prows['funding_agency'];
+	   
 	  $contractor				= $prows['contractor'];
-	   $contractor	= str_replace("999","'",$contractor); 
-	  $pcost					= $prows['pcost2'];
+	  
+	  $pcost					= $prows['pcost'];
 	  $ssector_id				= $prows['sector_id'];
 	  if($ssector_id!=0)
 	  {
@@ -579,9 +585,9 @@ if($ffCount > 0){
 		  $country_name = $crows['country_name'];
 	  }
 	  $consultant				=$prows['consultant'];
-	  $consultant	= str_replace("999","'",$consultant); 
+	  
 	  $location				    =$prows['location'];
-	  $location	= str_replace("999","'",$location); 
+	 
 	  $smec_code				=$prows['smec_code'];
 	}
 	
@@ -995,15 +1001,10 @@ function putValue(base_cur)
 								while ($yrows = $objDdb->dbFetchArray())
 								{
 									$j++;
-									if($j%3==0)
-								  {
-									    echo "<br/><br/> ";
-								  }
-								  else
-								  {
+								
 								  $yh_id=$yrows['yh_id'];
 								  $yh_title=$yrows['yh_title'];
-								  $yh_title	= str_replace("999","'",$yh_title); 
+								
 								  $yh_date=$yrows['yh_date'];			
 								  $yh_status=$yrows['yh_status'];
 								  ?>
@@ -1017,7 +1018,12 @@ function putValue(base_cur)
 								  }
 								   ?>
                                   <?php
+								  
+								  if($j%3==0)
+								  {
+									    echo "<br/><br/> ";
 								  }
+								  
 								}
 							}
 						?>
@@ -1186,13 +1192,13 @@ function putValue(base_cur)
                    <td ><strong>Currency 2:</strong> <br/>(e.g INR,USD,PKR)</td>
                    <td ><input id="cur_2" name="cur_2" type="text" value="<?php echo $cur_2; ?>" class="form-control" maxlength="10"/></td>
                    <td ><strong>Currency 2 Rate:</strong></td>
-                   <td ><input id="cur_2_rate" name="cur_2_rate" type="text" value="<?php echo $cur_2_rate; ?>" class="form-control" style="width:175px"/></td>
+                   <td ><input id="cur_2_rate" name="cur_2_rate" type="number" step="0.01" value="<?php echo $cur_2_rate; ?>" class="form-control" style="width:175px"/></td>
             </tr>
                 <tr>
                    <td ><strong>Currency 3:</strong> <br/>(e.g INR,USD,PKR)</td>
                    <td ><input id="cur_3" name="cur_3" type="text" value="<?php echo $cur_3; ?>" class="form-control" maxlength="10"/></td>
                    <td ><strong>Currency 3 Rate:</strong></td>
-                   <td ><input id="cur_3_rate" name="cur_3_rate" type="text" value="<?php echo $cur_3_rate; ?>" class="form-control" style="width:175px"/></td>
+                   <td ><input id="cur_3_rate" name="cur_3_rate" type="number" step="0.01" value="<?php echo $cur_3_rate; ?>" class="form-control" style="width:175px"/></td>
             </tr>
                 <tr>
 			  <td ><strong>Project Working Days:</strong></td>
@@ -1243,7 +1249,7 @@ function putValue(base_cur)
 							{
 								  $yh_id					= $yhrows['yh_id'];
 								  $yh_title					= $yhrows['yh_title'];
-								  $yh_title	= str_replace("999","'",$yh_title); 
+								
 								  $yh_date					= $yhrows['yh_date'];
 								  $yh_status				= $yhrows['yh_status'];
 								?>

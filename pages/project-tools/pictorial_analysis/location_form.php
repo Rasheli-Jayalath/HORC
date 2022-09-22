@@ -14,6 +14,12 @@ header("Location: ../../../index.php?init=3");
 
 $objDb  		= new Database( );
 $objDb1  		= new Database( );
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+
 	$pictomaxpid = $ObjPictoAna1->getMaxPid(); 
 	while($plevelrows=$ObjPictoAna1->dbFetchArray())
 	{
@@ -59,7 +65,7 @@ else
 
 if(isset($_REQUEST['save']))
 { 
-    $title=$_REQUEST['title'];
+    $title=RemoveSpecialChar($_REQUEST['title']);
 	$lid=$_REQUEST['lid'];
 	//echo "INSERT INTO  locations_component(lid,pid, title) Values(".$lid.",".$pid.", '".$title."' )";
 	$sql_pro=$objDb->dbQuery("INSERT INTO  locations_component(lid,pid, title) Values(".$lid.",".$pid.", '".$title."' )");
@@ -81,7 +87,7 @@ if(isset($_REQUEST['save']))
 }
 if(isset($_REQUEST['update']))
 {
-$title=$_REQUEST['title'];
+$title=RemoveSpecialChar($_REQUEST['title']);
 $lid=$_REQUEST['lid'];
 	 $sql_pro="UPDATE  locations_component SET title='$title',lid=$lid where lcid=$lcid";
 	
@@ -227,8 +233,8 @@ window.opener.location.reload();
                       <div class="text-center col-sm-4">
                       <label for="exampleSelectGender" style="font-weight: bold;margin-top:25px">Select Component</label>
                         
-                        <select  style="font-size: 14px; color: #000;background-color: #fff;" onchange="" class="form-control" id="lid" name="lid" >
-                        <option value="0"><?php echo "SelectComponent"; ?></option>
+                        <select  style="font-size: 14px; color: #000;background-color: #fff;" onchange="" class="form-control" id="lid" name="lid" required>
+                        <option value=""><?php echo "SelectComponent"; ?></option>
   		<?php  $pdSQL = "SELECT lid, pid, album_name, user_right, user_ids FROM  t031project_albums  WHERE parent_album=0 order by lid";
 						 $pdSQLResult = $objDb1->dbQuery($pdSQL);
 						$i=0;
@@ -289,7 +295,7 @@ window.opener.location.reload();
                       </div>
                       <div class="text-center col-sm-4">
                       <label for="exampleSelectGender" style="font-weight: bold;margin-top:15px">Enter Sub Component</label>
-                      <input type="text" class="form-control text-center "  id="title" name="title"  value="<?php echo $title;?>">
+                      <input type="text" class="form-control text-center "  id="title" name="title"  value="<?php echo $title;?>" maxlength="250" required>
                       </div>
                       <div class="text-center col-sm-4">
                       </div>

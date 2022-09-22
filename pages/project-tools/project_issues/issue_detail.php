@@ -185,8 +185,9 @@ $nos_id=$_GET['nos_id'];
 			
 			
 			?>
-			<table><tr><td><?php if($file1!="")
-			{ ?><a href="issues/<?php echo $file1 ;?>" data-lightbox="roadtrip"  data-title="image"><img src="issues/<?php echo $file1 ;?>" border="0" width="120px" height="120px" /></a><?php }
+			<table><tr>
+            <td><?php if($file1!="")
+			{ ?><a href="issues/<?php echo $file1 ;?>" data-lightbox="roadtrip"  data-title="image"><img src="issues/<?php echo $file1 ;?>" border="0" width="120px" height="120px" />&nbsp;&nbsp;&nbsp;&nbsp;</a><?php }
 			?></td>
 			<td><?php if($file2!="")
 			{ ?><a href="issues/<?php echo $file2 ;?>" data-lightbox="roadtrip"  data-title="image"><img src="issues/<?php echo $file2 ;?>" border="0" width="120px" height="120px" /></a><?php }

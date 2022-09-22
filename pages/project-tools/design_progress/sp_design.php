@@ -29,7 +29,7 @@ if(isset($_REQUEST['delete'])&&isset($_REQUEST['dgid'])&$_REQUEST['dgid']!="")
  $objDb->dbQuery("Delete from  t0101designprogress where dgid=".$_REQUEST['dgid']);
  header("Location: sp_design.php");
 }
-$pdSQL = "SELECT a.dgid, a.pgid, a.pid, a.serial, a.description, a.total, a.submitted, a.revision, a.approved, a.approvedpct, a.unit, a.item_id , a.remarks, b.lid,b.title ,b.item_id,c.lid ,c.title AS component FROM t014majoritems b left join t0101designprogress a on (a.item_id=b.item_id) left join structures c on (b.lid=c.lid) order by b.lid, b.item_id,a.serial;";
+$pdSQL = "SELECT a.dgid, a.pgid, a.pid, a.serial, a.description, a.total, a.submitted, a.revision, a.approved, a.approvedpct, a.unit, a.item_id , a.remarks, b.lid,b.title ,b.item_id,c.lid ,c.title AS component FROM t014majoritems b right join t0101designprogress a on (a.item_id=b.item_id) inner join structures c on (b.lid=c.lid) order by b.lid, b.item_id,a.serial;";
 $pdSQLResult = $objDb->dbQuery($pdSQL);
  
 ?>
@@ -231,8 +231,8 @@ table{
     <div class="col-sm-12 text-end pt-3 pb-3" >  
   <?php  if($dpentry_flag==1 || $dpadm_flag==1){?>
    <?php if($pid != ""&&$pid!=0){?>  
-    <button  class="  col-sm-2 button-33" href="javascript:void(null);" onclick="window.open('items_form.php', 'Upload Photos ','width=800px,height=650px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');" >Add Major Items</button> 
-    <button class="  col-sm-2 button-33" href="sp_design_input.php"     onclick="window.open('sp_design_input.php', 'Upload Photos ','width=800px,height=750px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  class="button">Add New Record</button>
+    <button  class=" col-sm-2 button-33" href="javascript:void(null);" onclick="window.open('items_form.php', 'Upload Photos ','width=800px,height=650px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');" >Add Major Items</button> 
+    <button class="  col-sm-2 button-33" href="sp_design_input.php"     onclick="window.open('sp_design_input.php', 'Upload Photos ','width=800px,height=750px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');" >Add New Record</button>
     <?php }}?>
   
   </div>
@@ -300,17 +300,21 @@ table{
                          
                         </tr>
                               <?php } ?>
-                         <?php if($pdData['description']!='')
-							  {?>     
+                            
                         <tr>
                           <td align="center"><?php echo $pdData['serial'];?></td>
                           <td align="left" style="text-align:center; vertical-align:middle"><?php echo $pdData['description'];?></td>
                           <td align="left"><?php echo $pdData['unit'];?></td>
-                          <td align="right"><?php echo number_format($pdData['total'],2);?></td>
-                          <td align="right"><?php echo number_format($pdData['submitted'],2);?></td>
-                          <td align="right"><?php echo number_format($pdData['revision'],2);?></td>
-                          <td align="right"><?php echo number_format($pdData['approved'],2);?></td>
-                          <td align="right"><?php echo number_format($pdData['approvedpct'],2)."%";?></td>
+                          <td align="right"><?php if($pdData['total']!=""){ 
+						 echo  $pdData['total']; }?></td>
+                          <td align="right"><?php if($pdData['submitted']!=""){ 
+						 echo $pdData['submitted']; }?></td>
+                          <td align="right"><?php if($pdData['revision']!=""){ 
+						 echo  $pdData['revision']; }?></td>
+                          <td align="right"><?php if($pdData['approved']!=""){ 
+						 echo $pdData['approved']; }?></td>
+                          <td align="right"><?php if($pdData['approvedpct']!=""){ 
+						 echo number_format($pdData['approvedpct'],2)."%"; }?></td>
                           <td align="right"><?php echo $pdData['remarks'];?></td>
 						   
 						   
@@ -318,14 +322,15 @@ table{
 								  {
 								   ?>
 							<td align="right">
-						   <span style="float:right"><form action="sp_design_input.php?dgid=<?php echo $pdData['dgid'] ?>" method="post">
-               <button type="submit" title="Edit" class="btn btn-outline-warning btn-fw px-1 py-1 "  name="edit" id="edit" value="Edit" >
-               <i class="ti-pencil btn-icon-prepend" ></i>  
-                            </button></form></span>
+						   <span style="float:right">
+                           
+                           <button class="btn btn-outline-warning btn-fw px-1 py-1 " href="sp_design_input.php"     onclick="window.open('sp_design_input.php?dgid=<?php echo $pdData['dgid'] ?>', 'update design ','width=800px,height=750px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');" ><i class="ti-pencil btn-icon-prepend" ></i> </button>
+                           
+                          </span>
 						     </td>
 						   <?php  
 							}
-							if($ncfadm_flag==1)
+							if($dpadm_flag==1)
 								  {
 								   ?>
 						   <td align="right">
@@ -337,7 +342,7 @@ table{
 						   }
 						   ?>   
                         </tr>
-                        <?php }?>
+                       
 						<?php
 						$prev=$current;
 						}

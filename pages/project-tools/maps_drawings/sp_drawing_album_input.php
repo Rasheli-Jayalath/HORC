@@ -43,6 +43,12 @@ function getExtention($type){
 		return "doc";
 		
 }
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+
+    return $res;
+}
 $album_id=$_REQUEST['album_id'];
  $pdSQL_get_right1_d = "SELECT parent_group FROM  t031project_drawingalbums  WHERE pid= ".$pid." and status=1 and albumid=".$album_id;
 			                $ObjMapDrawing->dbQuery($pdSQL_get_right1_d);
@@ -107,9 +113,12 @@ $ObjMapDrawing->dbQuery($pdSQL1);
 $al_file=$pdData1['al_file'];
  $dwg_type=$pdData1['dwg_type'];
  $dwg_no=$pdData1['dwg_no'];
+
 	$dwg_title=$pdData1['dwg_title'];
+	
 	$dwg_date=$pdData1['dwg_date'];
 	$revision_no=$pdData1['revision_no'];
+	
 	$dwg_status=$pdData1['dwg_status'];
 }
 
@@ -118,10 +127,13 @@ $max_size=($size * 1024 * 1024);*/
 if(isset($_REQUEST['save']))
 { 
 	$dwg_type=$_REQUEST['dwg_type'];
-    $dwg_no=$_REQUEST['dwg_no'];
-	$dwg_title=trim($_REQUEST['dwg_title']);
+    $dwg_no=RemoveSpecialChar($_REQUEST['dwg_no']);
+	
+	$dwg_title=RemoveSpecialChar(trim($_REQUEST['dwg_title']));
+	
 	$dwg_date=$_REQUEST['dwg_date'];
-	$revision_no=$_REQUEST['revision_no'];
+	$revision_no=RemoveSpecialChar($_REQUEST['revision_no']);
+	
 	$dwg_status=$_REQUEST['dwg_status'];
 		//echo $name_array = $_FILES['al_file']['name'];
 	if(isset($_FILES["al_file"]["name"])&&$_FILES["al_file"]["name"]!="")
@@ -154,8 +166,8 @@ if(isset($_REQUEST['save']))
 	$activity= "Error in adding drawing record";
 	}
 	$log_id=$_SESSION['log_id'];
-	$iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$activity')");
-$ObjMapDrawing2->dbQuery($iSQL);
+	//$iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$activity')");
+//$ObjMapDrawing2->dbQuery($iSQL);
 	}
 	}
 	}
@@ -168,11 +180,14 @@ $ObjMapDrawing2->dbQuery($iSQL);
 if(isset($_REQUEST['update']))
 {
 	$dwg_type=$_REQUEST['dwg_type'];
-	$dwg_no=$_REQUEST['dwg_no'];
-	$dwg_title=trim($_REQUEST['dwg_title']);
+	$dwg_no=RemoveSpecialChar($_REQUEST['dwg_no']);
+	
+	$dwg_title=RemoveSpecialChar(trim($_REQUEST['dwg_title']));
 	$dwg_title=stripslashes($dwg_title);
+	
 	$dwg_date=$_REQUEST['dwg_date'];
-	$revision_no=$_REQUEST['revision_no'];
+	$revision_no=RemoveSpecialChar($_REQUEST['revision_no']);
+	
 	$dwg_status=$_REQUEST['dwg_status'];
 $pdSQL = "SELECT dwgid, pid, dwg_no, dwg_title, dwg_date,	revision_no, dwg_status, al_file FROM t027project_drawings WHERE pid = ".$pid." and album_id=".$album_id." and dwgid=".$dwgid." order by dwgid";
 $ObjMapDrawing->dbQuery($pdSQL);
@@ -245,7 +260,7 @@ $old_al_file= $pdData["al_file"];
 	}
 	$log_id=$_SESSION['log_id'];
 		$iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$activity')");
-		echo $iSQL;
+	
 				$ObjMapDrawing->dbQuery($iSQL);
 //header("Location: sp_drawing_album_input.php?album_id=$album_id");
 }
@@ -520,7 +535,7 @@ function doFilter(frm){
 				<div class="form-group row">
                     <div class="text-end col-sm-6"> <label><?php echo "Drawing Title:";?></label> </div>
                       <div class="text-start col-sm-6">
-					  <input class="form-control"  type="text"   name="dwg_title" id="dwg_title" value="<?php echo $dwg_title;?>"  style="width: 60%;"  placeholder=" Drawing Title " Required>
+					  <input class="form-control"  type="text"   name="dwg_title" id="dwg_title" value="<?php echo $dwg_title;?>"  style="width: 60%;"  placeholder=" Drawing Title " Required maxlength="250">
 					 <span style="   font-size: 75%;"> Please avoid special characters</span>
 					</div>
                 </div>

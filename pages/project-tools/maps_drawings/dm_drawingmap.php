@@ -52,6 +52,7 @@ $log_id=1;
 	$sqlrw1ss=$ObjMapDrawing->dbFetchArray();
 	$par_groups=$sqlrw1ss['parent_group'];
 	$album_name=$sqlrw1ss['album_name'];
+	
 	$parent_id=$sqlrw1ss['albumid']; 
  	 $prt_id=$sqlrw1ss['parent_id'];
 	$status=$sqlrw1ss['status'];
@@ -65,6 +66,7 @@ $log_id=1;
 	//$sqlrCN=mysql_query($sqlCN);
 	//$sqlCNrw=mysql_fetch_array($sqlrCN);
 	$sqlCNrw=$ObjMapDrawing2->dbFetchArray();
+	
 	$f_name .='<a style="text-decoration:none" href="./dm_drawingmap.php?album_id='.$sqlCNrw['albumid'].'">'.$sqlCNrw['album_name'].'</a>';
 	
 	$f_name .="&nbsp;&raquo;&nbsp;";
@@ -88,6 +90,7 @@ $pdData1 =$ObjMapDrawing->dbFetchArray();
 //$pdData1 = mysql_fetch_array($pdSQLResult1);
 
 $title=$pdData1['title'];
+
 }
 if(isset($_REQUEST['delete'])&&isset($_REQUEST['lid'])&$_REQUEST['lid']!="")
 {

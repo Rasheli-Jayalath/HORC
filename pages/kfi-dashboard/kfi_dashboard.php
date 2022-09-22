@@ -1,4 +1,3 @@
-<?php include('kfi-top-cache.php');?>
 <?php
 include_once("../../config/config.php");
 include_once("rs_lang.admin.php");
@@ -486,7 +485,6 @@ function funcHideAndSeek(selector)
       
       var strURL="newTableReport_testing.php?itemids="+strval+"&itemname="+itemname;
          // var strURL="tableReport.php?itemids="+str;
-		 showSpinner();
           var req= getXMLHTTP();
 
           if(req)
@@ -695,4 +693,3 @@ function funcHideAndSeek(selector)
 </body>
 
 </html>
-<?php include('kfi-bottom-cache.php');?>

@@ -197,9 +197,6 @@ $objDbp  		= new Database();
 $objDbaa  		= new Database();
 $objDba 		= new Database();
 $objDb 		= new Database();
-$objDbkpi 		= new Database();
-$objDpc 		= new Database();
-$objkpi 		= new Database();
 $aSql = "Select * from activity where itemid=$itemid";
 $objDb11->dbQuery($aSql);
 $res_a=$objDb11->dbFetchArray();
@@ -240,34 +237,11 @@ $res_sr=$objDb4->dbFetchArray();
 		$budgetdate=$res_planned["budgetdate"];
 		$budgetqty=$res_planned["budgetqty"];
 		$actual_qty=$res_planned["actual_qty"];
- $aaSql_child = "UPDATE activity0 SET total_baseline=total_baseline-$budgetqty, 
+		$aaSql_child = "UPDATE activity0 SET total_baseline=total_baseline-$budgetqty, 
 		commulative_baseline=commulative_baseline-$budgetqty, total_progress=total_progress-$actual_qty, commulative_progress=commulative_progress-$actual_qty where itemid=$itemids AND 
 		budgetdate='$budgetdate'";
+		echo "<br/>";
 		$objDbaa->dbQuery($aaSql_child);
-		echo $pcSql = "Select sum(budgetqty) as total_contract from planned where itemid=$itemid";
-		 $objDpc->dbQuery($pcSql);
-		 $res_kpi=$objDpc->dbFetchArray();
-		 $total_contract=$res_kpi["total_contract"];
-		$planned_perc=$res_planned["budgetqty"]/$total_contract;
-		$actual_perc=$res_planned["actual_qty"]/$total_contract;
-		
-		$kpiSql = "Select * from kpi_activity where itemid=$itemid";
-		 $objkpi->dbQuery($kpiSql);
-		 $kpi_count=$objkpi->totalRecords();
-		 
-		
-		if($kpi_count>0)
-		{
-			$res_kpidata=$objkpi->dbFetchArray();
-			$kpiid=$res_kpidata['kpiid'];
-			$kpiSql_child = "UPDATE kpidata0 SET perc_planned=perc_planned-$planned_perc, 
-		perc_com_planned=perc_com_planned-$planned_perc, perc_actual=perc_actual-$actual_perc, 
-		perc_com_actual=perc_com_actual-$actual_perc where kpiid=$kpiid AND 
-		budgetdate='$budgetdate'";
-		$objDbkpi->dbQuery($kpiSql_child);
-			
-		
-		}
 		}
    
    $arr_size--;
@@ -281,8 +255,7 @@ $res_sr=$objDb4->dbFetchArray();
     $objDb->dbQuery($eSql_child1);
 	$eSql_child2 = "delete from progress where itemid=$itemid";
     $objDb->dbQuery($eSql_child2);
-	$eSql_child3 = "delete from kpi_activity  where itemid=$itemid";
-    $objDb->dbQuery($eSql_child3);
+	
 	$eSql_d = "delete from maindata where itemid=$itemid";
    $objDb->dbQuery($eSql_d);
 
@@ -296,8 +269,6 @@ $objDbp  		= new Database();
 $objDbaa  		= new Database();
 $objDba 		= new Database();
 $objDb 		= new Database();
-$objDbkpi 		= new Database();
-$objDpc 		= new Database();
 $aSql = "Select * from activity where itemid=$itemid";
 $objDb11->dbQuery($aSql);
 $res_a=$objDb11->dbFetchArray();
@@ -337,36 +308,9 @@ $res_sr=$objDb4->dbFetchArray();
 		
 		$budgetdate=$res_planned["budgetdate"];
 		$budgetqty=$res_planned["budgetqty"];
-		$aaSql_child = "UPDATE activity0 SET total_baseline=total_baseline-$budgetqty, 
-		commulative_baseline=commulative_baseline-$budgetqty, total_progress=total_progress-$actual_qty, commulative_progress=commulative_progress-$actual_qty where itemid=$itemids AND 
-		budgetdate='$budgetdate'";
+		$aaSql_child = "UPDATE activity0 SET total_baseline=total_baseline-$budgetqty where itemid=$itemids AND budgetdate='$budgetdate'";
+		echo "<br/>";
 		$objDbaa->dbQuery($aaSql_child);
-		
-		
-		 $pcSql = "Select sum(total_baseline) as total_contract from planned where itemid=$itemid";
-		 $objDpc->dbQuery($pcSql);
-		 $res_kpi=$objDpc->dbFetchArray();
-		 $total_contract=$res_kpi["total_contract"];
-		$planned_perc=$res_planned["budgetqty"]/$total_contract;
-		$actual_perc=$res_planned["actual_qty"]/$total_contract;
-		
-		$kpiSql = "Select * from kpi_activity where itemid=$itemid";
-		 $objkpi->dbQuery($kpiSql);
-		 $kpi_count=$objkpi->totalRecords();
-		 
-		 if($kpi_count>0)
-		{
-			$res_kpidata=$objkpi->dbFetchArray();
-			$kpiid=$res_kpidata['kpiid'];
-			$kpiSql_child = "UPDATE kpidata0 SET perc_planned=perc_planned-$planned_perc, 
-		perc_com_planned=perc_com_planned-$planned_perc, perc_actual=perc_actual-$actual_perc, 
-		perc_com_actual=perc_com_actual-$actual_perc where kpiid=$kpiid AND 
-		budgetdate='$budgetdate'";
-		$objDbkpi->dbQuery($kpiSql_child);
-			
-		
-		}
-		
 		}
    
    $arr_size--;
@@ -380,8 +324,7 @@ $res_sr=$objDb4->dbFetchArray();
     $objDb->dbQuery($eSql_child1);
 	$eSql_child2 = "delete from progress where itemid=$itemid";
     $objDb->dbQuery($eSql_child2);
-	$eSql_child3 = "delete from kpi_activity  where itemid=$itemid";
-    $objDb->dbQuery($eSql_child3);
+	
 
 
 }
@@ -473,7 +416,7 @@ $eSqls = "Select * from maindata where itemid='$txtactivity'";
 }	
 if($txtisentry==1)
 {	
-	  $ssSQL = ("INSERT INTO activity (itemid, startdate, enddate, rid,baseline,temp_id) VALUES ($itemids, '$startdate', '$enddate',$txtrid,$txtused_quantity,$temp_id)");
+	echo  $ssSQL = ("INSERT INTO activity (itemid, startdate, enddate, rid,baseline,temp_id) VALUES ($itemids, '$startdate', '$enddate',$txtrid,$txtused_quantity,$temp_id)");
 	$objDb2->dbQuery($ssSQL);
 	$txtid = $con->lastInsertId();
 	$aid = $txtid;	

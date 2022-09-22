@@ -2,95 +2,24 @@
 require_once('../../../rs_lang.admin.php');
 require_once('../../../rs_lang.eng.php');
 include_once("../../../config/config.php");
-//$ObjMapDrawing  = new  MapsDrawings();
-//$ObjMapDrawing2 = new MapsDrawings();
-//$ObjMapDrawing3 = new MapsDrawings();
-//$ObjMapDrawing4 = new MapsDrawings();
-//$user_cd=1;
-//$_SESSION['ne_user_type']=1;
-//$data_url="drawings/";
-//$file_path="pictorial_data";
-//$data_url="photos/";
-
- //$album_id=$_REQUEST['album_id'];
 
 $edit			= $_GET['edit'];
 $revert			= $_GET['revert'];
 $objDb  		= new Database( );
+$objDb1  		= new Database( );
 $objSDb  		= new Database( );
 $objVSDb  		= new Database( );
 $_SESSION['ne_user_type']=1;
 $user_cd=1;
-/*error_reporting(E_ALL & ~E_NOTICE);
-@require_once("requires/session.php");
-$module			= "Design Progress";
-if ($uname==null)
-{
-	header("Location:index.php?init=3");
-}
-else if ($dp_flag==0)
-{
-	header("Location: index.php?init=3");
-}
-$defaultLang = 'en';
+$pid=1;
 
-//if ($pid=="" ) 
-//{
-//header("Location: project_calender.php");
-//}
-
-$user_cd=$uid;*/
 header("Content-Type: text/html; charset=utf-8");
-//Checking, if the $_GET["language"] has any value
-//if the $_GET["language"] is not empty
-/*if (!empty($_GET["language"])) { //<!-- see this line. checks 
-    //Based on the lowecase $_GET['language'] value, we will decide,
-    //what lanuage do we use
-    switch (strtolower($_GET["language"])) {
-        case "en":
-            //If the string is en or EN
-            $_SESSION['lang'] = 'en';
-            break;
-        case "rus":
-            //If the string is tr or TR
-            $_SESSION['lang'] = 'rus';
-            break;
-        default:
-            //IN ALL OTHER CASES your default langauge code will set
-            //Invalid languages
-            $_SESSION['lang'] = $defaultLang;
-            break;
-    }
-}
+function RemoveSpecialChar($str){
 
-//If there was no language initialized, (empty $_SESSION['lang']) then
-if (empty($_SESSION["lang"])) {
-    //Set default lang if there was no language
-    $_SESSION["lang"] = $defaultLang;
-}
-if($_SESSION["lang"]=='en')
-{
-require_once('rs_lang.admin.php');
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
 
+    return $res;
 }
-else
-{
-	require_once('rs_lang.admin_rus.php');
-
-}
-
-$edit			= $_GET['edit'];
-$revert			= $_GET['revert'];
-$objDb  		= new Database( );
-$objSDb  		= new Database( );
-$objVSDb  		= new Database( );
-$objCSDb  		= new Database( );
-@require_once("get_url.php");
-$msg						= "";
- $pSQL = "SELECT max(pid) as pid from project";
-						 $pSQLResult = mysql_query($pSQL);
-						 $pData = mysql_fetch_array($pSQLResult);
-						 $pid=$pData["pid"];*/
 $pSQL = "SELECT max(pid) as pid from project";
 $objDb->dbQuery($pSQL);
 $pData =$objDb->dbFetchArray();
@@ -103,29 +32,51 @@ $pData =$objDb->dbFetchArray();
 {
  $lid=$_REQUEST['lid'];
 }
+
 if(isset($_REQUEST['save']))
 {
 	
-	$serial=$_REQUEST['serial'];
-	$description=$_REQUEST['description'];
+	$serial=RemoveSpecialChar($_REQUEST['serial']);
+	$description=RemoveSpecialChar($_REQUEST['description']);
+	
 	$total=$_REQUEST['total'];
 	$submitted=$_REQUEST['submitted'];
 	$revision=$_REQUEST['revision'];
 	$approved=$_REQUEST['approved'];
 	$approvedpct=$_REQUEST['approvedpct'];
 	$item_id=$_REQUEST['item_id'];
-	$unit=$_REQUEST['unit'];
+	$unit=RemoveSpecialChar($_REQUEST['unit']);
 	$lid=$_REQUEST['lid'];
 	$pid="1";
-	echo $item_id;
+	
 
-	$remarks=$_REQUEST['remarks'];
+	$remarks=RemoveSpecialChar($_REQUEST['remarks']);
 	$message="";
 	$pgid=1;
+	if($total=="")
+	{
+		$total=0;
+	}
+	if($submitted=="")
+	{
+		$submitted=0;
+	}
+	if($revision=="")
+	{
+		$revision=0;
+	}
+	if($approved=="")
+	{
+		$approved=0;
+	}
+	if($approvedpct=="")
+	{
+		$approvedpct=0;
+	}
 
-$query=("INSERT INTO t0101designprogress (pid, serial, description, total, submitted, revision, approved, approvedpct,item_id,unit,remarks) 
-Values(".$pid.",".$serial.",'".$description."',".$total.",".$submitted.",".$revision.",".$approved.",".$approvedpct.",".$item_id.",'".$unit."','".$remarks." ')");
-$sql_pro=$objDb->dbQuery($query);
+ $query=("INSERT INTO t0101designprogress (pid, lid,serial, description, total, submitted, revision, approved, approvedpct,item_id,unit,remarks) 
+Values(".$pid.",".$lid.",'".$serial."','".$description."',".$total.",".$submitted.",".$revision.",".$approved.",".$approvedpct.",".$item_id.",'".$unit."','".$remarks." ')");
+$sql_pro=$objSDb->dbQuery($query);
 						
 	if ($sql_pro == TRUE) {
     $message=  "New record added successfully";
@@ -142,27 +93,32 @@ $sql_pro=$objDb->dbQuery($query);
 	$unit='';
 	$item_id='';
 	$remarks='';
+	print "<script type='text/javascript'>";
+    print "window.opener.location.reload();";
+    print "self.close();";
+    print "</script>";
+
 }
 
 if(isset($_REQUEST['update']))
 {
 	$dgid=$_REQUEST['dgid'];
-	$serial=$_REQUEST['serial'];
-	$description=$_REQUEST['description'];
+	$serial=RemoveSpecialChar($_REQUEST['serial']);
+	$description=RemoveSpecialChar($_REQUEST['description']);
 	$total=$_REQUEST['total'];
 	$submitted=$_REQUEST['submitted'];
 	$revision=$_REQUEST['revision'];
 	$approved=$_REQUEST['approved'];
 	$approvedpct=$_REQUEST['approvedpct'];
 	$item_id=$_REQUEST['item_id'];
-	$unit=$_REQUEST['unit'];
-	 $remarks=$_REQUEST['remarks'];
+	$unit=RemoveSpecialChar($_REQUEST['unit']);
+	 $remarks=RemoveSpecialChar($_REQUEST['remarks']);
 	 $lid=$_REQUEST['lid'];
-	$pid=$_REQUEST['pid'];
+	//$pid=$_REQUEST['pid'];
 	$message="";
 	$pgid=1;
 	
-$sql_pro="UPDATE t0101designprogress SET serial='$serial', description='$description', total = $total, submitted=$submitted, revision=$revision, approved=$approved, approvedpct=$approvedpct , item_id='$item_id' , unit='$unit' ,remarks='$remarks' where dgid=$dgid";
+$sql_pro="UPDATE t0101designprogress SET serial='$serial', description='$description', total = $total, submitted=$submitted, revision=$revision, approved=$approved, approvedpct=$approvedpct , item_id=$item_id , unit='$unit' ,remarks='$remarks' where dgid=$dgid";
 	
 	$sql_proresult=$objDb->dbQuery($sql_pro);
 	
@@ -178,7 +134,11 @@ $sql_pro="UPDATE t0101designprogress SET serial='$serial', description='$descrip
 //	$price='';
 //	$display_order='';
 	
-//header("Location: sp_design.php");
+print "<script type='text/javascript'>";
+    print "window.opener.location.reload();";
+    print "self.close();";
+    print "</script>";
+
 }
 if(isset($_REQUEST['dgid']))
 {
@@ -209,7 +169,7 @@ $pdData1=$objDb->dbFetchArray();
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Manage Videos<</title>
+  <title>Design Progress</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="../../../vendors/feather/feather.css">
   <link rel="stylesheet" href="../../../endors/mdi/css/materialdesignicons.min.css">
@@ -265,13 +225,13 @@ $pdData1=$objDb->dbFetchArray();
               <div class="card" style="background-image: linear-gradient(180deg, #f0f0fc, #f0f0fc);">
                 <div class="card-body text-center">
                   <h4 class="card-title">Design Progress</h4>
-				  <?php echo $message; ?>
+				 <span style="color:green; font-size:16px; font-weight:bold"> <?php echo $message; ?></span>
                   <form class="forms-sample" action="sp_design_input.php" target="_self" method="post"  >
 				 
 				  <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Serial #: </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text"  name="serial" id="serial" value="<?php echo $serial; ?>"  style="width: 60%;" placeholder="Serial #" Required>
+					     <input class="form-control"  type="text"  name="serial" id="serial" value="<?php echo $serial; ?>"  style="width: 60%;" placeholder="Serial #" Required maxlength="100">
                       </div>
                  </div>
 
@@ -280,7 +240,7 @@ $pdData1=$objDb->dbFetchArray();
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Component Area: </label> </div>
                       <div class="text-start col-sm-6">
-									<select class="form-control  bg-light text-dark" id="lid" name="lid" style="width: 60%;" onchange="getMajor(this.value);">
+									<select class="form-control  bg-light text-dark" id="lid" name="lid" style="width: 60%;" onchange="getMajor(this.value);" required>
 					<option value="">Select Component Area</option>
 					<?php $pdSQL = "SELECT lid,pid,code,title FROM  structures  order by lid";
 										$pdSQLResult = $objDb->dbQuery($pdSQL);
@@ -303,18 +263,42 @@ $pdData1=$objDb->dbFetchArray();
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Major Item: </label> </div>
                       <div class="text-start col-sm-4" id="item_div">
-									<!-- <select class="form-control  bg-light text-dark" id="item_id" name="item_id" style="width: 60%;" >
-					<option value="0">Select Major Item</option>
-			
-			
-					</select> -->
+									<?php  if(isset($_REQUEST['dgid']))
+{
+	?>
+
+                      <select  id="item_id" name="item_id"  class="form-control"  style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);"  required>
+                        <option value="">Select Major Component</option>
+
+                        <?php $pdSQL = "SELECT item_id, title FROM  t014majoritems  where item_id=$item_id";
+										$pdSQLResult = $objDb1->dbQuery($pdSQL);
+										$i=0;
+										if($objDb1-> totalRecords()>=1);
+											
+											{
+											while($pdData2=$objDb1->dbFetchArray())
+											{ 
+											$i++;?>
+
+				<option value="<?php echo $pdData2["item_id"];?>" <?php if($item_id==$pdData2["item_id"]) {?> selected="selected" <?php }?>><?php echo $pdData2["title"];?></option>
+                       
+                                  
+                        <?php
+                            }
+											}
+                           ?>
+
+  </select>
+  <?php
+}
+?>
 	              </div>
                  </div>
 
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Description: </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text"  name="description" id="description" value="<?php echo $description; ?>"  style="width: 60%;" placeholder="Description" Required>
+					     <input class="form-control"  type="text"  name="description" id="description" value="<?php echo $description; ?>"  style="width: 60%;" placeholder="Description" >
                       </div>
                  </div>
 
@@ -328,39 +312,39 @@ $pdData1=$objDb->dbFetchArray();
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Total:</label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text"  name="total" id="total" value="<?php echo $total; ?>" style="width: 60%;" placeholder="Total" Required>
+					     <input class="form-control"  type="number"  step="0.01"  name="total" id="total" value="<?php echo $total; ?>" style="width: 60%;"  > Numbers Only
                       </div>
                  </div>
 
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Design Submitted:</label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text" name="submitted" id="submitted" value="<?php echo $submitted; ?>"  style="width: 60%;" placeholder="Design Submitted" Required>
+					     <input class="form-control"  type="number" step="0.01"  name="submitted" id="submitted" value="<?php echo $submitted; ?>"  style="width: 60%;" placeholder="Design Submitted" >Numbers Only
                       </div>
                  </div>				 
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Under Revision:</label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text"  name="revision" id="revision" value="<?php echo $revision; ?>"  style="width: 60%;" placeholder="Under Revision" Required>
+					     <input class="form-control"  type="number" step="0.01" name="revision" id="revision" value="<?php echo $revision; ?>"  style="width: 60%;" placeholder="Under Revision" >Numbers Only
                       </div>
                  </div>				 
 			 
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Approved : </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text" name="approved" id="approved" value="<?php echo $approved; ?>" style="width: 60%;" placeholder="Approved" Required>
+					     <input class="form-control"  type="number" step="0.01"  name="approved" id="approved" value="<?php echo $approved; ?>" style="width: 60%;" placeholder="Approved" >Numbers Only
                       </div>
                  </div>				 
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Approval %: </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text"  name="approvedpct" id="approvedpct" value="<?php echo $approvedpct; ?>" style="width: 60%;" placeholder="Approval %" Required>
+					     <input class="form-control"  type="number" step="0.01"   name="approvedpct" id="approvedpct" value="<?php echo $approvedpct; ?>" style="width: 60%;" placeholder="Approval %" >Decimal Numbers Only
                       </div>
                  </div>
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Remarks :</label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text"  name="remarks" id="remarks" value="<?php echo $remarks; ?>" style="width: 60%;" placeholder="Remarks" Required>
+					     <input class="form-control"  type="text"  name="remarks" id="remarks" value="<?php echo $remarks; ?>" style="width: 60%;" placeholder="Remarks" >
                       </div>
                  </div>
 
@@ -370,7 +354,7 @@ $pdData1=$objDb->dbFetchArray();
 	 ?>
 	    <input type="hidden" name="dgid" id="dgid" value="<?php echo $_REQUEST['dgid']; ?>" />
 	    <button  type="submit" class="btn btn-primary me-2" name="update" id="update" value="Update" style="width:20%">Update</button>
-		<button class="btn btn-light" type="button" style="width:20%" onclick="history.back()">Cancel</button>
+		<button class="btn btn-light" type="button" style="width:20%" onclick="javascript:window.close()">Cancel</button>
 	   <?php
 	 }
 	 else

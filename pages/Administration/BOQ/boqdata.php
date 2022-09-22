@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 include_once "../../../config/config.php";
 require_once('../../../rs_lang.admin.php');
 require_once('../../../rs_lang.eng.php');
@@ -6,8 +7,10 @@ require_once('../../../rs_lang.eng.php');
 $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
+$objDb6  		= new Database();
 $objDb7  		= new Database();
 $objDb8  		= new Database();
+
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -15,6 +18,7 @@ $uname 	= $_SESSION['ne_username'];
 $boq_flag			= $_SESSION['ne_boq'];
 	$boqadm_flag		= $_SESSION['ne_boqadm'];
 	$boqentry_flag		= $_SESSION['ne_boqentry'];
+  $pcd = '';
 
 if ($uname==null  ) {
 header("Location: ../../index.php?init=3");
@@ -66,8 +70,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 	
 	$aorder_list=$_POST["aorder"];
 	$item_list=$_POST["itemid"];
-	$size_l=is_countable($item_list);
-	$size_a=is_countable($aorder_list);
+	$size_l=sizeof($item_list);
+	$size_a=sizeof($aorder_list);
 	$msg="";
 	if($size_l==$size_a)
 	{
@@ -531,7 +535,7 @@ padding:10px 10px 0 0; }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
-    $('#level1').on('change', function(){
+    $('#level1').on('click', function(){
         var PCDLevel1 = $(this).val();
         if(PCDLevel1){
             $.ajax({
@@ -550,7 +554,7 @@ $(document).ready(function(){
         }
     });
     
-    $('#level2').on('change', function(){
+    $('#level2').on('click', function(){
         var PCDLevel2 = $(this).val();
         if(PCDLevel2){
             $.ajax({
@@ -567,7 +571,7 @@ $(document).ready(function(){
             $('#level3').html('<option value="">Select Level 2 first</option>'); 
         }
     });
-    $('#level3').on('change', function(){
+    $('#level3').on('click', function(){
         var PCDLevel3 = $(this).val();
         if(PCDLevel3){
             $.ajax({
@@ -583,7 +587,7 @@ $(document).ready(function(){
             $('#level4').html('<option value="">Select Level 3 first</option>'); 
         }
     });
-    $('#level4').on('change', function(){
+    $('#level4').on('click', function(){
         var PCDLevel4 = $(this).val();
         if(PCDLevel4){
             $.ajax({
@@ -612,52 +616,133 @@ $(document).ready(function(){
 ?>
 
     <!-- level1 dropdown -->
-    <select id="level1" name="level1" class="mx-5">
-        <option value="">Select Level 1</option>
-        <?php 
-  if( $objDb7->totalRecords()>0){ 
-    while($row = $objDb7->dbFetchArray()){  
-      echo '<option value="'.$row['itemid'].'">'.$row['itemname'].'</option>'; 
-        } 
-    }else{ 
-        echo '<option value=""> not available</option>'; 
-    } 
-    ?>
-    </select>
-	
-   
-    <select id="level2" name="level2" class="mx-4">
-        <option value="">Select Level 2</option>
-    </select>
-	
-    <!-- level3 dropdown -->
-    <select id="level3" name="level3" class="mx-4">
-        <option value="">Select Level 3</option>
-    </select>
-
-    <!-- level4 dropdown -->
-    <select id="level4" name="level4" class="mx-4 ">
-        <option value="">Select Level 4</option>
-    </select>
+    <div class="row">
+    <div class="col-11 row  ">
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 1</span>
+          <select id="level1" name="level1" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+                  <option value="">Select </option>
+                  <?php 
+            if( $objDb7->totalRecords()>0){ 
+              while($row = $objDb7->dbFetchArray()){  
+                $selected=" ";
+                if(isset($_POST['submit']) && ($_POST['level1']==$row['itemid'])  ){
+                  $selected="selected";
+                }
+                echo '<option value="'.$row['itemid'].'" '.$selected.'>'.$row['itemname'].'</option>'; 
+                  } 
+              }else{ 
+                  echo '<option value=""> not available</option>'; 
+              } 
+              ?>
+      </select>
+        </div>
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 2</span>
+              <!-- level2 dropdown -->
+            <select id="level2" name="level2" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+              <?php
+                    if(isset($_POST['submit']) && $_POST['level1']>0 ){
+                            // Fetch state data based on the specific level 
+                    $query = "SELECT * FROM boqdata WHERE parentcd = ".$_POST['level1']." AND activitylevel = 2 "; 
+                    $result = $objDb6->dbQuery($query);
+                    // Generate  list 
+                        if( $objDb6->totalRecords()>0){ 
+                        echo '<option value="">Select </option>'; 
+                          while($row = $objDb6->dbFetchArray()){  
+                            $selected=" ";
+                            if($_POST['level2']==$row['itemid']  ){
+                              $selected="selected";
+                            }
+                              echo '<option value="'.$row['itemid'].'" '.$selected.'>'.$row['itemname'].'</option>'; 
+                          }
+                      }else{ 
+                        echo '<option value=""> not available</option>'; 
+                      } 
+                    }else{
+              ?>
+                <option value="">Select </option>
+                <?php }?>
+            </select>
+        </div>
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 3</span>
+             <!-- level3 dropdown -->
+            <select id="level3" name="level3" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+            <?php
+                    if(isset($_POST['submit']) && $_POST['level2']>0 ){
+            // Fetch  data based on the specific level 
+            $query = "SELECT * FROM boqdata WHERE parentcd = ".$_POST['level2']." AND activitylevel = 3 "; 
+            $result = $objDb6->dbQuery($query);
+            
+            // Generate list
+                  if( $objDb6->totalRecords()>0){ 
+                      echo '<option value="">Select </option>'; 
+                      while($row = $objDb6->dbFetchArray()){  
+                        $selected=" ";
+                        if($_POST['level3']==$row['itemid']  ){
+                          $selected="selected";
+                        }
+                          echo '<option value="'.$row['itemid'].'"'.$selected.'>'.$row['itemname'].'</option>'; 
+                      } 
+                  }else{ 
+                      echo '<option value=""> not available</option>'; 
+                  } 
+                          
+                }else{
+                      ?>
+                <option value="">Select </option>
+                <?php }?>
+            </select>
+        </div>
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 4</span>
+              <!-- level4 dropdown -->
+              <select id="level4" name="level4" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+              <?php
+                      if(isset($_POST['submit']) && $_POST['level3']>0 ){
+                        
+                      // Fetch  data based on the specific level 
+                      $query = "SELECT * FROM boqdata WHERE parentcd = ".$_POST['level3']." AND activitylevel = 4 "; 
+                      $result = $objDb6->dbQuery($query);
+                      
+                      // Generate list
+                      if( $objDb6->totalRecords()>0){ 
+                          echo '<option value="">Select </option>'; 
+                          while($row = $objDb6->dbFetchArray()){  
+                            $selected=" ";
+                            if($_POST['level4']==$row['itemid']  ){
+                              $selected="selected";
+                            }
+                              echo '<option value="'.$row['itemid'].'"'.$selected.'>'.$row['itemname'].'</option>'; 
+                          } 
+                      }else{ 
+                          echo '<option value=""> not available</option>'; 
+                      } 
+                      }else{
+                        ?>
+                  <option value="">Select </option>
+                  <?php }?>
+              </select>
+        </div>
+                      </div>
+                      <div class="col-1">         
+        <div class="col-1">
+      
+        <input type="submit" name="submit" class="btn btn-info bg-primary text-white px-3 mx-1 mt-4" value="Submit"/>
+        </div>
+                      </div>
+    </div>
+    <br>
 
     <!-- level5 dropdown -->
     <!-- <select id="level5" name="level5">
         <option value="">Select level5</option>
     </select> -->
 	
-    <input type="submit" name="submit" class="btn btn-info bg-primary text-white px-3 mx-1" value="Submit"/>
+   
 </form>
-<?php 
-if(isset($_POST['submit']) && $_POST['level1']>0){ 
 
-?>
-     <h6 class="text-primary"> <span>&nbsp;&nbsp;<br> Filtered Result !</span> </h6>
-<?php 
-
-}else{
-  echo "<hr>";
-}
-?>
 
 </div>
 <div id="without_search" class="pt-0">
@@ -676,13 +761,6 @@ if(isset($_POST['submit'])){
 ?>
 <!--  -->
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
-
-<script type="text/javascript"> var pcd = "<?php if(isset($_POST['submit'])){
-   echo $pcd; 
-   } ?>"; 
-</script>
-<script type="text/javascript" src="jquery_pagination.js"></script>
 
 
 <?php
@@ -694,20 +772,56 @@ if(isset($_POST['submit'])){
 	
 
   if(isset($_POST['submit']) && $_POST['level1']>0 ){
-    $sqlCheck = "SELECT parentgroup FROM boqdata where itemid= $pcd";	
+    $sqlCheck = "SELECT parentgroup, parentcd, activitylevel FROM boqdata where itemid= $pcd";	
     $objDb8->dbQuery($sqlCheck);
     $row = $objDb8->dbFetchArray();
     $pGroup = $row['parentgroup'];
+	  $oneParentcd = $row['parentcd'];
+    $activitylevel = $row['activitylevel'];
 
-    $sql .= "SELECT itemid, stage, parentgroup, itemname FROM boqdata WHERE parentgroup LIKE '$pGroup%' ";
+        if($activitylevel==4){
+          $aLevel1 =  substr($pGroup,0,13);
+          $aLevel2 =  substr($pGroup,0,20);
+          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd ";
+        
+        }else if($activitylevel==3){
+          $aLevel1 =  substr($pGroup,0,13);
+          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd ";
+        
+        }else{
+          $sql .= "SELECT * FROM boqdata WHERE itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'  AND stage='BOQ' order by parentgroup, parentcd  ";
+        }
+
     }else{
-      $sql .= "SELECT itemid, stage, parentgroup, itemname FROM boqdata ";
+      $sql .= "SELECT * FROM boqdata ";
     }
 	$result = $objDb1->dbQuery($sql);
 	$count =  $objDb1->totalRecords();
 	$pages = ceil($count/$per_page)
-	?>			
-	
+	?>		
+  
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+
+<script type="text/javascript"> var pcd = "<?php if(isset($_POST['submit'])){echo $pcd; } ?>"; 
+var totalPages = "<?php if($pages>0){echo $pages; }else{echo 0 ;} ?>"; 
+</script>
+<script type="text/javascript" src="jquery_pagination.js"></script>
+
+	<?php 
+if(isset($_POST['submit']) && $_POST['level1']>0){ 
+
+?>
+     <h6 class="text-primary"> <span>&nbsp;&nbsp;<br> &nbsp; Total Records for this filtered result  : 	<?php echo $count; ?></span> </h6>
+<?php 
+
+}else{
+  echo "<hr>";
+  ?>
+     <span class="text-muted p-0 m-0" style="margin-top: -25px;"> Total Records   : 	<?php echo $count; ?></span> 
+
+  <?php
+}
+?>
 	<div id="content" style=" border: none;"></div>
 	<div id="pagination">
 		<ul class="pagination " style="text-align: right;">
@@ -725,7 +839,6 @@ if(isset($_POST['submit'])){
 
 
 </div>
-
 </form>
 
               </div>

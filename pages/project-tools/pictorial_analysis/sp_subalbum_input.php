@@ -1,9 +1,12 @@
 <?php
 include_once("../../../config/config.php");
 	
-	$pic_flag			= $_SESSION['ne_pic'];
+/*	$pic_flag			= $_SESSION['ne_pic'];
 	$picadm_flag		= $_SESSION['ne_picadm'];
-	$picentry_flag		=$_SESSION['ne_picentry'];
+	$picentry_flag		=$_SESSION['ne_picentry'];*/
+	$pic_flag			= 1;
+	$picadm_flag		= 1;
+	$picentry_flag		=1;
 	$uid				= $_SESSION['ne_user_cd']; 
 	$uname				= $_SESSION['ne_username'];
 	$superadmin_flag 		= $_SESSION['ne_sadmin'];
@@ -17,6 +20,13 @@ header("Location: ../../../index.php?init=3");
 $edit			= $_GET['edit'];
 $objDb  		= new Database( );
 $objDb1  		= new Database( );
+
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+
 //@require_once("get_url.php");
 $file_path="photos/";
  $pSQL = "SELECT max(pid) as pid from project";
@@ -129,7 +139,7 @@ $parent_album=$pdData1['parent_album'];
 }
 if(isset($_REQUEST['save']))
 { 
-     $album_name=$_REQUEST['album_name'];
+     $album_name=RemoveSpecialChar($_REQUEST['album_name']);
 	  $album_order=$_REQUEST['album_order'];
 	  if( $album_order!=="")
 	  {
@@ -228,7 +238,7 @@ $iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$a
 
 if(isset($_REQUEST['update']))
 {
-$album_name=$_REQUEST['album_name'];
+$album_name=RemoveSpecialChar($_REQUEST['album_name']);
 $album_order=$_REQUEST['album_order'];
 if( $album_order!=="")
 	  {
@@ -409,7 +419,7 @@ function cancelButton()
                       </div>
                       <div class="text-center col-sm-4">
                        
-                      <input class="form-control"  type="text"  id="album_name" name="album_name" placeholder="Enter The Album Name Here" value="<?php echo $album_name;?>" Required>
+                      <input class="form-control"  type="text"  id="album_name" name="album_name" placeholder="Enter The Album Name Here" value="<?php echo $album_name;?>" Required maxlength="245">
                       </div>
                       <div class="text-center col-sm-4">
                       </div>

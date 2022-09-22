@@ -41,10 +41,16 @@ function getExtention($type){
 		return "doc";
 		
 }
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+
 if(isset($_REQUEST['save']))
 {
 	
-	$iss_no=$_REQUEST['iss_no'];
+	$iss_no=RemoveSpecialChar($_REQUEST['iss_no']);
 	echo $iss_date=trim($_REQUEST['iss_date']);
 	if($iss_date=='')
 	{
@@ -55,12 +61,12 @@ if(isset($_REQUEST['save']))
 	{
 		$iss_date="'".$iss_date."'";
 	}
-	$iss_title=$_REQUEST['iss_title'];
-	$iss_detail=$_REQUEST['iss_detail'];
+	$iss_title=RemoveSpecialChar($_REQUEST['iss_title']);
+	$iss_detail=RemoveSpecialChar($_REQUEST['iss_detail']);
 	$iss_status=$_REQUEST['iss_status'];
 	//$iss_action=$_REQUEST['iss_action'];
-	$iss_action=$_REQUEST['action_status'];
-	$iss_remarks=$_REQUEST['iss_remarks'];
+	$iss_action=RemoveSpecialChar($_REQUEST['action_status']);
+	$iss_remarks=RemoveSpecialChar($_REQUEST['iss_remarks']);
 	$lid=$_REQUEST['lid'];
 	$message="";
 	$pgid=1;
@@ -168,13 +174,13 @@ $objDb->dbQuery($pdSQL1);
 $pdData1=$objDb->dbFetchArray();
 //$pdData1 = mysql_fetch_array($pdSQLResult1);
 
-	$iss_no=$pdData1['iss_no'];
+	$iss_no=RemoveSpecialChar($pdData1['iss_no']);
 	$iss_date=$pdData1['iss_date'];
-	$iss_title=$pdData1['iss_title'];
-	$iss_detail=$pdData1['iss_detail'];
+	$iss_title=RemoveSpecialChar($pdData1['iss_title']);
+	$iss_detail=RemoveSpecialChar($pdData1['iss_detail']);
 	$iss_status=$pdData1['iss_status'];
 	$iss_action=$pdData1['action_status'];
-	$iss_remarks=$pdData1['iss_remarks'];
+	$iss_remarks=RemoveSpecialChar($pdData1['iss_remarks']);
 	$lid=$pdData1['lid'];
 	$old_attachment=$pdData1['attachment'];
 }
@@ -295,7 +301,7 @@ if(isset($_REQUEST['update']))
 	{
 echo $sql_pro="UPDATE t012issues SET iss_no='$iss_no', iss_title='$iss_title', iss_detail='$iss_detail',  iss_status='$iss_status',  action_status='$iss_action', iss_remarks='$iss_remarks' , attachment='$flink' ,image2='$image2file',iss_date='$iss_date', lid='$lid'  where nos_id=$nos_id";
 	}
-	else if($flink!="" && $image1file=="" && $image2file=="")
+	else if($flink!="" && $image1file!="" && $image2file=="")
 	{
 	echo $sql_pro="UPDATE t012issues SET iss_no='$iss_no', iss_title='$iss_title', iss_detail='$iss_detail',  iss_status='$iss_status',  action_status='$iss_action', iss_remarks='$iss_remarks' , attachment='$flink' , image1='$image1file',iss_date='$iss_date', lid='$lid'  where nos_id=$nos_id";
 	}
@@ -366,7 +372,9 @@ if(isset($_REQUEST['cancel']))
 	
 	var x =document.getElementById("lid").value;
 	var iss_title =document.getElementById("iss_title").value;
-	var iss_no =document.getElementById("iss_no").value;
+	var iss_date =document.getElementById("iss_date").value;
+	
+	
 	var file =document.getElementById("al_file").value;
 	var old_file =document.getElementById("old_al_file").value;
 	
@@ -380,6 +388,10 @@ if(isset($_REQUEST['cancel']))
   		}
 		else if (iss_no == '') {
     alert("Please Add Issue Number!");
+    return false;
+  		}
+		else if (iss_date == '') {
+    alert("Please Add Issue Date!");
     return false;
   		}
 		
@@ -762,6 +774,7 @@ $(document).ready(function () {
                             <label class="col-sm-4 text-end"> Image 1 : </label>
                             <div class="col-sm-8 text-start">
 								 <input class="form-control" type="file" name="image1" id="image1" value="<?php echo $old_image1; ?>" />
+                                <span style="color:red" > Image (jpeg, jpg, gif, png)Only </span>
                                <input  type="hidden" name="old_image1" id="old_image1" value="<?php echo $old_image1; ?>" />
                              <!--  <input class="form-control" type="file" name="" id="" value="" />
                                <input  type="hidden" name="" id="" value="" />
@@ -775,6 +788,7 @@ $(document).ready(function () {
                             <label class="col-sm-4 text-end"> Image 2 : </label>
                             <div class="col-sm-8 text-start">
 								 <input class="form-control" type="file" name="image2" id="image2" value="<?php echo $old_image2; ?>" />
+                                 <span style="color:red" > Image (jpeg, jpg, gif, png)Only </span>
                                <input  type="hidden" name="old_image2" id="old_image2" value="<?php echo $old_image2; ?>" />
                              <!--  <input class="form-control" type="file" name="" id="" value="" />
                                <input  type="hidden" name="" id="" value="" />-->

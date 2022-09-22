@@ -17,16 +17,23 @@ else if ($newsadm_flag==0  and $newsentry_flag==0)
 
 
 //include("./fckeditor/fckeditor.php");
+
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+
+    return $res;
+}
 $news_path=NEWS_PATH;
 $mode	= "I";
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
 
-		 $title 		= trim($_POST['title1']);
-		 $title	= str_replace("'","999",$title);
+		 $title 		= RemoveSpecialChar(trim($_POST['title1']));
+		
 		 $newsdate 		= date('Y-m-d',strtotime($_POST['newsdate']));
-		 $details 		= trim($_POST['details']);
-		 $details	= str_replace("'","999",$details);
+		 $details 		= RemoveSpecialChar(trim($_POST['details']));
+		 
 		 $status 		= trim($_POST['status']);
 		 $newsfile      = $_FILES['newsfile'];
 		 $old_news_file =trim($_POST['old_news_file']);

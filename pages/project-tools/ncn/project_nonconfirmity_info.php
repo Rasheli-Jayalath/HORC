@@ -418,7 +418,8 @@ function doFilter(frm){
   <option value="2" <?php if($_REQUEST["iss_status"]==2) {?> selected="selected" <?php }?>>Closed</option>
   
   </select>
-  <button type="button"  class=" col-sm-1 button-33 " style="background-color: Green;   border-radius: 4px; margin-right: 2%;"  onclick="doFilter(this.form);" class="SubmitButton" name="Submit" id="Submit" value=" <?php echo VIEW; ?> " > <?php echo VIEW; ?> </button>
+  
+  <button type="button"  class=" col-sm-1 button-33 " style="background-color: Green;   border-radius: 4px; margin-right: 2%;"  onclick="doFilter(this.form);"  name="Submit" id="Submit" value=" <?php echo VIEW; ?> " > <?php echo VIEW; ?> </button>
           
   <?php if($pid != ""&&$pid!=0){?>
 
@@ -466,7 +467,7 @@ function doFilter(frm){
 									{
 								  ?>
                                   <tr>
-                          		<td colspan="11"  style="font-weight:bold; font-size:14; background: #b5b5f7"><?php echo $compdata['title'];?></td>
+                          		<td colspan="11"  style="font-weight:bold; font-size:14; background: #b5b5f7"><?php echo $compdata["title"];?></td>
                         		</tr>
                                   <?php
 									}
@@ -499,7 +500,7 @@ function doFilter(frm){
 						 
 									  ?>
                                       <tr>
-                          		<td colspan="11"  style="font-weight:bold; font-size:14; background: #b5b5f7"><?php echo $compdata['title'];?></td>
+                          		<td colspan="11"  style="font-weight:bold; font-size:14; background: #b5b5f7"><?php echo $compdata["title"];?></td>
                         		</tr>
                            <?php
 						   
@@ -539,7 +540,7 @@ function doFilter(frm){
 								   ?>
                         <tr>
                         <td align="center" style="font-size:13px"><?php echo ++$counter; ?></td>                        
-                        <td align="center" style="font-size:13px"><?php  echo $compdata['title'];
+                        <td align="center" style="font-size:13px"><?php  echo $compdata["title"];
 							  ?></td>
                           <td align="center" style="font-size:13px"><?php echo $pdData['iss_no'];?></td>
                           <td align="left" style="font-size:13px"><?php echo wordwrap($pdData['iss_title'],30,"<br>\n") ;?></td>
@@ -559,14 +560,17 @@ function doFilter(frm){
 						    
 						   <td align="center" style="font-size:13px; text-align:center">
 						    <span style="float:right">
-						   <form action="project_nonconfirmity_input.php?nos_id=<?php echo $pdData['nos_id'] ?>" method="post">
-               <button type="submit" title="Edit" class="btn btn-outline-warning btn-fw px-1 py-1 " name="edit" id="edit" value="<?php echo EDIT;?>" >      
-               <i class="ti-pencil btn-icon-prepend" ></i>  
-                            </button></form></span>
+                            
+                            
+                             <button class="btn btn-outline-warning btn-fw px-1 py-1 "  href="javascript:void(null);" onClick="window.open('project_nonconfirmity_input.php?nos_id=<?php echo $pdData['nos_id'] ?>', 'Manage notices ','width=870px,height=800px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  style=""> <i class="ti-pencil btn-icon-prepend" ></i> </button>
+                            </span>
 						  
 						   </td>					  
 								    <td align="right">
-						   <span style="float:right"><form action="project_nonconfirmity_info.php?nos_id=<?php echo $pdData['nos_id'] ?>" method="post">
+						   <span style="float:right">
+                           
+                           
+                           <form action="project_nonconfirmity_info.php?nos_id=<?php echo $pdData['nos_id'] ?>" method="post">
                <button type="submit" title = "Delete" class="btn btn-outline-danger btn-fw px-1 py-1 m-0" name="delete" id="delete" value="<?php echo DEL;?>" onclick="return confirm('Are you sure?')" >
                <i class="ti-trash btn-icon-prepend" ></i> 
         					</button></form></span>
@@ -626,9 +630,8 @@ function doFilter(frm){
 								  ?>
                                       <td align="center" style="font-size:13px; text-align:center">
 						    <span style="float:right">
-						   <form action="project_nonconfirmity_input.php?nos_id=<?php echo $pdData['nos_id'] ?>" method="post">
-               <button type="submit" title="Edit" class="btn btn-outline-warning btn-fw px-1 py-1 " name="edit" id="edit" value="<?php echo EDIT;?>">      <i class="ti-pencil btn-icon-prepend" ></i>  
-                            </button></form></span>
+ <button class="btn btn-outline-warning btn-fw px-1 py-1 "  href="javascript:void(null);" onClick="window.open('project_nonconfirmity_input.php?nos_id=<?php echo $pdData['nos_id'] ?>', 'Manage notices ','width=870px,height=800px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  style=""> <i class="ti-pencil btn-icon-prepend" ></i> </button>
+</span>
 						  
 						   </td>				
                            <?php

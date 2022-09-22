@@ -13,8 +13,8 @@ $lid		= $_REQUEST['lid'];
 $sCondition = '';
 
 ?>
-<select  id="item_id" name="item_id"  class="form-control"  style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);">
-                        <option value="0">Select Major Component</option>
+<select  id="item_id" name="item_id"  class="form-control"  style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);" required>
+                        <option value="">Select Major Component</option>
 
                         <?php
                         

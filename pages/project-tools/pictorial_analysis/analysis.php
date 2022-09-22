@@ -3,9 +3,12 @@ include_once("../../../config/config.php");
 require_once('../../../rs_lang.admin.php');
 $module		= "Pictorial Analysis";
 
-$pic_flag			= $_SESSION['ne_pic'];
+/*$pic_flag			= $_SESSION['ne_pic'];
 	$picadm_flag		= $_SESSION['ne_picadm'];
-	$picentry_flag		=$_SESSION['ne_picentry'];
+	$picentry_flag		=$_SESSION['ne_picentry'];*/
+	$pic_flag			= 1;
+	$picadm_flag		= 1;
+	$picentry_flag		=1;
 	$uid				= $_SESSION['ne_user_cd']; 
 	$uname				= $_SESSION['ne_username'];
 	$superadmin_flag 		= $_SESSION['ne_sadmin'];
@@ -914,7 +917,7 @@ $pdSQL = "SELECT * FROM  structures WHERE pid=".$pid." order by lid";
 			
   ?>
 <div class="col-sm-8 text-end" >  
-    <button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_video_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Videos</button>
+    <?php /*?><button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_video_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Videos</button><?php */?>
     <button type="button" class=" col-sm-3 button-33" onclick="window.open('sp_photo_album_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Photos</button>
     <button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_subalbum_input.php?cat_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Albums</button>
     </div>
@@ -960,7 +963,7 @@ $cattid=$_REQUEST['album_id'];
 							$read_right=1;
 							?>
      <div class="col-sm-8 text-end" >  
-    <button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_video_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Videos</button>
+   <?php /*?> <button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_video_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Videos</button><?php */?>
     <button type="button" class=" col-sm-3 button-33" onclick="window.open('sp_photo_album_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Photos</button>
     <button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_subalbum_input.php?cat_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Albums</button>
     </div>
@@ -971,7 +974,7 @@ $cattid=$_REQUEST['album_id'];
 							$read_right=3;
 							?>
                             <div class="col-sm-8 text-end" >  
-    <button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_video_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Videos</button>
+    <?php /*?><button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_video_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Videos</button><?php */?>
     <button type="button" class=" col-sm-3 button-33" onclick="window.open('sp_photo_album_input.php?album_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Photos</button>
     <button type="button" class="  col-sm-3 button-33" onclick="window.open('sp_subalbum_input.php?cat_id=<?php echo $album_id; ?>', 'newwindow', 'left=600,top=60,width=870,height=800');return false;" id="but3">Manage Albums</button>
     </div>
@@ -1217,7 +1220,7 @@ $cattid=$_REQUEST['album_id'];
             </td></tr>
              <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </td></tr>
-         <tr style="background: #CDCDCD; height:40px">
+         <?php /*?><tr style="background: #CDCDCD; height:40px">
          <td style="font-size:18px; font-weight:bold; padding-left:3px; text-align:center"><span><?php echo VIDEOS; ?></span> 
          <?php  $pdSQL1 = "SELECT vid, pid,album_id,v_cap,v_al_file FROM t32project_videos WHERE pid = ".$pid." and album_id=".$album_id." order by vid";
 			 $pdSQLResult1 = $objDb1->dbQuery($pdSQL1);
@@ -1232,15 +1235,16 @@ $cattid=$_REQUEST['album_id'];
    <?php
 			}
 			?>
-	</td></tr>
+	</td></tr><?php */?>
      <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </td></tr>
-  <tr>
+  <?php /*?><tr>
   <td align="center" valign="top">
 
    <table width="100%" style=" padding: 3px; font-family: Verdana, Geneva, sans-serif; font-size: 12px;
     font-weight: bold;  margin: 0px;">
-     <tbody><?php  
+     <tbody>
+	 <?php  
 			
 			 $cm=0;
 			 $pdSQL = "SELECT vid, pid,album_id,v_cap,v_al_file FROM t32project_videos WHERE pid = ".$pid." and album_id=".$album_id." order by vid";
@@ -1256,8 +1260,7 @@ $cattid=$_REQUEST['album_id'];
 				{
 				$file_array=explode(".",$result['v_al_file']);
 				$file_type=$file_array[1];
-				/*if(($file_type=="jpeg") || ($file_type=="jpg") || ($file_type=="gif") || ($file_type=="png"))
-				{*/
+				
 				?>
                 <div  style="float:left;width:198px;margin-right:0px;">
 				 <a  href="javascript:void(null);" onclick="window.open('sp_video_large.php?video=<?php echo $result['v_al_file'];?>&vid=<?php echo $result['vid'];?>&album_id=<?php echo $album_id;?>', 'View Video ','width=700px,height=550px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  
@@ -1292,7 +1295,7 @@ $cattid=$_REQUEST['album_id'];
                 </tbody>
       </table>
   </td>
-  </tr>
+  </tr><?php */?>
   </tbody>
 		</table>
         </div>

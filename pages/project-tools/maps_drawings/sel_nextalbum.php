@@ -123,7 +123,7 @@ if($mysql_rows>0)
  {
 
 ?>
-<option value="<?php echo $tdata['albumid']; ?>"><?php echo $tdata['album_name']; ?></option>
+<option value="<?php echo $tdata['albumid']; ?>"><?php  echo $tdata['album_name']; ?></option>
 <?php
 
 }

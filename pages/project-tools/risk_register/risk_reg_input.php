@@ -100,7 +100,12 @@ $pData =$objDb->dbFetchArray();
   $dpentry_flag=1;
  $dpadm_flag=1;	
  
+function RemoveSpecialChar($str){
 
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+
+    return $res;
+}
 
  $pSQL = "SELECT a.*, b.* ,c.* FROM `tbl_risk_register` a inner join tbl_risk_register_context b on(a.risk_con_id=b.risk_con_id) 
  inner join structures c on (b.lid=c.lid) where risk_id='$risk_id' ";
@@ -139,11 +144,11 @@ if(isset($_REQUEST['save']))
 	
 	$pid=1;
 	$risk_entry_date=date('Y-m-d',strtotime($_REQUEST['risk_entry_date']));
-	$risk_no=$_REQUEST['risk_no'];
+	$risk_no=RemoveSpecialChar($_REQUEST['risk_no']);
 	$risk_con_id=$_REQUEST['risk_con_id'];
 	$risk_status=$_REQUEST['risk_status'];
-	$risk_cons_hazard=$_REQUEST['risk_cons_hazard'];
-	$risk_cause=$_REQUEST['risk_cause'];
+	$risk_cons_hazard=RemoveSpecialChar($_REQUEST['risk_cons_hazard']);
+	$risk_cause=RemoveSpecialChar($_REQUEST['risk_cause']);
 	$risk_like_score=$_REQUEST['risk_like_score'];
 	if($risk_like_score==""){
 		$risk_like_score='0';
@@ -156,8 +161,8 @@ if(isset($_REQUEST['save']))
 	}else{
 		$risk_impact_score=$risk_impact_score;
 	}
-	$risk_control_measure=$_REQUEST['risk_control_measure'];
-	$risk_owner=$_REQUEST['risk_owner'];
+	$risk_control_measure=RemoveSpecialChar($_REQUEST['risk_control_measure']);
+	$risk_owner=RemoveSpecialChar($_REQUEST['risk_owner']);
 	$risk_lastdate=date('Y-m-d',strtotime($_REQUEST['risk_lastdate']));
 	$risk_update_date=date('Y-m-d'); 
 	$risk_rrls=$_REQUEST['risk_rrls'];
@@ -172,7 +177,7 @@ if(isset($_REQUEST['save']))
 	}else{
 		$risk_rris=$risk_rris;
 	}
-	$risk_comments=$_REQUEST['risk_comments'];
+	$risk_comments=RemoveSpecialChar($_REQUEST['risk_comments']);
 	
 	$message="";
 	$pgid=1;
@@ -198,6 +203,11 @@ $sql_pro=$objDb->dbQuery($query);
 	$unit='';
 	$item_id='';
 	$remarks='';
+	
+	print "<script type='text/javascript'>";
+    print "window.opener.location.reload();";
+    print "self.close();";
+    print "</script>";
 }
 
 if(isset($_REQUEST['update']))
@@ -253,6 +263,11 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
 } else {
     $message= "Error in updating design progress record";
 }
+
+print "<script type='text/javascript'>";
+    print "window.opener.location.reload();";
+    print "self.close();";
+    print "</script>";
 	
 //	$item_id='';
 //	$description='';
@@ -270,7 +285,7 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Manage Videos<</title>
+  <title>Risk Register</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="../../../vendors/feather/feather.css">
   <link rel="stylesheet" href="../../../endors/mdi/css/materialdesignicons.min.css">
@@ -320,6 +335,51 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
       box-shadow: 0px 2px 5px 1px  rgba(0, 0, 0, 0.3);
     }
   </style>
+   <script  type="text/javascript">
+  function required_1(){
+	  
+	var x = document.forms["form1"]["risk_no"].value;
+	var lid = document.forms["form1"]["lid"].value;
+	var risk_entry_date = document.forms["form1"]["risk_entry_date"].value;
+	var risk_owner = document.forms["form1"]["risk_owner"].value;
+	var risk_lastdate = document.forms["form1"]["risk_lastdate"].value;
+	
+	if(lid!="")
+	{
+	var risk_con_id = document.forms["form1"]["risk_con_id"].value;
+	}
+  if (x == "") {
+    alert("Risk Number must be filled out");
+    return false;
+  }
+   if (lid== "") {
+    alert("Select Component first");
+    return false;
+  }
+  if(lid!="")
+	{
+   if (risk_con_id== "") {
+    alert("Select Risk Context");
+    return false;
+  }
+	}
+	 if (risk_entry_date== "") {
+    alert("Select Risk entry Date first");
+    return false;
+  }
+   if (risk_owner== "") {
+    alert("Add Risk Owner Name");
+    return false;
+  }
+   if (risk_lastdate== "") {
+    alert("Select Risk Action by Date");
+    return false;
+  }
+
+	
+	
+}
+</script>
     <div class="container-fluid">
 
     <div class=" grid-margin stretch-card " style = "margin-top: 3%;">
@@ -327,12 +387,12 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
                 <div class="card-body text-center">
                   <h4 class="card-title">Design Progress</h4>
 				  <?php echo $message; ?>
-                  <form class="forms-sample" action="risk_reg_input.php" target="_self" method="post"  >
+                  <form class="forms-sample" action="risk_reg_input.php" target="_self" method="post" name="form1" onsubmit="return required_1()">
 				 
 				  <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Risk Id #: </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="number"  name="risk_no" id="risk_no" value="<?php echo $risk_no; ?>"  style="width: 60%;" placeholder="Serial #" Required>
+					     <input class="form-control"  type="text"  name="risk_no" id="risk_no" value="<?php echo $risk_no; ?>"  style="width: 60%;" >
                       </div>
                  </div>
 
@@ -341,7 +401,7 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Risk Component Area: </label> </div>
                       <div class="text-start col-sm-6">
-									<select class="form-control  bg-light text-dark" id="lid" name="lid" style="width: 60%;"onchange="getRisk(this.value);">
+									<select class="form-control  bg-light text-dark" id="lid" name="lid" style="width: 60%;"onchange="getRisk(this.value);" >
 					<option value="">Select Component Area</option>
 					<?php $pdSQL = "SELECT lid,pid,code,title FROM  structures  order by lid";
 										$pdSQLResult = $objDb->dbQuery($pdSQL);
@@ -367,15 +427,15 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
 					  if($risk_id!=''){ ?>
 
 
-					<select class="form-control  bg-light text-dark" id="risk_con_id" name="risk_con_id" style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);" Required>
+					<select class="form-control  bg-light text-dark" id="risk_con_id" name="risk_con_id" style="font-size: 14px; color: #000;   background-color: rgba(255, 255, 255);" >
 					<option value="">Select Risk Context</option>
 					<?php $pdSQL = "SELECT * FROM  tbl_risk_register_context  order by risk_con_id";
-										$pdSQLResult = $objDb->dbQuery($pdSQL);
+										$pdSQLResult = $objSDb ->dbQuery($pdSQL);
 										$i=0;
-										if($objDb-> totalRecords()>=1);
+										if($objSDb -> totalRecords()>=1);
 											
 											{
-											while($pdData=$objDb->dbFetchArray())
+											while($pdData=$objSDb ->dbFetchArray())
 											{ 
 											$i++;?>
 
@@ -392,7 +452,7 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Risk Entry Date: </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="date"  name="risk_entry_date" id="risk_entry_date" value="<?php echo $risk_entry_date; ?>"  style="width: 60%;" placeholder="Description" Required>
+					     <input class="form-control"  type="date"  name="risk_entry_date" id="risk_entry_date" value="<?php echo $risk_entry_date; ?>"  style="width: 60%;"  >
                       </div>
                  </div>
 
@@ -416,14 +476,14 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Risk Consequence Hazard: </label> </div>
                       <div class="text-start col-sm-6">
-					  <textarea  class="form-control" rows="4" style=" height: 100px; "  name="risk_cons_hazard"  id="risk_cons_hazard" Required><?php echo $risk_cons_hazard;?> </textarea>
+					  <textarea  class="form-control" rows="4" style=" height: 100px; "  name="risk_cons_hazard"  id="risk_cons_hazard" ><?php echo $risk_cons_hazard;?> </textarea>
                       </div>
                  </div>
 
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Risk Cause (Description):</label> </div>
                       <div class="text-start col-sm-6">
-					  <textarea  class="form-control" rows="4" style=" height: 100px; "  name="risk_cause"  id="risk_cause"  Required><?php echo $risk_cause;?> </textarea>
+					  <textarea  class="form-control" rows="4" style=" height: 100px; "  name="risk_cause"  id="risk_cause"  ><?php echo $risk_cause;?> </textarea>
                       </div>
                  </div>
 
@@ -484,14 +544,14 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label> Risk Action Owner:</label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="text"  name="risk_owner" id="risk_owner" value="<?php echo $risk_owner; ?>"  style="width: 60%;" placeholder="Risk Action Owner" Required>
+					     <input class="form-control"  type="text"  name="risk_owner" id="risk_owner" value="<?php echo $risk_owner; ?>"  style="width: 60%;" placeholder="Risk Action Owner" >
                       </div>
                  </div>				 
 			 
 				 <div class="form-group row">
                     <div class="text-end col-sm-6"> <label>Action By Date: </label> </div>
                       <div class="text-start col-sm-6">
-					     <input class="form-control"  type="date" name="risk_lastdate" id="risk_lastdate" value="<?php if(isset($risk_lastdate)&&$risk_lastdate!="0000-00-00"&&$risk_lastdate!="0000-00-00")echo $risk_lastdate; ?>" style="width: 60%;" placeholder="Action By Date" Required>
+					     <input class="form-control"  type="date" name="risk_lastdate" id="risk_lastdate" value="<?php echo $risk_lastdate; ?>" style="width: 60%;" placeholder="Action By Date" >
                       </div>
                  </div>	
 				 
@@ -557,7 +617,7 @@ risk_owner='$risk_owner', risk_lastdate='$risk_lastdate', risk_update_date='$ris
 	 ?>
 	    <input type="hidden" name="risk_id" id="risk_id" value="<?php echo $_REQUEST['risk_id']; ?>" />
 	    <button  type="submit" class="btn btn-primary me-2" name="update" id="update" value="<?php echo $_REQUEST['risk_id']; ?>" style="width:20%">Update</button>
-		<button class="btn btn-light" type="button" style="width:20%" onclick="history.back()">Cancel</button>
+		<button class="btn btn-light" type="button" style="width:20%" onclick="javascript:window.close()">Cancel</button>
 	   <?php
 	 }
 	 else

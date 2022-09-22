@@ -18,6 +18,12 @@ $objDb1  		= new Database( );
 $msg						= "";
 $giscode=0;
 $file_path="pictorial_data/";
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
+
 function genRandom($char = 5){
 	$md5 = md5(time());
 	return substr($md5, rand(5, 25), $char);

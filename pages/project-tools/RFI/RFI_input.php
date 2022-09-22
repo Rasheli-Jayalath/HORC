@@ -19,6 +19,11 @@ function genRandom($char = 5){
 	$md5 = md5(time());
 	return substr($md5, rand(5, 25), $char);
 }
+function RemoveSpecialChar($str){
+
+    $res = preg_replace('/[^a-zA-Z0-9_ -]/s','',$str);
+    return $res;
+}
 function getExtention($type){
 	if($type == "image/jpeg" || $type == "image/jpg" || $type == "image/pjpeg")
 		return "jpg";
@@ -39,19 +44,27 @@ function getExtention($type){
 
 if(isset($_REQUEST['save']))
 {
+	
+	
+	
+	
 
 
-		$lid=$_REQUEST['lid'];
-	$contractor_no=$_REQUEST['contractor_no'];
-	$section=$_REQUEST['section'];
-	$site=$_REQUEST['site'];
-	$rfi_number=$_REQUEST['rfi_number'];
+	$lid=$_REQUEST['lid'];
+	$contractor_no=RemoveSpecialChar($_REQUEST['contractor_no']);
+	$section=RemoveSpecialChar($_REQUEST['section']);
+	$site=RemoveSpecialChar($_REQUEST['site']);
+	$rfi_number=RemoveSpecialChar($_REQUEST['rfi_number']);
 	$rfi_prev_ref=$_REQUEST['rfi_prev_ref'];
 	 $rfi_Date=$_REQUEST['rfi_Date'];
 	if($rfi_Date=='')
 	{
 		
-		$rfi_Date='0000-00-00';
+		$rfi_Date='NULL';
+	}
+	else
+	{
+		$rfi_Date="'".$rfi_Date."'";
 	}
 	
 	$rfi_sub_date_time=$_REQUEST['rfi_sub_date_time'];
@@ -59,27 +72,35 @@ if(isset($_REQUEST['save']))
   if($rfi_sub_date_time=='')
 	{
 		
-		 $rfi_sub_date_time ='00:00:00';
+		 $rfi_sub_date_time ='NULL';
 	}
-	$rfi_activity_detail=$_REQUEST['rfi_activity_detail'];
-	$rfi_activity_location=$_REQUEST['rfi_activity_location'];
-	$rfi_activity_location_from=$_REQUEST['rfi_activity_location_from'];
-	$rfi_activity_location_to=$_REQUEST['rfi_activity_location_to'];
-	$rfi_contractor_rep_name=$_REQUEST['rfi_contractor_rep_name'];
-	$RFI_Received_by=$_REQUEST['RFI_Received_by'];
+	else
+	{
+		$rfi_sub_date_time="'".$rfi_sub_date_time."'";
+	}
+	$rfi_activity_detail=RemoveSpecialChar($_REQUEST['rfi_activity_detail']);
+	$rfi_activity_location=RemoveSpecialChar($_REQUEST['rfi_activity_location']);
+	$rfi_activity_location_from=RemoveSpecialChar($_REQUEST['rfi_activity_location_from']);
+	$rfi_activity_location_to=RemoveSpecialChar($_REQUEST['rfi_activity_location_to']);
+	$rfi_contractor_rep_name=RemoveSpecialChar($_REQUEST['rfi_contractor_rep_name']);
+	$RFI_Received_by=RemoveSpecialChar($_REQUEST['RFI_Received_by']);
 	$RFI_Received_date_time=$_REQUEST['RFI_Received_date_time'];
   if($RFI_Received_date_time=='')
 	{
 		
-		$RFI_Received_date_time='00:00:00';
+		$RFI_Received_date_time='NULL';
+	}
+	else
+	{
+		$RFI_Received_date_time="'".$RFI_Received_date_time."'";
 	}
 
   $rfi_time=$_REQUEST['rfi_time'];
-  if($rfi_time=='')
+ /* if($rfi_time=='')
 	{
 		
 		$rfi_time='00:00:00';
-	}
+	}*/
 	$RFI_Scanned_document=$_REQUEST['RFI_Scanned_document'];
 	
 	
@@ -110,7 +131,6 @@ if(isset($_REQUEST['save']))
 	{ 
 	$Approval_documents=$file_name.".".$extension;
 	  $target_file=$file_path.$Approval_documents;
-	 //$target_file = $file_path . basename($_FILES['al_file']["name"]);
 	
 	move_uploaded_file($_FILES['Approval_documents']['tmp_name'], $target_file);	
 	
@@ -132,7 +152,6 @@ if(isset($_REQUEST['save']))
 	{ 
 	$RFI_Scanned_documentfile=$RFI_Scanned_document_file_name.".".$extension1;
 	  $target_file1=$file_path.$RFI_Scanned_documentfile;
-	 //$target_file = $file_path . basename($_FILES['al_file']["name"]);
 	
 	move_uploaded_file($_FILES['RFI_Scanned_document']['tmp_name'], $target_file1);	
 	
@@ -153,45 +172,21 @@ if(isset($_REQUEST['save']))
 	{ 
 	$Quality_test_report_documentfile=$Quality_test_report_document_file_name.".".$extension2;
 	  $target_file2=$file_path.$Quality_test_report_documentfile;
-	 //$target_file = $file_path . basename($_FILES['al_file']["name"]);
 	
 	move_uploaded_file($_FILES['Quality_test_report_document']['tmp_name'], $target_file2);	
 	
 	
 	}
 	}
-//    echo $insert_q="INSERT INTO tbl_rfi_lab( contractor_no, section, site, rfi_number, rfi_prev_ref, rfi_Date, rfi_sub_date_time, 
-// rfi_activity_detail, rfi_activity_location, rfi_activity_location_from, rfi_activity_location_to, rfi_contractor_rep_name, 
-// RFI_Received_by, RFI_Received_date_time, RFI_Scanned_document, Survey_Surveyor_name, Survey_Date_time, Survey_report, Survey_comments,
-//  Survey_document, Inspection_inspector_name, Inspection_Date_time, Inspection_report, Inspection_comments, Inspection_document,
-//   Quality_MT_Engineer_name, Quality_testing_Date_time, Quality_test_perfomed, Quality_test_sample_numbers, Quality_test_report, 
-//   Quality_test_result, Quality_test_comments, Quality_test_report_document, Approval_authority, Approval_authority_name, 
-//   Approval_status, Approval_comments, Approval_documents) VALUES ('$contractor_no','$section','$site','$rfi_number',
-//   '$rfi_prev_ref','$rfi_Date','$rfi_sub_date_time','$rfi_activity_detail','$rfi_activity_location','$rfi_activity_location_from',
-  
-//   '$rfi_activity_location_to','$rfi_contractor_rep_nam','$RFI_Received_by','$RFI_Received_date_time','$RFI_Scanned_document'
-//   ,'$Survey_Surveyor_name','$Survey_Date_time','$Survey_report','$Survey_comments','$Survey_document','$Inspection_inspector_name',
-//   '$Inspection_Date_time','$Inspection_report','$Inspection_comments','$Inspection_document','$Quality_MT_Engineer_name',
-  
-//   '$Quality_testing_Date_time','$Quality_test_perfomed','$Quality_test_sample_numbers','$Quality_test_report',
-//   '$Quality_test_result','$Quality_test_comments','$Quality_test_report_document','$Approval_authority','$Approval_authority_name',
-  
-//   '$Approval_status','$Approval_comments','$Approval_documents')";
 
 
 
-
-
-$insert_q="INSERT INTO tbl_rfi_lab(lid, contractor_no, section, site, rfi_number, rfi_prev_ref, rfi_Date, rfi_sub_date_time, rfi_activity_detail, rfi_activity_location, 
+ $insert_q="INSERT INTO tbl_rfi_lab(lid, contractor_no, section, site, rfi_number, rfi_prev_ref, rfi_Date, rfi_sub_date_time, rfi_activity_detail, rfi_activity_location, 
 rfi_activity_location_from, rfi_activity_location_to, rfi_contractor_rep_name, RFI_Received_by, RFI_Received_date_time,rfi_time, RFI_Scanned_document)
- VALUES ('$lid','$contractor_no','$section','$site','$rfi_number','$rfi_prev_ref','$rfi_Date','$rfi_sub_date_time','$rfi_activity_detail','$rfi_activity_location',
- '$rfi_activity_location_from','$rfi_activity_location_to','$rfi_contractor_rep_nam','$RFI_Received_by','$RFI_Received_date_time','$rfi_time','$RFI_Scanned_documentfile')";
+ VALUES ('$lid','$contractor_no','$section','$site','$rfi_number','$rfi_prev_ref',$rfi_Date,$rfi_sub_date_time,'$rfi_activity_detail','$rfi_activity_location',
+ '$rfi_activity_location_from','$rfi_activity_location_to','$rfi_contractor_rep_nam','$RFI_Received_by',$RFI_Received_date_time,'$rfi_time','$RFI_Scanned_documentfile')";
 $sql_pro= $objDb->dbQuery($insert_q);
-/*$sql_pro= $objSDb->dbQuery("INSERT INTO tbl_rfi_lab( contractor_no, section, site, rfi_number, rfi_prev_ref, rfi_Date, rfi_sub_date_time, rfi_activity_detail, rfi_activity_location, rfi_activity_location_from, rfi_activity_location_to, rfi_contractor_rep_name, RFI_Received_by, RFI_Received_date_time, RFI_Scanned_document)VALUES('$contractor_no','$section','$site','$rfi_number','$rfi_prev_ref','$rfi_Date','$rfi_sub_date_time','$rfi_activity_detail','$rfi_activity_location','$rfi_activity_location_from','$rfi_activity_location_to','$rfi_contractor_rep_nam','$RFI_Received_by','$RFI_Received_date_time','$RFI_Scanned_document')");*/
-//echo $pSQL="INSERT INTO tbl_rfi_lab( contractor_no,section,site,rfi_number) VALUES('11','22','22','22')";
-//$sql_pro=$objDb->dbQuery($pSQL);
-//$objSDb->dbQuery("INSERT INTO tbl_rfi_lab( contractor_no,section,site,rfi_number) VALUES('$contractor_no','$section','$site','$rfi_number')");
- //$insertid=$con->lastInsertId();
+
 	if ($sql_pro == TRUE) {
     $message=  "New record added successfully";
 	$activity=$insertid." - New record for issues added successfully";
@@ -200,8 +195,7 @@ $sql_pro= $objDb->dbQuery($insert_q);
 	$activity="Error in adding record";
 	
 }
-//$iSQL = ("INSERT INTO pages_visit_log (log_id,request_url) VALUES ('$log_id','$activity')");
-//$objSDb->dbQuery($iSQL);
+
 
 	
 	$iss_no='';
@@ -221,16 +215,19 @@ $sql_pro= $objDb->dbQuery($insert_q);
 }
 if(isset($_REQUEST['update1'])){
 
-	$Survey_Surveyor_name=$_REQUEST['Survey_Surveyor_name'];
+	$Survey_Surveyor_name=RemoveSpecialChar($_REQUEST['Survey_Surveyor_name']);
 	 $Survey_Date_time=$_REQUEST['Survey_Date_time'];
 	if($Survey_Date_time=='')
 	{
 		
-		$Survey_Date_time='00:00:00';
+		$Survey_Date_time='NULL';
 	}
-
-	$Survey_report=$_REQUEST['Survey_report'];
-	$Survey_comments=$_REQUEST['Survey_comments'];
+else
+{
+	$Survey_Date_time="'".$Survey_Date_time."'";
+}
+	$Survey_report=RemoveSpecialChar($_REQUEST['Survey_report']);
+	$Survey_comments=RemoveSpecialChar($_REQUEST['Survey_comments']);
 	$Survey_document=$_REQUEST['Survey_document'];
   $survey_time=$_REQUEST['survey_time'];
 
@@ -266,8 +263,8 @@ if(isset($_REQUEST['update1'])){
 	
 	}
 	}
-echo $Survey_document;
-  $insert_q2="UPDATE tbl_rfi_lab SET Survey_Surveyor_name='$Survey_Surveyor_name', Survey_Date_time='$Survey_Date_time',survey_time='$survey_time', Survey_report='$Survey_report',
+//echo $Survey_document;
+  $insert_q2="UPDATE tbl_rfi_lab SET Survey_Surveyor_name='$Survey_Surveyor_name', Survey_Date_time=$Survey_Date_time,survey_time='$survey_time', Survey_report='$Survey_report',
    Survey_comments='$Survey_comments', Survey_document='$Survey_document' WHERE rfi_id='$rfi_id'";
   $sql_pro2= $objDb->dbQuery($insert_q2);
 if ($sql_pro2 == TRUE) {
@@ -281,15 +278,19 @@ $activity=$insertid." - New record for issues added successfully";
 if(isset($_REQUEST['update2'])){
 
 	
-	$Inspection_inspector_name=$_REQUEST['Inspection_inspector_name'];
+	$Inspection_inspector_name=RemoveSpecialChar($_REQUEST['Inspection_inspector_name']);
 	$Inspection_Date_time=$_REQUEST['Inspection_Date_time'];
   if($Inspection_Date_time=='')
 	{
 		
-		$Inspection_Date_time='00:00:00';
+		$Inspection_Date_time='NULL';
 	}
-	$Inspection_report=$_REQUEST['Inspection_report'];
-	$Inspection_comments=$_REQUEST['Inspection_comments'];
+	else
+	{
+		$Inspection_Date_time="'".$Inspection_Date_time."'";
+	}
+	$Inspection_report=RemoveSpecialChar($_REQUEST['Inspection_report']);
+	$Inspection_comments=RemoveSpecialChar($_REQUEST['Inspection_comments']);
 	$Inspection_document=$_REQUEST['Inspection_document'];
 	$Inspect_time=$_REQUEST['Inspect_time'];
   if($Inspect_time=='')
@@ -297,6 +298,7 @@ if(isset($_REQUEST['update2'])){
 		
 		$Inspect_time='00:00:00';
 	}
+	
   if(isset($_FILES["Inspection_document"]["name"])&&$_FILES["Inspection_document"]["name"]!="")
 	{
 	$extension=getExtention($_FILES["Inspection_document"]["type"]);
@@ -320,7 +322,7 @@ if(isset($_REQUEST['update2'])){
 	}
 	}
 
-  $insert_q3="UPDATE tbl_rfi_lab SET Inspection_inspector_name='$Inspection_inspector_name', Inspection_Date_time='$Inspection_Date_time',Inspect_time='$Inspect_time', Inspection_report='$Inspection_report',
+  $insert_q3="UPDATE tbl_rfi_lab SET Inspection_inspector_name='$Inspection_inspector_name', Inspection_Date_time=$Inspection_Date_time,Inspect_time='$Inspect_time', Inspection_report='$Inspection_report',
    Inspection_comments='$Inspection_comments', Inspection_document='$Inspection_document' WHERE rfi_id='$rfi_id'";
   $sql_pro3= $objDb->dbQuery($insert_q3);
 if ($sql_pro3 == TRUE) {
@@ -335,18 +337,22 @@ $activity=$insertid." - New record for issues added successfully";
 if(isset($_REQUEST['update3'])){
 
 	
-	$Quality_MT_Engineer_name=$_REQUEST['Quality_MT_Engineer_name'];
+	$Quality_MT_Engineer_name=RemoveSpecialChar($_REQUEST['Quality_MT_Engineer_name']);
 	$Quality_testing_Date_time=$_REQUEST['Quality_testing_Date_time'];
   if($Quality_testing_Date_time=='')
 	{
 		
-		$Quality_testing_Date_time='00:00:00';
+		$Quality_testing_Date_time='NULL';
 	}
-	$Quality_test_perfomed=$_REQUEST['Quality_test_perfomed'];
+	else
+	{
+		$Quality_testing_Date_time="'".$Quality_testing_Date_time."'";
+	}
+	$Quality_test_perfomed=RemoveSpecialChar($_REQUEST['Quality_test_perfomed']);
 	$Quality_test_sample_numbers=$_REQUEST['Quality_test_sample_numbers'];
-	$Quality_test_report=$_REQUEST['Quality_test_report'];
-	$Quality_test_result=$_REQUEST['Quality_test_result'];
-	$Quality_test_comments=$_REQUEST['Quality_test_comments'];
+	$Quality_test_report=RemoveSpecialChar($_REQUEST['Quality_test_report']);
+	$Quality_test_result=RemoveSpecialChar($_REQUEST['Quality_test_result']);
+	$Quality_test_comments=RemoveSpecialChar($_REQUEST['Quality_test_comments']);
 	$Quality_test_report_document=$_REQUEST['Quality_test_report_document'];
 	$Quality_time=$_REQUEST['Quality_time'];
   if($Quality_time=='')
@@ -377,8 +383,8 @@ if(isset($_REQUEST['update3'])){
 	}
 	}
 
-  $insert_q4="UPDATE tbl_rfi_lab SET Quality_MT_Engineer_name='$Quality_MT_Engineer_name', Quality_testing_Date_time='$Quality_testing_Date_time',Quality_time='$Quality_time', Quality_test_perfomed='$Quality_test_perfomed',
-   Quality_test_sample_numbers='$Quality_test_sample_numbers', Quality_test_report='$Quality_test_report' , Quality_test_result='$Quality_test_result',
+  $insert_q4="UPDATE tbl_rfi_lab SET Quality_MT_Engineer_name='$Quality_MT_Engineer_name', Quality_testing_Date_time=$Quality_testing_Date_time,Quality_time='$Quality_time', Quality_test_perfomed='$Quality_test_perfomed',
+   Quality_test_sample_numbers=$Quality_test_sample_numbers, Quality_test_report='$Quality_test_report' , Quality_test_result='$Quality_test_result',
    Quality_test_comments='$Quality_test_comments' , Quality_test_report_document='$Quality_test_report_documentfile' WHERE rfi_id='$rfi_id'";
     echo $insert_q4;
 
@@ -395,10 +401,10 @@ $activity=$insertid." - New record for issues added successfully";
 if(isset($_REQUEST['update4'])){
 
 
-	$Approval_authority=$_REQUEST['Approval_authority'];
-	$Approval_authority_name=$_REQUEST['Approval_authority_name'];
+	$Approval_authority=RemoveSpecialChar($_REQUEST['Approval_authority']);
+	$Approval_authority_name=RemoveSpecialChar($_REQUEST['Approval_authority_name']);
 	$Approval_status=$_REQUEST['Approval_status'];
-	$Approval_comments=$_REQUEST['Approval_comments'];
+	$Approval_comments=RemoveSpecialChar($_REQUEST['Approval_comments']);
 	$Approval_documents=$_REQUEST['Approval_documents'];
 	
 	if(isset($_FILES["Approval_documents"]["name"])&&$_FILES["Approval_documents"]["name"]!="")
@@ -441,29 +447,47 @@ $activity=$insertid." - New record for issues added successfully";
 if(isset($_REQUEST['update0'])){
 
   $lid=$_REQUEST['lid'];
-	$contractor_no=$_REQUEST['contractor_no'];
-	$section=$_REQUEST['section'];
-	$site=$_REQUEST['site'];
-	$rfi_number=$_REQUEST['rfi_number'];
-	$rfi_prev_ref=$_REQUEST['rfi_prev_ref'];
+	$contractor_no=RemoveSpecialChar($_REQUEST['contractor_no']);
+	$section=RemoveSpecialChar($_REQUEST['section']);
+	$site=RemoveSpecialChar($_REQUEST['site']);
+	$rfi_number=RemoveSpecialChar($_REQUEST['rfi_number']);
+	$rfi_prev_ref=RemoveSpecialChar($_REQUEST['rfi_prev_ref']);
 	 $rfi_Date=trim($_REQUEST['rfi_Date']);
 	if($rfi_Date=='')
 	{
 		
-		$rfi_Date='0000-00-00';
+		$rfi_Date='NULL';
 	}
 	else
 	{
-		$rfi_Date=$rfi_Date;
+		$rfi_Date="'".$rfi_Date."'";
 	}
 	$rfi_sub_date_time=date('Y-m-d',strtotime($_REQUEST['rfi_sub_date_time']));
-	$rfi_activity_detail=$_REQUEST['rfi_activity_detail'];
-	$rfi_activity_location=$_REQUEST['rfi_activity_location'];
-	$rfi_activity_location_from=$_REQUEST['rfi_activity_location_from'];
-	$rfi_activity_location_to=$_REQUEST['rfi_activity_location_to'];
-	$rfi_contractor_rep_name=$_REQUEST['rfi_contractor_rep_name'];
-	$RFI_Received_by=$_REQUEST['RFI_Received_by'];
+	if($rfi_sub_date_time=='')
+	{
+		
+		$rfi_sub_date_time='NULL';
+	}
+	else
+	{
+		$rfi_sub_date_time="'".$rfi_sub_date_time."'";
+	}
+	$rfi_activity_detail=RemoveSpecialChar($_REQUEST['rfi_activity_detail']);
+	$rfi_activity_location=RemoveSpecialChar($_REQUEST['rfi_activity_location']);
+	$rfi_activity_location_from=RemoveSpecialChar($_REQUEST['rfi_activity_location_from']);
+	$rfi_activity_location_to=RemoveSpecialChar($_REQUEST['rfi_activity_location_to']);
+	$rfi_contractor_rep_name=RemoveSpecialChar($_REQUEST['rfi_contractor_rep_name']);
+	$RFI_Received_by=RemoveSpecialChar($_REQUEST['RFI_Received_by']);
 	$RFI_Received_date_time=$_REQUEST['RFI_Received_date_time'];
+	if($RFI_Received_date_time=='')
+	{
+		
+		$RFI_Received_date_time='NULL';
+	}
+	else
+	{
+		$RFI_Received_date_time="'".$RFI_Received_date_time."'";
+	}
   $rfi_time=$_REQUEST['rfi_time'];
 	$RFI_Scanned_document=$_REQUEST['RFI_Scanned_document'];
   
@@ -492,10 +516,10 @@ if(isset($_REQUEST['update0'])){
 
 
   $insert_q6="UPDATE tbl_rfi_lab SET lid='$lid',contractor_no='$contractor_no', section='$section', site='$site',
-   rfi_number='$rfi_number', rfi_prev_ref='$rfi_prev_ref' , rfi_Date='$rfi_Date',
-   rfi_sub_date_time='$rfi_sub_date_time' , rfi_activity_detail='$rfi_activity_detail', rfi_activity_location='$rfi_activity_location',
+   rfi_number='$rfi_number', rfi_prev_ref='$rfi_prev_ref' , rfi_Date=$rfi_Date,
+   rfi_sub_date_time=$rfi_sub_date_time , rfi_activity_detail='$rfi_activity_detail', rfi_activity_location='$rfi_activity_location',
    rfi_activity_location_from='$rfi_activity_location_from', rfi_activity_location_to='$rfi_activity_location_to' , rfi_contractor_rep_name='$rfi_contractor_rep_name',
-   RFI_Received_by='$RFI_Received_by' , RFI_Received_date_time='$RFI_Received_date_time',rfi_time='$rfi_time', RFI_Scanned_document='$RFI_Scanned_documentfile' WHERE rfi_id='$rfi_id'";
+   RFI_Received_by='$RFI_Received_by' , RFI_Received_date_time=$RFI_Received_date_time,rfi_time='$rfi_time', RFI_Scanned_document='$RFI_Scanned_documentfile' WHERE rfi_id='$rfi_id'";
   $sql_pro6= $objDb->dbQuery($insert_q6);
 if ($sql_pro6 == TRUE) {
   $message=  "New record added successfully";
@@ -583,7 +607,7 @@ $pdData1=$objDb->dbFetchArray();
   <script type="text/javascript" src="datepickercode/jquery-1.10.2.js"></script>
   <script type="text/javascript" src="datepickercode/jquery-ui.js"></script>
   <script>
-  function required(){
+  function (){
 	
 	var x =document.getElementById("lid").value;
 	var file =document.getElementById("al_file").value;
@@ -832,7 +856,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                 <div class="card-body">
 
 
-            <form class="form-sample" method="post" target="_self" method="post"  enctype="multipart/form-data">
+            <form class="form-sample" method="post" target="_self" name="form1"   enctype="multipart/form-data">
 
             <div class="content-wrapper">
           <div class="row">
@@ -845,16 +869,20 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                     </li>
                    
                     <li class="nav-item">
-                      <a class="nav-link" id="indicators-tab" data-bs-toggle="tab" <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#surv_details"<?php } else {?> href="#" <?php }?>  role="tab" aria-selected="false">Survey Details</a>
+                      <a class="nav-link" id="indicators-tab" data-bs-toggle="tab" 
+					  <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#surv_details"<?php } else {?> href="#" <?php }?>  role="tab" aria-selected="false">Survey Details</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" id="contact-tab" data-bs-toggle="tab" <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#inspect_details"<?php } else {?> href="#" <?php }?> role="tab" aria-selected="false">Inspection Details</a>
+                      <a class="nav-link" id="contact-tab" data-bs-toggle="tab" 
+					  <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#inspect_details"<?php } else {?> href="#" <?php }?> role="tab" aria-selected="false">Inspection Details</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" id="contact-tab" data-bs-toggle="tab" <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#qual_details"<?php } else {?> href="#" <?php }?> role="tab" aria-selected="false">Quality  Details</a>
+                      <a class="nav-link" id="contact-tab" data-bs-toggle="tab" 
+					  <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#qual_details"<?php } else {?> href="#" <?php }?> role="tab" aria-selected="false">Quality  Details</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" id="contact-tab" data-bs-toggle="tab" <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#app_details"<?php } else {?> href="#" <?php }?> role="tab" aria-selected="false">Approved Details</a>
+                      <a class="nav-link" id="contact-tab" data-bs-toggle="tab" 
+					  <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> href="#app_details"<?php } else {?> href="#" <?php }?> role="tab" aria-selected="false">Approved Details</a>
                     </li>
 
                  
@@ -875,7 +903,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end ">Component Area :</label>
                           <div class="col-sm-9">
-                          <select class="form-control  bg-light text-dark" id="lid" name="lid" style="width: 60%;" Required>
+                          <select class="form-control  bg-light text-dark" id="lid" name="lid" style="width: 60%;"  required>
                           <option value="" >Select Component Area </option>
 
 					<?php $pdSQL = "SELECT lid,pid,code,title FROM  structures  order by lid";
@@ -902,7 +930,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end ">Contract No :</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="contractor_no" value="<?php echo $contractor_no; ?>" id="contractor_no" placeholder=""  required/>
+                            <input type="text" class="form-control" name="contractor_no" value="<?php echo $contractor_no; ?>" id="contractor_no" placeholder=""  />
                           </div>
                         </div>
                       </div>
@@ -928,7 +956,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">RFI Number</label>
                           <div class="col-sm-9">
-                          <input type="text" class="form-control" name="rfi_number"  value="<?php echo $rfi_number; ?>"  id="rfi_number" placeholder="" required/>
+                          <input type="text" class="form-control" name="rfi_number"  value="<?php echo $rfi_number; ?>"  id="rfi_number" placeholder=""  required/>
                           </div>
                         </div>
                       </div>
@@ -946,7 +974,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end"> RFI Date :</label>
                           <div class="col-sm-9">
-                          <input class="form-control" id="rfi_Date" placeholder ="yyyy-mm-dd" type="date" name="rfi_Date" value="<?php echo substr($rfi_Date,0,10); ?>" required/>
+                          <input class="form-control" id="rfi_Date" placeholder ="yyyy-mm-dd" type="date" name="rfi_Date" value="<?php echo substr($rfi_Date,0,10); ?>" />
                           </div>
                         </div>
                       </div>
@@ -957,7 +985,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">RFI Submission Date </label>
                           <div class="col-sm-9">
-                            <input type="date" class="form-control" name="rfi_sub_date_time"  value="<?php echo substr($rfi_sub_date_time,0,10); ?>" id="rfi_sub_date_time" placeholder="yyyy-mm-dd" />
+                            <input type="date" class="form-control" name="rfi_sub_date_time"  value="<?php echo substr($rfi_sub_date_time,0,10); ?>" id="rfi_sub_date_time" placeholder="yyyy-mm-dd"  />
                           </div>
                         </div>
                       </div>
@@ -1049,10 +1077,27 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                 <!-- Save button -->
             <div class="pt-2 text-end pb-3" > 
             <button type="button" class="col-sm-2 button-33" onclick="location.href='RFI_info.php'  ;" name="" id="" value=""> <?php echo "Back"?> </button>
+            
+	             <!--   <button  class="col-sm-2 button-33" type="submit" name="save" id="save" style="width:15%">Savecf</button>-->
 
-                <button  class="col-sm-2 button-33" type="submit" <?php if(isset($rfi_id)&&$rfi_id!=0) { ?> name="update0" id="update0"<?php } else {?> name="save" id="save"<?php }?>
-                  style="width:15%"> <?php if(isset($rfi_id)&&$rfi_id!=0) { echo "Update"; } else {echo "Save";}?>
+    <button  class="col-sm-2 button-33" type="submit" 
+	<?php 
+	if(isset($rfi_id)&&$rfi_id!=0) 
+	{
+		 ?> name="update0" id="update0" 
+	<?php 
+	} 
+	else 
+	{?> 
+    name="save" id="save"
+	<?php }?>
+    style="width:15%"
+    >
+                   <?php if(isset($rfi_id)&&$rfi_id!=0) { echo "Update"; } else {echo "Save";}?>
 </button>
+
+
+
             </div>
             <div class="style-five row" >  </div>
 
@@ -1072,7 +1117,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">Surveyor Name</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="Survey_Surveyor_name" value="<?php echo $Survey_Surveyor_name; ?>" id="Survey_Surveyor_name" placeholder="" />
+                            <input type="text" class="form-control" name="Survey_Surveyor_name" value="<?php echo $Survey_Surveyor_name; ?>" id="Survey_Surveyor_name" placeholder=""  />
                           </div>
                         </div>
                       </div>
@@ -1090,7 +1135,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">Survey Date</label>
                           <div class="col-sm-9">
-                          <input type="date" class="form-control" name="Survey_Date_time" value="<?php echo substr($Survey_Date_time,0,10); ?>"  id="Survey_Date_time" placeholder="yyyy-mm-dd" />
+                          <input type="date" class="form-control" name="Survey_Date_time" value="<?php echo substr($Survey_Date_time,0,10); ?>"  id="Survey_Date_time" placeholder="yyyy-mm-dd"  />
                           </div>
                         </div>
                       </div>
@@ -1168,7 +1213,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">Inspector Name</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="Inspection_inspector_name" value="<?php echo $Inspection_inspector_name; ?>" id="Inspection_inspector_name" placeholder="" />
+                            <input type="text" class="form-control" name="Inspection_inspector_name" value="<?php echo $Inspection_inspector_name; ?>" id="Inspection_inspector_name" placeholder=""   />
                           </div>
                         </div>
                       </div>
@@ -1186,7 +1231,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">Inspection Date</label>
                           <div class="col-sm-9">
-                          <input type="Date" class="form-control" name="Inspection_Date_time" value="<?php echo substr($Inspection_Date_time,0,10); ?>" id="Inspection_Date_time" placeholder="yyyy-mm-dd" />
+                          <input type="Date" class="form-control" name="Inspection_Date_time" value="<?php echo substr($Inspection_Date_time,0,10); ?>" id="Inspection_Date_time" placeholder="yyyy-mm-dd"  />
                           </div>
                         </div>
                       </div>
@@ -1263,7 +1308,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">MT Engineer Name</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="Quality_MT_Engineer_name" value="<?php echo $Quality_MT_Engineer_name; ?>"  id="Quality_MT_Engineer_name" placeholder="" />
+                            <input type="text" class="form-control" name="Quality_MT_Engineer_name" value="<?php echo $Quality_MT_Engineer_name; ?>"  id="Quality_MT_Engineer_name" placeholder=""  />
                           </div>
                         </div>
                       </div>
@@ -1282,7 +1327,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end"> Testing Date:</label>
                           <div class="col-sm-9">
-                          <input type="date" class="form-control" name="Quality_testing_Date_time" value="<?php echo substr($Quality_testing_Date_time,0,10); ?>" id="Quality_testing_Date_time" placeholder="yyyy-mm-dd" />
+                          <input type="date" class="form-control" name="Quality_testing_Date_time" value="<?php echo substr($Quality_testing_Date_time,0,10); ?>" id="Quality_testing_Date_time" placeholder="yyyy-mm-dd"  />
                           </div>
                         </div>
                       </div>
@@ -1309,7 +1354,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">Test Sample Numbers:</label>
                           <div class="col-sm-9">
-                          <input type="number"   class="form-control" type= rows="4" style=" height: 100px; "  name="Quality_test_sample_numbers"  id="Quality_test_sample_numbers" value="<?php echo $Quality_test_sample_numbers; ?>"/>
+                          <input type="number" step="0.01"   class="form-control"    name="Quality_test_sample_numbers"  id="Quality_test_sample_numbers" value="<?php echo $Quality_test_sample_numbers; ?>" />
                           </div>
                         </div>
                       </div>
@@ -1379,7 +1424,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
                         <div class="form-group row">
                           <label class="col-sm-3 text-end">Approved Authority :</label>
                           <div class="col-sm-9">
-                          <select class="form-control bg-light text-dark" value="<?php echo $Approval_authority; ?>"  name="Approval_authority"  id="Approval_authority" >
+                          <select class="form-control bg-light text-dark" value="<?php echo $Approval_authority; ?>"  name="Approval_authority"  id="Approval_authority"  >
 
                           <option value="1" <?php if($Approval_authority==1) {?> selected="selected" <?php }?>>Client</option>
                               <option value="2" <?php if($Approval_authority==2) {?> selected="selected" <?php }?>>Consultant</option>
@@ -1469,6 +1514,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
               </div>
             </div>
           </div>
+          </form>
         </div>
             
           </div>
@@ -1490,7 +1536,7 @@ $('#Quality_testing_Date_time').datepicker({ dateFormat: 'yy-mm-dd'}); });
      
 
             
-                  </form>
+                 
                 </div>
               </div>
             

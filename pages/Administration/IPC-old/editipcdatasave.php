@@ -5,7 +5,6 @@ require_once('../../../rs_lang.eng.php');
 $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
-$objDb3  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -42,37 +41,12 @@ if($eeCount > 0){
   $cur_3 					= $eeRes1['cur_3'];
   
   }
-   $sql_p="Select lid,ipcid,left(ipcmonth,7) as ipcmmonth from ipc where status=0";
- $res_p=$objDb1->dbQuery($sql_p);
- $row3_p=$objDb1->dbFetchArray();
-$ipcmonth=$row3_p['ipcmmonth'];
-$ipcid=$row3_p['ipcid'];
-$lid=$row3_p['lid'];
-  $sql_iip="Select itemname from boqdata where itemid=".$lid;
-			$res_bc=$objDb3->dbQuery($sql_iip);
-			$row3_bc=$objDb3->dbFetchArray();
-			 $itemname=$row3_bc['itemname'];
-			
-			
-
-			 $sql_pn="Select parentgroup from boqdata where parentcd=$pid and isentry=1 limit 0,1";
-			$res_pn=$objDb1->dbQuery($sql_pn);
-			$row3_pn=$objDb1->dbFetchArray();
-			$pgroup_pn=$row3_pn['parentgroup'];	
-			$arr_pn=explode("_",$pgroup_pn);
-			 $item_pn=$arr_pn[1];
-			 $item_pn = ltrim($item_pn, "0");
-			$sql_pn1="Select itemname from boqdata where itemid=$item_pn";
-			$res_pn1=$objDb2->dbQuery($sql_pn1);
-			$row3_pn1=$objDb2->dbFetchArray();
-  
-  
 ?>
 
 <table  width="100%" >
             	<tbody id="tblPrdSizesProject<?php echo $pid; ?>">
                     <tr>
-                        <th style="width:5%;"></th>
+                        <th style="width:15%;"></th>
                         <th style="width:5%;"><?php echo "Code";?></th>
 						<th style="width:15%;"><?php echo "Item";?></th>
 						 <th style="width:5%;"><?php echo "Unit";?></th>
@@ -89,8 +63,8 @@ $lid=$row3_p['lid'];
 						  {?>
 						 <th style="width:15%;"><?php echo $cur_3; ?>&nbsp;Rate&nbsp;<?php if($cur_3==$base_cur) { echo "(Base Currency)"; } else { echo "<br/>(Exchange Rate:".$cur_3_rate.")";}?></th>
 						<?php }?>
-						<th style="width:15%;"><?php echo "IPC As on ".$ipcmonth?><?php if($lid==$item_pn) { echo " <span style='color:white; background-color:green'>(Active)</span>"; } else { echo " <span style='color:white; background-color:red'>(Inactive) </span>"; }?> <?php echo "<br/> Package Name:  ".$row3_pn1['itemname'];?> </th>
-						<th style="width:5%;"><?php echo "Action";?></th>
+						<th style="width:15%;"><?php echo "IPC As on ".$progressdate1;?></th>
+						<th style="width:10%;"><?php echo "Action";?></th>
                         
                         
                     </tr>
@@ -99,9 +73,7 @@ $lid=$row3_p['lid'];
 			$i=1;
 			while($row3_b=$objDb1->dbFetchArray())
 			{
-				
-			$itm_id=$row3_b['itemid'];	
-			
+			$itm_id=$row3_b['itemid'];
 			$sql_a="Select * from boq where itemid=$itm_id";
 			$res_a=$objDb2->dbQuery($sql_a);
 			$j=1;
@@ -137,7 +109,7 @@ $lid=$row3_p['lid'];
 			
 			<td>
 			<input type="hidden" value="<?php echo $progressdate1;?>" name="txtprogressdate" id="txtprogressdate"  />			
-			<input type="number" step="0.01" value="<?php echo $ipcqty;?>" name="txtprogress" id="txtprogress"  />
+			<input type="text" value="<?php echo $ipcqty;?>" name="txtprogress" id="txtprogress"  />
           <!--  <br/> Remarks: <input type="text" value="" name="remarks" id="remarks"  />-->
          <!--  <br/> Attachment: <input type="text" value="" name="attach_link" id="attach_link"  />--></td>			
 			<td>

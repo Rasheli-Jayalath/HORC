@@ -6,7 +6,6 @@ $module="Update IPC Entry";
 $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
-$objDb3  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -49,8 +48,78 @@ function genRandom($char = 5){
 	$md5 = md5(time());
 	return substr($md5, rand(5, 25), $char);
 }
-
+/*function getExtention($type){
+	if($type == "image/jpeg" || $type == "image/jpg" || $type == "image/pjpeg")
+		return "jpg";
+	elseif($type == "image/png")
+		return "png";
+	elseif($type == "image/gif")
+		return "gif";
+	elseif($type == "application/pdf")
+		return "pdf";
+	elseif($type == "application/msword")
+		return "doc";
+	elseif($type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+		return "docx";
+	elseif($type == "text/plain")
+		return "doc";
+		
+		
+}*/
+/*if(isset($_FILES["attach_link"]["name"])&&$_FILES["attach_link"]["name"]!="")
+	{
+		
+	$extension=getExtention($_FILES["attach_link"]["type"]);
+	$file_name=genRandom(5)."-".$pid;
+	if(($_FILES["attach_link"]["type"] == "application/pdf")|| ($_FILES["attach_link"]["type"] == "application/msword") || 
+	($_FILES["attach_link"]["type"] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document")||
+	($_FILES["attach_link"]["type"] == "text/plain") || 
+	($_FILES["attach_link"]["type"] == "image/jpg")|| 
+	($_FILES["attach_link"]["type"] == "image/jpeg")|| 
+	($_FILES["attach_link"]["type"] == "image/gif") || 
+	($_FILES["attach_link"]["type"] == "image/png"))
+	{ 
+	 
+	if($attach_link!="")
+	{
+	 @unlink($file_path."/". $attach_link);
+	 
+	}
+	else
+	{
+		$target_file=$file_path.$file_name;
+	copy($_FILES['attach_link']['tmp_name'],"temp/".$_FILES['attach_link']['name']);	
+	//include("imageResize.php");
+	//$imagelink2 = "temp/".$_FILES['attach_link']['name'];
+	//list($widtho, $heighto, $typeo, $attro) = getimagesize($imagelink2);
 	
+	$flink=$file_name.".".$flink;
+	$sql_pro=$objDb -> dbQuery("UPDATE ipcv SET
+		attach_link='$attach_link'
+		where ipcvid=$ipcvid and ipcid=$ipcid and boqid=$boqid");
+	if ($sql_pro == TRUE) {
+    $message=  "New record added successfully";
+	} else {
+    $message= "Error";
+	}
+	}
+	}
+	}*/
+	$eSqls = "Select * from project_currency ";
+  $objDb -> dbQuery($eSqls);
+  $base_currFlag=false;
+  $eeCount = $objDb->totalRecords();
+if($eeCount > 0){
+	$eeRes1= $objDb->dbFetchArray();
+  $cur_1_rate 				= $eeRes1['cur_1_rate'];
+  $cur_2_rate 				= $eeRes1['cur_2_rate'];
+  $cur_3_rate 				= $eeRes1['cur_3_rate'];
+  $base_cur 				= $eeRes1['base_cur'];
+  $cur_1 					= $eeRes1['cur_1'];
+  $cur_2 					= $eeRes1['cur_2'];
+  $cur_3 					= $eeRes1['cur_3'];
+  
+  }
   if($progress =="")
   {
 	$progress=0;
@@ -58,45 +127,38 @@ function genRandom($char = 5){
   else{
 	$progress=$progress;
   }
-  $sSQL = "UPDATE ipcv SET
+ echo $sSQL = "UPDATE ipcv SET
 		ipcqty			=$progress
 		where ipcvid=$ipcvid and ipcid=$ipcid and boqid=$boqid";  
 	$objDb1->dbQuery($sSQL);
 	$msg="Updated!";
-	
-	$sql_p="Select lid,ipcid,left(ipcmonth,7) as ipcmmonth from ipc where status=0";
- $res_p=$objDb1->dbQuery($sql_p);
- $row3_p=$objDb1->dbFetchArray();
-$ipcmonth=$row3_p['ipcmmonth'];
-$ipcid=$row3_p['ipcid'];
-$lid=$row3_p['lid'];
-  $sql_iip="Select itemname from boqdata where itemid=".$lid;
-			$res_bc=$objDb3->dbQuery($sql_iip);
-			$row3_bc=$objDb3->dbFetchArray();
-			 $itemname=$row3_bc['itemname'];
-			
-			
-
-			 $sql_pn="Select parentgroup from boqdata where parentcd=$pid and isentry=1 limit 0,1";
-			$res_pn=$objDb1->dbQuery($sql_pn);
-			$row3_pn=$objDb1->dbFetchArray();
-			$pgroup_pn=$row3_pn['parentgroup'];	
-			$arr_pn=explode("_",$pgroup_pn);
-			 $item_pn=$arr_pn[1];
-			 $item_pn = ltrim($item_pn, "0");
-			$sql_pn1="Select itemname from boqdata where itemid=$item_pn";
-			$res_pn1=$objDb2->dbQuery($sql_pn1);
-			$row3_pn1=$objDb2->dbFetchArray();
-
+/*	$tSql="Select * from baseline_template where use_data=1 OR use_data=2";
+	$resbtemp=$objDb2 -> dbQuery($tSql);
+	$tempcount=$objDb2 -> totalRecords();
+	if($tempcount>0)
+	{
+	while($row3tmpgb=$objDb2 -> dbFetchArray())
+	{
+	$boq_temp_id=$row3tmpgb["temp_id"];
+    $ttSql="SELECT * FROM baseline a inner join baseline_mapping_boqs b on (a.rid=b.rid) where a.temp_id=".$boq_temp_id." AND b.boqid=".$boqid;
+	$resttemp=$objDb -> dbQuery($ttSql);
+	$checkboq=$objDb ->totalRecords();
+	if($checkboq>0)
+	{
+	 $suSQL = "UPDATE template_progress SET update_flag=1 where temp_id=$boq_temp_id AND progress_type=1";  
+		$objDb1->dbQuery($suSQL);
+	}
+	}
+	}*/
 ?>
 <table  width="100%" >
             	<tbody id="tblPrdSizesProject<?php echo $pid; ?>">
                     <tr>
-                        <th style="width:5%;"></th>
-                        <th style="width:5%;"><?php echo "Code";?></th>
-						<th style="width:15%;"><?php echo "Item";?></th>
-						 <th style="width:5%;"><?php echo "Unit";?></th>
-						 <th style="width:5%;"><?php echo "Quantity";?></th>
+                        <th style="width:15%;"></th>
+                        <th style="width:15%;"><?php echo "Code";?></th>
+						<th style="width:25%;"><?php echo "Item";?></th>
+						 <th style="width:15%;"><?php echo "Unit";?></th>
+						 <th style="width:15%;"><?php echo "Quantity";?></th>
 							<?php if($cur_1!="")
                                   {?>
                                  <th style="width:15%;"><?php echo $cur_1; ?>&nbsp;Rate&nbsp;<?php if($cur_1==$base_cur) { echo "<br/>(Base Currency)"; } else { echo "<br/>(Exchange Rate:".$cur_1_rate.")";}?></th>
@@ -109,8 +171,8 @@ $lid=$row3_p['lid'];
                                   {?>
                                  <th style="width:15%;"><?php echo $cur_3; ?>&nbsp;Rate&nbsp;<?php if($cur_3==$base_cur) { echo "(Base Currency)"; } else { echo "<br/>(Exchange Rate:".$cur_3_rate.")";}?></th>
                                 <?php }?>
-						<th style="width:15%;"><?php echo "IPC As on ".$ipcmonth?><?php if($lid==$item_pn) { echo " <span style='color:white; background-color:green'>(Active)</span>"; } else { echo " <span style='color:white; background-color:red'>(Inactive) </span>"; }?> <?php echo "<br/> Package Name:  ".$row3_pn1['itemname'];?> </th>
-						<th style="width:5%;"><?php echo "Action";?></th>
+						<th style="width:15%;"><?php echo "IPC As on ".$progressdate1;?></th>
+						<th style="width:10%;"><?php echo "Action";?></th>
                         
                         
                     </tr>

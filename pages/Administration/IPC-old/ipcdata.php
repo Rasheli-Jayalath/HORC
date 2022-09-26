@@ -68,14 +68,6 @@ $eSql_l = "Select * from ipc where status=0";
 	}
 	else
 	{
-	 $eSql_5 = "Select * from ipc where lid=$lid and ipcmonth='$txtipcmonth'";
-  	$res_5=$objDb->dbQuery($eSql_5);
-		if($objDb->totalRecords()>=1)
-		{
-			$msg="Selected IPC Month and Package is already added.";
-		}
-		else
-		{
  $sSQL = ("INSERT INTO ipc (ipcno,ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status,lid) VALUES ('$txtipcno ','$txtipcmonth','$txtipcstartdate','$txtipcenddate','$txtipcsubmitdate','$txtipcreceivedate','$txtstatus',$lid)");
 
 	$objDb1->dbQuery($sSQL);
@@ -88,7 +80,6 @@ $eSql_l = "Select * from ipc where status=0";
 	$sSQL = ("INSERT INTO ipc_log (log_module,log_title,log_ip,ipcno,ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status, transaction_id) VALUES ('$log_module','$log_title','$log_ip','$txtipcno ','$txtipcmonth','$txtipcstartdate','$txtipcenddate','$txtipcsubmitdate','$txtipcreceivedate','$txtstatus',$ipcid)");
 	$objDb2->dbQuery($sSQL);
 	header("Location: ipcdata.php");
-		}
 }	
 		
  
@@ -96,7 +87,7 @@ $eSql_l = "Select * from ipc where status=0";
 
 if($updateBtn !=""){
 
- $eSql_l = "Select * from ipc where status=0 and ipcid!=$edit";
+$eSql_l = "Select * from ipc where status=0 and ipcid!=$edit";
   	$res_q=$objDb->dbQuery($eSql_l);
 	
 	if($objDb->totalRecords()==1)
@@ -105,15 +96,7 @@ if($updateBtn !=""){
 		
 	}
 	else
-	{
-	$eSql_6 = "Select * from ipc where lid=$lid and ipcmonth='$txtipcmonth' and ipcid!=$edit";
-  	$res_6=$objDb->dbQuery($eSql_6);
-		if($objDb->totalRecords()>=1)
-		{
-			$msg="Selected IPC Month and Package is already added.";
-		}
-		else
-		{	
+	{	
 $uSql = "Update ipc SET 			
 			 ipcno         				= '$txtipcno',
 			 ipcmonth   				= '$txtipcmonth',
@@ -135,11 +118,8 @@ $uSql = "Update ipc SET
 	
 $sSQL2 = ("INSERT INTO ipc_log (log_module,log_title,log_ip,ipcno,ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status,transaction_id) VALUES ('$log_module','$log_title','$log_ip','$txtipcno ','$txtipcmonth','$txtipcstartdate','$txtipcenddate','$txtipcsubmitdate','$txtipcreceivedate','$txtstatus',$edit)");
 		$objDb2->dbQuery($sSQL2);
-		
-		
-	header("Location: ipcdata.php");
 
-	}
+		
 	}
 	$txtipcno 						= '';
 	$txtipcstartdate 				= '';
@@ -148,19 +128,18 @@ $sSQL2 = ("INSERT INTO ipc_log (log_module,log_title,log_ip,ipcno,ipcmonth,ipcst
 	$txtipcsubmitdate				= '';
 	$txtipcreceivedate				= '';
 	$txtstatus				= '';
-	
+	header("Location: ipcdata.php");
 	
 	}
 		
 }
 
 if($edit != ""){
- $eSql = "Select lid,ipcno,left(ipcmonth,7) as ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status from ipc where ipcid='$edit'";
+ $eSql = "Select ipcno,left(ipcmonth,7) as ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status from ipc where ipcid='$edit'";
   $objDb -> dbQuery($eSql);
   $eCount = $objDb->totalRecords();
 	if($eCount > 0){
 		$eRes = $objDb->dbFetchArray();
-		$lid 								= $eRes['lid'];
 	  $ipcno 								= $eRes['ipcno'];
 	  $ipcmonth	 							= $eRes['ipcmonth'];
 	  $ipcstartdate							= $eRes['ipcstartdate'];
@@ -392,7 +371,7 @@ function group_checkbox()
 
                                 <div class="col-md-12">
                                 <label for="" class="col-sm-6" >Packages/Components</label>
-                                   <select name="lid" id="lid" class="col-sm-5  form-select  form-control-enhanced" style = "width: 70%;" required>
+                                   <select name="lid" id="lid" class="col-sm-5  form-select  form-control form-control-enhanced" style = "width: 70%;" required>
                                              <?php $sqlgg="SELECT * FROM boqdata where parentcd=1";
 			$resg=$objDb3->dbQuery($sqlgg);
 			
@@ -409,7 +388,7 @@ function group_checkbox()
 			}
 			
 			?>
-			  <option  value="<?php echo $row3g['itemid'];?>" <?php echo  $sel; ?>  ><?php echo $row3g['itemname']; ?> </option>
+			  <option value="<?php echo $row3g['itemid'];?>" <?php echo  $sel; ?>  ><?php echo $row3g['itemname']; ?> </option>
 			  <?php
 			  }
 			  
@@ -439,7 +418,7 @@ function group_checkbox()
 
                                     <div class="col-md-12">
                                     <label >Month </label>
-                                    <select name="txtipcmonth" id="txtipcmonth" class="col-sm-5  form-select  form-control-enhanced" style = "width: 70%;" required>
+                                    <select name="txtipcmonth" id="txtipcmonth" class="col-sm-5  form-select  form-control form-control-enhanced" style = "width: 70%;" required>
                                              <?php $sqlg="SELECT left(pd_date,7) as getmonths FROM project_days group by left(pd_date,7) order by left(pd_date,7)";
 			$resg=$objDb1->dbQuery($sqlg);
 			
@@ -626,8 +605,11 @@ function group_checkbox()
     <tr class="bg-form" style="font-size:12px; color:#CCC;">
     
       <th align="center" width="3%"><strong>Sr. No.</strong></th>
-      
-          <th align="center" width="10%"><strong>Package</strong></th>
+      <th align="center" width="2%"><strong>
+	  <input  type="checkbox"  name="txtChkAll" id=
+          "txtChkAll"   form="reports"  onclick="group_checkbox();"/>
+		  
+		  </strong></th>
       <th align="center" width="10%"><strong>IPC No</strong></th>
       <th width="10%"><strong>IPC Month</strong></th>
       <th width="15%"><strong>IPC Start Date</strong></th>
@@ -642,16 +624,14 @@ function group_checkbox()
     </tr>
 <strong>
 <?php
- $sSQL = "select ipcid,ipcno,lid,left(ipcmonth,7) as ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status from ipc";
+ $sSQL = "select ipcid,ipcno,left(ipcmonth,7) as ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status from ipc";
  $objDb2->dbQuery($sSQL);
  $iCount = $objDb2->totalRecords( );
  if($iCount>0)
  {
-	 $j=0;
 	while( $res_e2=$objDb2->dbFetchArray())
 	
 	{
-	 $j++;
 		
 	  $ipcid 								= $res_e2['ipcid'];
 	  $ipcno 								= $res_e2['ipcno'];
@@ -661,11 +641,6 @@ function group_checkbox()
 	  $ipcsubmitdate	 					= $res_e2['ipcsubmitdate'];
 	  $ipcreceivedate						= $res_e2['ipcreceivedate'];
 	  $status3								= $res_e2['status'];
-	  $itemid_p								= $res_e2['lid'];
-	  
-	  $sSQL6 = "select itemname from boqdata where itemid=".$itemid_p;
- 	$objDb3->dbQuery($sSQL6);
-	$res_e3=$objDb3->dbFetchArray();
 	  
 	   if($status3=="0")
 	  {
@@ -681,13 +656,12 @@ if ($i % 2 == 0) {
 } else {
 	$style = ' style="background:#ffffff;"';
 }
-
 ?>
 </strong>
 <tr <?php echo $style; ?>>
-<td width="5px"><center> <?php echo $j;?> </center> </td>
-
-<td width="210px"><?php echo $res_e3['itemname'];?></td>
+<td width="5px"><center> <?=$i+1;?> </center> </td>
+<td><input class="checkbox" type="checkbox" name="sel_checkbox[]" id="sel_checkbox[]" value="<?=$ipcid ?>"   form="reports" onclick="group_checkbox();">
+</td>
 <td width="210px"><?=$ipcno;?></td>
 <td width="100px"><?=$ipcmonth;?></td>
 <td width="180px"  ><?=$ipcstartdate;?></td>

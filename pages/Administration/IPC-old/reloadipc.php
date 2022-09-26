@@ -5,7 +5,6 @@ require_once('../../../rs_lang.eng.php');
 $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
-$objDb3  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -17,7 +16,7 @@ $ipc_flag			= $_SESSION['ne_ipc'];
 if ($uname==null  ) {
 header("Location: ../../index.php?init=3");
 } 
- $pid 				= $_REQUEST['itemid'];
+echo $pid 				= $_REQUEST['itemid'];
 
 //@require_once("get_url.php");
 $eSqls = "Select * from project_currency ";
@@ -35,34 +34,12 @@ if($eeCount > 0){
   $cur_3 					= $eeRes['cur_3'];
   
   }
- $sql_p="Select lid,ipcid,left(ipcmonth,7) as ipcmmonth from ipc where status=0";
+ $sql_p="Select ipcid,left(ipcmonth,7) as ipcmmonth from ipc where status=0";
  $res_p=$objDb1->dbQuery($sql_p);
  $row3_p=$objDb1->dbFetchArray();
 $ipcmonth=$row3_p['ipcmmonth'];
 $ipcid=$row3_p['ipcid'];
-$lid=$row3_p['lid'];
-  $sql_iip="Select itemname from boqdata where itemid=".$lid;
-			$res_bc=$objDb3->dbQuery($sql_iip);
-			$row3_bc=$objDb3->dbFetchArray();
-			 $itemname=$row3_bc['itemname'];
-			
-			
 
-			 $sql_pn="Select parentgroup from boqdata where parentcd=$pid and isentry=1 limit 0,1";
-			$res_pn=$objDb1->dbQuery($sql_pn);
-			$row3_pn=$objDb1->dbFetchArray();
-			$pgroup_pn=$row3_pn['parentgroup'];	
-			$arr_pn=explode("_",$pgroup_pn);
-			 $item_pn=$arr_pn[1];
-			 $item_pn = ltrim($item_pn, "0");
-			$sql_pn1="Select itemname from boqdata where itemid=$item_pn";
-			$res_pn1=$objDb2->dbQuery($sql_pn1);
-			$row3_pn1=$objDb2->dbFetchArray();
-				
-			
-			
-				
-			 
 ?>
 <table  width="100%" >
             	<tbody id="tblPrdSizesProject<?php echo $pid; ?>">
@@ -84,7 +61,7 @@ $lid=$row3_p['lid'];
 						  {?>
 						 <th style="width:15%;"><?php echo $cur_3; ?>&nbsp;Rate&nbsp;<?php if($cur_3==$base_cur) { echo "(Base Currency)"; } else { echo "<br/>(Exchange Rate:".$cur_3_rate.")";}?></th>
 						<?php }?>
-						<th style="width:15%;"><?php echo "IPC As on ".$ipcmonth?><?php if($lid==$item_pn) { echo " <span style='color:white; background-color:green'>(Active)</span>"; } else { echo " <span style='color:white; background-color:red'>(Inactive) </span>"; }?> <?php echo "<br/> Package Name:  ".$row3_pn1['itemname'];?> </th>
+						<th style="width:15%;"><?php echo "IPC As on ".$ipcmonth;?></th>
 						<th style="width:5%;"><?php echo "Action";?></th>
                         
                         
@@ -96,11 +73,6 @@ $lid=$row3_p['lid'];
 			$i=1;
 			while($row3_b=$objDb2->dbFetchArray())
 			{
-			$pgroup=$row3_b['parentgroup'];	
-			$arr_p=explode("_",$pgroup);
-			 $item_p=$arr_p[1];	
-			 $item_p = ltrim($item_p, "0"); 
-			
 			$itm_id=$row3_b['itemid'];			
 			$sql_a="Select * from boq where itemid=$itm_id";
 			$res_a=$objDb->dbQuery($sql_a);
@@ -158,7 +130,7 @@ $lid=$row3_p['lid'];
 			if($ipcentry_flag==1 || $ipcadm_flag==1)
 			{
 			?>
-			<input type="button" value="Edit" name="edit" id="edit" <?php if($item_p!=$lid) { echo "disabled";?> style="background-color:#EBEBEB; color:#828282" <?php  }?>  onclick="editipc_data(<?php echo $ipcvid; ?>,<?php echo $pid;?>,<?php echo $ipcid;?>,<?php echo $boqid;?>)"/>
+			<input type="button" value="Edit" name="edit" id="edit"  onclick="editipc_data(<?php echo $ipcvid; ?>,<?php echo $pid;?>,<?php echo $ipcid;?>,<?php echo $boqid;?>)"/>
 			<?php
 			}
 			?></td>
@@ -171,7 +143,7 @@ $lid=$row3_p['lid'];
 			<?php
 			if($ipcentry_flag==1 || $ipcadm_flag==1)
 			{
-			?><input   type="button" value="Edit" name="edit" id="edit"  <?php if($item_p!=$lid) { echo "disabled";?> style="background-color:#EBEBEB; color:#828282" <?php  }?> onclick="editipc_data1(<?php echo $boqid;?>,<?php echo $pid;?>,<?php echo $ipcid;?>,<?php echo $itm_id;?>)"/>
+			?><input type="button" value="Edit" name="edit" id="edit"  onclick="editipc_data1(<?php echo $boqid;?>,<?php echo $pid;?>,<?php echo $ipcid;?>,<?php echo $itm_id;?>)"/>
 			<?php
 			}
 			?></td>

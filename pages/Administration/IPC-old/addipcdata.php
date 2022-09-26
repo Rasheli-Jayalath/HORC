@@ -6,7 +6,6 @@ $module="Add IPC-Entry";
 $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
-$objDb3  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -26,10 +25,6 @@ $pid 					= $_REQUEST['pid'];
 $boqid 				= $_REQUEST['boqid'];
 $ipcid	 				= $_REQUEST['ipcid'];
 $progress 				= $_REQUEST['progress'];
-if($progress=="")
-{
-	$progress=0;
-}
 $progressdate1 			= $_REQUEST['progressdate'];
 //$remarks 			= $_REQUEST['remarks'];
 //$attach_link 		= $_REQUEST['attach_link'];
@@ -52,34 +47,10 @@ if($eeCount > 0){
   
   }
  
-	 $sSQL = ("INSERT INTO ipcv (boqid, ipcid, ipcqty) VALUES ($boqid,$ipcid,$progress )");
+	echo $sSQL = ("INSERT INTO ipcv (boqid, ipcid, ipcqty) VALUES ($boqid,$ipcid,$progress )");
 	$objDb->dbQuery($sSQL);
 	echo $ipcvid = $con->lastInsertId();
 	$msg="Saved!";
-	
-	$sql_p="Select lid,ipcid,left(ipcmonth,7) as ipcmmonth from ipc where status=0";
- $res_p=$objDb1->dbQuery($sql_p);
- $row3_p=$objDb1->dbFetchArray();
-$ipcmonth=$row3_p['ipcmmonth'];
-$ipcid=$row3_p['ipcid'];
-$lid=$row3_p['lid'];
-  $sql_iip="Select itemname from boqdata where itemid=".$lid;
-			$res_bc=$objDb3->dbQuery($sql_iip);
-			$row3_bc=$objDb3->dbFetchArray();
-			 $itemname=$row3_bc['itemname'];
-			
-			
-
-			 $sql_pn="Select parentgroup from boqdata where parentcd=$pid and isentry=1 limit 0,1";
-			$res_pn=$objDb1->dbQuery($sql_pn);
-			$row3_pn=$objDb1->dbFetchArray();
-			$pgroup_pn=$row3_pn['parentgroup'];	
-			$arr_pn=explode("_",$pgroup_pn);
-			 $item_pn=$arr_pn[1];
-			 $item_pn = ltrim($item_pn, "0");
-			$sql_pn1="Select itemname from boqdata where itemid=$item_pn";
-			$res_pn1=$objDb2->dbQuery($sql_pn1);
-			$row3_pn1=$objDb2->dbFetchArray();
 	
 /*	$log_module  = $module." Module";
 	$log_title   = "Add ".$module." Record";
@@ -92,11 +63,11 @@ $lid=$row3_p['lid'];
 <table  width="100%" >
             	<tbody id="tblPrdSizesProject<?php echo $pid; ?>">
                    <tr>
-                       <th style="width:5%;"></th>
-                        <th style="width:5%;"><?php echo "Code";?></th>
-						<th style="width:15%;"><?php echo "Item";?></th>
-						 <th style="width:5%;"><?php echo "Unit";?></th>
-					    <th style="width:5%;"><?php echo "Quantity";?></th>
+                       <th style="width:15%;"></th>
+                        <th style="width:15%;"><?php echo "Code";?></th>
+						<th style="width:25%;"><?php echo "Item";?></th>
+						 <th style="width:15%;"><?php echo "Unit";?></th>
+					    <th style="width:15%;"><?php echo "Quantity";?></th>
                         <?php if($cur_1!="")
 						  {?>
 						 <th style="width:15%;"><?php echo $cur_1; ?>&nbsp;Rate&nbsp;<?php if($cur_1==$base_cur) { echo "<br/>(Base Currency)"; } else { echo "<br/>(Exchange Rate:".$cur_1_rate.")";}?></th>
@@ -110,8 +81,8 @@ $lid=$row3_p['lid'];
 						 <th style="width:15%;"><?php echo $cur_3; ?>&nbsp;Rate&nbsp;<?php if($cur_3==$base_cur) { echo "(Base Currency)"; } else { echo "<br/>(Exchange Rate:".$cur_3_rate.")";}?></th>
 						<?php }?>
 						
-						<th style="width:15%;"><?php echo "IPC As on ".$ipcmonth?><?php if($lid==$item_pn) { echo " <span style='color:white; background-color:green'>(Active)</span>"; } else { echo " <span style='color:white; background-color:red'>(Inactive) </span>"; }?> <?php echo "<br/> Package Name:  ".$row3_pn1['itemname'];?> </th>
-						<th style="width:5%;"><?php echo "Action";?></th>
+						<th style="width:10%;"><?php echo "IPC As on ".$progressdate1;?></th>
+						<th style="width:10%;"><?php echo "Action";?></th>
                         
                     </tr>
 <?php $sql_b="Select * from boqdata where parentcd=$pid";

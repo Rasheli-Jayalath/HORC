@@ -4,11 +4,12 @@ require_once('../../../rs_lang.admin.php');
 require_once('../../../rs_lang.eng.php');
 //$module		= MAINDATA;
 $objDb  		= new Database();
-$objDb1  		= new Database();
-$objDb2  		= new Database();
-$objAdminUser   = new AdminUser();
+$objDb5  		= new Database();
+$objDb6  		= new Database();
+$objDb7  		= new Database();
+$objAdminUser1   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
-$user_type=$_SESSION['ne_user_type'];
+$user_type=$_SESSION['ne_user_type']; 
 $uname 	= $_SESSION['ne_username'];
 $mdata_flag			= $_SESSION['ne_mdata'];
 	$mdataadm_flag		= $_SESSION['ne_mdataadm'];
@@ -605,7 +606,7 @@ padding:10px 10px 0 0; }
               <!-- Table All Data DIV-->
               <div class="col-md-12" id="table_all_data">
 <h1> <?php echo ACT_ENTRY_PANEL;?></h1>
-<form name="reports" id="reports"  method="post" onsubmit="return atleast_onecheckbox(event)"  style="display:inline-block; width:100%; margin-top:10px;"> 
+<!-- <form name="reports" id="reports"  method="post" onsubmit="return atleast_onecheckbox(event)"  style="display:inline-block; width:100%; margin-top:10px;">  -->
 		<?php /*?><div style="margin-bottom:12px;">
 		<?php  if($mdataentry_flag==1 || $mdataadm_flag==1)
 	{
@@ -632,327 +633,316 @@ padding:10px 10px 0 0; }
 <input type="text" name="valueisentry"  id="valueisentry" title="Is Entry" placeholder="Is Entry" style="width:100px"    onkeyup="showResult(module.value,valuestage.value,valueitemcode.value,valueitemname.value,valueweight.value,this.value)"/>
 <input name="submit" type="submit" value="Print List" formaction="report.php" />-->
 <div id="search"></div>
-<div id="without_search">
-	<table class="reference" style="width:100%" > 
-      <tr bgcolor="#333333" style="text-decoration:inherit; color:#CCC">
-	  <th></th>
-      <?php
-	  if($mdataentry_flag==1 || $mdataadm_flag==1)
-	{
-	?>
-      <th width="30%" style="text-align:center; vertical-align:middle"><strong><?php echo NAME;?></strong></th>
-	  <?php
-	  }
-	  else
-	  {
-	  ?>
-	   <th style="text-align:center; vertical-align:middle" width="50%"><strong><?php echo NAME;?></strong></th>
-	  <?php
-	  }
-	  ?>
-	  <th style="text-align:center; vertical-align:middle" width="5%"><span class="label"><?php echo CODE;?></span></th>
-	  <th style="text-align:center; vertical-align:middle" width="5%"><span class="label"></span><?php echo IS_ENTRY; ?></span></th>
-	  <th style="text-align:center; vertical-align:middle" width="10%"><span class="label"><?php echo RESOURCE;?></span></th>
-	  <th style="text-align:center; vertical-align:middle" width="10%"><?php echo START;?> <br />(yyyy-mm-dd)</th>
-	  <th style="text-align:center; vertical-align:middle" width="10%"><?php echo END;?> <br />(yyyy-mm-dd)</th>
-	  <th style="text-align:center; vertical-align:middle" width="10%"><?php echo AVAILED;?></th>
-     <!-- <th style="text-align:center; vertical-align:middle" width="5%"><strong><input  type="checkbox"  name="txtChkAll" id="txtChkAll"   form="reports"  onclick="group_checkbox();"/></strong></th>-->
-	    <?php
-	  if($mdataentry_flag==1 || $mdataadm_flag==1)
-	{
-	?>
-	   <th style="text-align:center; vertical-align:middle" width="20%"><?php echo ACTION; ?>
-  </th>
-	 <?php
-	 }
-	 ?>
-	<!-- <th style="text-align:center; vertical-align:middle" width="2%"><?php echo LOG;?>
-     </th>-->
-	 
-     </tr>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('#level1').on('click', function(){
+        var PCDLevel1 = $(this).val();
+        if(PCDLevel1){
+            $.ajax({
+                type:'POST',
+                url:'levelData.php',
+                data:'level1='+PCDLevel1,
+                success:function(html){
+                    $('#level2').html(html);
+                    $('#level3').html('<option value="">Select </option>'); 
+                    $('#level4').html('<option value="">Select </option>'); 
+                    $('#level5').html('<option value="">Select </option>'); 
+                }
+            }); 
+        }else{
+            $('#level2').html('<option value="">Select Level 1 first</option>'); 
+        }
+    });
+    
+    $('#level2').on('click', function(){
+        var PCDLevel2 = $(this).val();
+        if(PCDLevel2){
+            $.ajax({
+                type:'POST',
+                url:'levelData.php',
+                data:'level2='+PCDLevel2,
+                success:function(html){
+                    $('#level3').html(html);
+                    $('#level4').html('<option value="">Select </option>'); 
+                    $('#level5').html('<option value="">Select </option>'); 
+                }
+            }); 
+        }else{
+            $('#level3').html('<option value="">Select Level 2 first</option>'); 
+        }
+    });
+    $('#level3').on('click', function(){
+        var PCDLevel3 = $(this).val();
+        if(PCDLevel3){
+            $.ajax({
+                type:'POST',
+                url:'levelData.php',
+                data:'level3='+PCDLevel3,
+                success:function(html){
+                    $('#level4').html(html);
+                    $('#level5').html('<option value="">Select </option>'); 
+                }
+            }); 
+        }else{
+            $('#level4').html('<option value="">Select Level 3 first</option>'); 
+        }
+    });
+    $('#level4').on('click', function(){
+        var PCDLevel4 = $(this).val();
+        if(PCDLevel4){
+            $.ajax({
+                type:'POST',
+                url:'levelData.php',
+                data:'level4='+PCDLevel4,
+                success:function(html){
+                    $('#level5').html(html);
+                }
+            }); 
+        }else{
+            $('#level5').html('<option value="">Select Level 4 first</option>'); 
+        }
+    });
+});
+</script>
+<div id="main-filter">
+<form action="" method="post" style="margin-top: 20px;" class="pb-2">
 
-<?php
-		 $sSQL = "SELECT * FROM maindata  order by parentgroup, parentcd";
-		$sqlresult = $objDb->dbQuery($sSQL);
-while ($data = $objDb->dbFetchArray()) {
-	$cdlist = array();
-	$items = 0;
-	$path = $data['parentgroup'];
-	$parentcd = $data['parentcd'];
-	$cdlist = explode("_",$path);
-	$items = count($cdlist);
-	$cdsql2 = "select * from maindata where itemid = ".$cdlist[0];
-	$cdsqlresult12 =  $objDb1->dbQuery($cdsql2);
-	$cddata1 = $objDb1->dbFetchArray();
-	$itemname = $cddata1['itemname'];
-	
-				
 
-				
+<?php 
+
+    // Fetch state data based on the specific level 
+    $query = "SELECT * FROM maindata   WHERE parentcd = 1 AND activitylevel = 1 "; 
+    $result = $objDb7->dbQuery($query);
 ?>
 
-		<tr id="abcd<?php echo $cdlist[$items-1];?>">
-		<?php
-		$cdsql = "select * from maindata where itemid = ".$cdlist[$items-1];
-		$cdsqlresult = $objDb2->dbQuery($cdsql);
-		$cddata = $objDb2->dbFetchArray();
-		$itemid = $cddata['itemid'];
-		$parentcd = $cddata['parentcd'];
-		$stage=$cddata['stage'];
-		$activitylevel=$cddata['activitylevel'];
-		if($cddata['isentry']==0)
-				{
-				$isentry1="No";
-				}
-				else
-				{
-				$isentry1="Yes";
-				}
-
-			?>
-			
-			<?php
-			$space=$items;
-			$h="";
-			for($j=1; $j<$space; $j++)
-			{
-			$k="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			$h=$h.$k;
-			
-			if($j==$space-1)
-				{
-					if($j==1)
-					{
-					//red
-					
-					$colorr="#FFF9F9";
-					}
-					elseif($j==2)
-					{
-					
-					//green
-					$colorr="#E1FFE1";
-					}
-					elseif($j==3)
-					{
-					
-					//blue
-					$colorr="#E9E9F3";
-					} 
-					elseif($j==4)
-					{
-					
-					//yellow
-					$colorr="#FFFFC6";
-					} 
-					elseif($j==5)
-					{
-					
-					//brown
-					$colorr="#F0E1E1";
-					}
-					elseif($j==6)
-					{
-					
-					//brown
-					$colorr="#99CCCC";
-					}
-					elseif($j==7)
-					{
-					
-					//brown
-					$colorr="#CC66CC";
-					}
-					
-				}  
-			}
-			
-			
-			?>
-			<td rowspan="2"></td>
-			<td style=" font-size:10px; color: #000000; background-color: <?php echo $colorr; ?>">
-			<?php
-			if($parentcd==0){	
-			echo "<b>".$itemname."</b>";
-			}
-			else
-			{
-			echo $h.$cddata['itemname'];
-		
-			}
-		  
-		  
-		   ?>
-		</td>
-		<td style=" font-size:10px; color: #000000; background-color: <?php echo $colorr; ?>" ><?=$cddata['itemcode'];?></td>
-		<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>" ><?=$isentry1;?></td>
-		
-		<?php 
-		if($isentry1=="Yes")
-		{
-		
-		$sql_b="Select * from activity where itemid=$itemid AND temp_id=$temp_id";
-			$res_b=$objDb2->dbQuery($sql_b);
-			$i=1;
-			while($row3_b=$objDb2->dbFetchArray())
-			{
-			$aid=$row3_b['aid'];
-			?>
-			
-			
-			
-			
-			  <?php  
-			   
-			  
-				 $sqlg="Select * from baseline where rid=".$row3_b['rid'] ;
-				$resg=$objDb1->dbQuery($sqlg);
-				$row3g=$objDb1->dbFetchArray();
-				
-							
-				?>
-				
-				<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>"><?php if($row3g['base_desc']!="") { echo $row3g['base_desc']; } else { echo "&nbsp;"; }?></td>
-				
-              
-			<td style=" font-size:10px; text-align:center;  color: #000000; background-color: <?php echo $colorr; ?>"><?=$row3_b['startdate'];?></td>
-			<td style=" font-size:10px; text-align:center;  color: #000000; background-color: <?php echo $colorr; ?>"><?=$row3_b['enddate'];?></td>
-			<td style=" font-size:10px;  text-align:right;  color: #000000; background-color: <?php echo $colorr; ?>"><?=$row3_b['baseline'];?></td>
-			<?php
-			$i=$i+1;
-			}
-			}
-			else
-			{
-			?>
+    <!-- level1 dropdown -->
+    <div class="row">
+    <div class="col-11 row  ">
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 1</span>
+          <select id="level1" name="level1" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+                  <option value="">Select </option>
+                  <?php 
+            if( $objDb7->totalRecords()>0){ 
+              while($row = $objDb7->dbFetchArray()){  
+                $selected=" ";
+                if(isset($_POST['submit']) && ($_POST['level1']==$row['itemid'])  ){
+                  $selected="selected";
+                }
+                echo '<option value="'.$row['itemid'].'" '.$selected.'>'.$row['itemname'].'</option>'; 
+                  } 
+              }else{ 
+                  echo '<option value=""> not available</option>'; 
+              } 
+              ?>
+      </select>
+        </div>
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 2</span>
+              <!-- level2 dropdown -->
+            <select id="level2" name="level2" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+              <?php
+                    if(isset($_POST['submit']) && $_POST['level1']>0 ){
+                            // Fetch state data based on the specific level 
+                    $query = "SELECT * FROM maindata   WHERE parentcd = ".$_POST['level1']." AND activitylevel = 2 "; 
+                    $result = $objDb6->dbQuery($query);
+                    // Generate  list 
+                        if( $objDb6->totalRecords()>0){ 
+                        echo '<option value="">Select </option>'; 
+                          while($row = $objDb6->dbFetchArray()){  
+                            $selected=" ";
+                            if($_POST['level2']==$row['itemid']  ){
+                              $selected="selected";
+                            }
+                              echo '<option value="'.$row['itemid'].'" '.$selected.'>'.$row['itemname'].'</option>'; 
+                          }
+                      }else{ 
+                        echo '<option value=""> not available</option>'; 
+                      } 
+                    }else{
+              ?>
+                <option value="">Select </option>
+                <?php }?>
+            </select>
+        </div>
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 3</span>
+             <!-- level3 dropdown -->
+            <select id="level3" name="level3" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+            <?php
+                    if(isset($_POST['submit']) && $_POST['level2']>0 ){
+            // Fetch  data based on the specific level 
+            $query = "SELECT * FROM maindata   WHERE parentcd = ".$_POST['level2']." AND activitylevel = 3 "; 
+            $result = $objDb6->dbQuery($query);
             
-			<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>"></td>
-			<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>"></td>
-			<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>"></td>
-			<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>"></td>
-			<?php
-			}
-			?>
-		<!--<td style=" font-size:10px; text-align:center;  color: #000000; background-color: <?php echo $colorr; ?>"><input class="checkbox" type="checkbox" name="sel_checkbox[]" id="sel_checkbox[]" value="<?=$itemid ?>"   form="reports" onclick="group_checkbox();">		</td>-->
-		<?php  if($activitylevel==0)
-		{
-		$editlink='subactivity.php';
-		$redirect="subactivity.php?subaid=$itemid&levelid=$activitylevel";
-		$redirect_title="Add Subactivity";
-		}
-		else if($activitylevel>0)
-		{
-		$editlink='subactivity.php';
-		$redirect="subactivity.php?subaid=$itemid&levelid=$activitylevel";
-		$redirect_title="Add Subactivity";
-		}
-		$deletelink='subactivity.php';
-		$deletelinkoutput='output.php';
-		
-		  ?>
-		
-			 <?php
-	  if($mdataentry_flag==1 || $mdataadm_flag==1)
-	{
-	?>
-		<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>" >&nbsp;
-		
-		  <?php if($cddata['isentry']==0)
-		{	
-		?>
-		  <a href="javascript:void(null);" onclick="window.open('<?php echo $redirect; ?>', '<?php echo $redirect_title; ?>','width=650,height=550,scrollbars=yes');" >
-		 <?php echo $redirect_title; ?></a> | 
-		<?php
-		 }?>
-		 <?php  if($activitylevel>0) {?>
-		<a href="javascript:void(null);" onclick="window.open('<?php echo $editlink; ?>?edit=<?php echo $itemid;?>&subaid=<?php echo $parentcd; ?>&levelid=<?php echo $activitylevel-1;?>', '<?php echo "Edit ".$itemid; ?>','width=650,height=550,scrollbars=yes');" >Edit</a> 
-		
-		<?php if($mdataadm_flag==1)
-		{
-		?>
-		| <a href="<?php echo $deletelink; ?>?del=<?php echo $itemid;?>"   onclick="return confirm('Are you sure you want to delete this Activity and all of its child?')">Delete</a>
-		<?php }}else{?>
-		<a href="javascript:void(null);" onclick="window.open('<?php echo $editlink; ?>?edit=<?php echo $itemid;?>', '<?php echo "Edit ".$itemid; ?>','width=550,height=650,scrollbars=yes');" >Edit</a>  
-		
-		<?php 
-			 if($mdataadm_flag==1)
-		{
-		?>
-		|
-	
-			<a href="<?php echo $deletelink; ?>?del=<?php echo $itemid;?>"   onclick="return confirm('Are you sure you want to delete this Activity and all of its child?')">Delete</a>
-			<?php
-			
-		}
-		?>
-		
-		<?php } ?>
-		 	 </td>
-		<?php
-		}
-		?>
-		 <!--<td style=" font-size:10px;  color: #000000; background-color: <?php echo $colorr; ?>" >
-		 <a href="log.php?trans_id=<?php echo $itemid ; ?>&module=<?php echo $module?>" target="_blank"><?php echo LOG;?></a>
-	
-		 </td>-->
-	
-		</tr>
-		<tr>
-		<td colspan="10">
-			 <?php
-	if($cddata['isentry']==1)
-		{	
-		?> 
-		<script>
-		function callmsgbody<?php echo $itemid; ?>()
-		{
-		
-			var id=<?php echo $itemid; ?>;
-			if (window.XMLHttpRequest) {
-				// code for IE7+, Firefox, Chrome, Opera, Safari
-				xmlhttp3=new XMLHttpRequest();
-			  } else {  // code for IE6, IE5
-				xmlhttp3=new ActiveXObject("Microsoft.XMLHTTP");
-			  }
-			
-			  xmlhttp3.onreadystatechange=function() {
-				if (xmlhttp3.readyState==4 && xmlhttp3.status==200) {
-				
-					
-					document.getElementById("abc"+id).innerHTML=xmlhttp3.responseText;
-					//document.getElementById("addnew"+id).style.display="block";
-					
-				 // document.getElementById("search").style.border="1px solid #A5ACB2";
-				  
-				
-				 
-				}
-			  }
-			
-			  xmlhttp3.open("GET","reloadmaindata.php?itemid="+id,true);
-			  xmlhttp3.send();
-			$('div[class^="msg_body"]').not('.msg_body<?php echo $itemid;?>').hide();
-			$(".msg_body<?php echo $itemid;?>").show(); 
-			$(this).next(".msg_body<?php echo $itemid;?>").slideToggle(600);
-			
-		}
+            // Generate list
+                  if( $objDb6->totalRecords()>0){ 
+                      echo '<option value="">Select </option>'; 
+                      while($row = $objDb6->dbFetchArray()){  
+                        $selected=" ";
+                        if($_POST['level3']==$row['itemid']  ){
+                          $selected="selected";
+                        }
+                          echo '<option value="'.$row['itemid'].'"'.$selected.'>'.$row['itemname'].'</option>'; 
+                      } 
+                  }else{ 
+                      echo '<option value=""> not available</option>'; 
+                  } 
+                          
+                }else{
+                      ?>
+                <option value="">Select </option>
+                <?php }?>
+            </select>
+        </div>
+        <div class="col-3 ">
+          <span class="text-muted mx-2 "> Level 4</span>
+              <!-- level4 dropdown -->
+              <select id="level4" name="level4" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
+              <?php
+                      if(isset($_POST['submit']) && $_POST['level3']>0 ){
+                        
+                      // Fetch  data based on the specific level 
+                      $query = "SELECT * FROM maindata   WHERE parentcd = ".$_POST['level3']." AND activitylevel = 4 "; 
+                      $result = $objDb6->dbQuery($query);
+                      
+                      // Generate list
+                      if( $objDb6->totalRecords()>0){ 
+                          echo '<option value="">Select </option>'; 
+                          while($row = $objDb6->dbFetchArray()){  
+                            $selected=" ";
+                            if($_POST['level4']==$row['itemid']  ){
+                              $selected="selected";
+                            }
+                              echo '<option value="'.$row['itemid'].'"'.$selected.'>'.$row['itemname'].'</option>'; 
+                          } 
+                      }else{ 
+                          echo '<option value=""> not available</option>'; 
+                      } 
+                      }else{
+                        ?>
+                  <option value="">Select </option>
+                  <?php }?>
+              </select>
+        </div>
+                      </div>
+                      <div class="col-1">         
+        <div class="col-1">
+      
+        <input type="submit" name="submit" class="btn btn-info bg-primary text-white px-3 mx-1 mt-4" value="Submit"/>
+        </div>
+                      </div>
+    </div>
+    <br>
 
-		</script> 
-		 
-		  <?php
-		  }
-		  ?>
-		</td></tr>
-		
+    <!-- level5 dropdown -->
+    <!-- <select id="level5" name="level5">
+        <option value="">Select level5</option>
+    </select> -->
 	
-	<?php        
-			}
-		
-	?>
-
-	</table>
-</div>
+   
 </form>
+
+
+</div>
+
+
+<div id="without_search" class="pt-0">
+<?php 
+if(isset($_POST['submit'])){ 
+   if($_POST['level4'] >0){
+    $pcd .= $_POST['level4'];
+   }else if ($_POST['level3']>0){
+    $pcd .= $_POST['level3'];
+   }else if($_POST['level2']>0){
+    $pcd .= $_POST['level2'];
+   }else if($_POST['level1']>0){
+    $pcd .= $_POST['level1'];
+   }
+} 
+?>
+<!--  -->
+
+
+
+<?php
+	$per_page = 50;
+	//Calculating no of pages
+  $sql = "";
+
+ 
+	
+
+  if(isset($_POST['submit']) && $_POST['level1']>0 ){
+    $sqlCheck = "SELECT parentgroup, parentcd, activitylevel FROM maindata   where itemid= $pcd ";	
+    $objDb5->dbQuery($sqlCheck);
+    $row = $objDb5->dbFetchArray();
+    $pGroup = $row['parentgroup'];
+	  $oneParentcd = $row['parentcd'];
+    $activitylevel = $row['activitylevel'];
+
+        if($activitylevel==4){
+          $aLevel1 =  substr($pGroup,0,13);
+          $aLevel2 =  substr($pGroup,0,20);
+          $sql .=  "SELECT * FROM maindata   WHERE parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' order by parentgroup, parentcd ";
+        
+        }else if($activitylevel==3){
+          $aLevel1 =  substr($pGroup,0,13);
+          $sql .=  "SELECT * FROM maindata   WHERE parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%'  order by parentgroup, parentcd ";
+        
+        }else{
+          $sql .= "SELECT * FROM maindata   WHERE itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'   order by parentgroup, parentcd  ";
+        }
+
+    }else{
+      $sql .= "SELECT * FROM maindata     ";
+    }
+	$result = $objDb6->dbQuery($sql);
+	$count =  $objDb6->totalRecords();
+	$pages = ceil($count/$per_page)
+	?>		
+  
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+
+<script type="text/javascript"> var pcd = "<?php if(isset($_POST['submit'])){echo $pcd; } ?>"; 
+var totalPages = "<?php if($pages>0){echo $pages; }else{echo 0 ;} ?>"; 
+</script>
+<script type="text/javascript" src="jquery_pagination.js"></script>
+
+	<?php 
+if(isset($_POST['submit']) && $_POST['level1']>0){ 
+
+?>
+     <h6 class="text-primary"> <span>&nbsp;&nbsp;<br> &nbsp; Total Records for this filtered result  : 	<?php echo $count; ?></span> </h6>
+<?php 
+
+}else{
+  echo "<hr>";
+  ?>
+     <span class="text-muted p-0 m-0" style="margin-top: -25px;"> Total Records   : 	<?php echo $count; ?></span> 
+
+  <?php
+}
+?>
+	<div id="content" style=" border: none;"></div>
+	<div id="pagination">
+		<ul class="pagination " style="text-align: right;">
+		<?php
+		//Pagination Numbers
+		for($i=1; $i<=$pages; $i++)
+		{
+			echo '<li style=" border: 1px solid #CCC; border-style: ridge; margin: 10px; padding: 5px;" id="'.$i.'">'.$i.'</li>';
+		}
+		?> 
+		</ul> 
+  
+	</div>		
+<!--  -->
+
+
+</div>   <!-- without_search -->
+<!-- </form> -->
 
 
    </div>

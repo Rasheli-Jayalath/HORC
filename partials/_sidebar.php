@@ -3,7 +3,6 @@ $objPD  		= new ProjectSetup();
 $objPD->getProject();
   $PCount=$objPD->totalRecords();
   
-  
   if($PCount==1)
   {
 ?>
@@ -46,13 +45,13 @@ $objPD->getProject();
 
             >
           </li>
-             <li class="nav-item">            <a
+             <?php /*?><li class="nav-item">            <a
               class="nav-link"
               href="<?php echo SITE_URL; ?>pages/eva-dashboard/eva_dashboard.php"
               >EVA Dashboard</a
 
             >
-          </li>
+          </li><?php */?>
           <li class="nav-item">            <a
               class="nav-link"
               href="<?php echo SITE_URL; ?>pages/act-dashboard/act_dashboard.php"
@@ -68,9 +67,10 @@ $objPD->getProject();
           </li>
 		  
 		   <li class="nav-item">
-         <a class="nav-link"
-              href="<?php echo SITE_URL; ?>pages/project-tools/progress_report/kfiactivity.php"
+           <a class="nav-link"
+              href="<?php echo SITE_URL; ?>pages/act-dashboard-summary/act_dashboard.php"
               >Progress Dashboard</a>
+        
           </li>
 		  
         </ul>
@@ -115,7 +115,7 @@ $objPD->getProject();
             <a class="nav-link" href="<?php echo SITE_URL; ?>pages/project-tools/ncn/project_nonconfirmity_info.php">Non Conformity Notices</a>
           </li>
         </ul>
-		 <ul class="nav flex-column sub-menu">
+		 <!--<ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="<?php echo SITE_URL; ?>pages/project-tools/drawing_register/drawing_reg.php?comp_id=1&contract_id=1">Drawing Register</a>
           </li>
@@ -124,7 +124,7 @@ $objPD->getProject();
           <li class="nav-item">
             <a class="nav-link" href="<?php echo SITE_URL; ?>pages/project-tools/contractors/contractors.php?cid=1&category_cd=85">Contractors</a>
           </li>
-        </ul>
+        </ul>-->
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="<?php echo SITE_URL; ?>pages/project-tools/design_progress/sp_design.php">Design Progress</a>
@@ -135,11 +135,11 @@ $objPD->getProject();
             <a class="nav-link" href="<?php echo SITE_URL; ?>pages/project-tools/risk_register/risk_register.php">Risk Register</a>
           </li>
         </ul>
-        <ul class="nav flex-column sub-menu">
+       <?php /*?> <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="<?php echo SITE_URL; ?>pages/project-tools/site_diary/site_diary.php">Site Diary</a>
           </li>
-        </ul>
+        </ul><?php */?>
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="<?php echo SITE_URL; ?>pages/project-tools/RFI/rfi_info.php">Request for Inspection</a>
@@ -205,7 +205,7 @@ $objPD->getProject();
         </ul>
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="#">Step 4 - KPIs Entry</a>
+            <a class="nav-link" href="<?php echo SITE_URL; ?>pages/administration/kpi_entry/kpidata.php">Step 4 - KPIs Entry</a>
           </li>
         </ul>
       </div>
@@ -233,7 +233,7 @@ $objPD->getProject();
         </ul>
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="#">Step 2 - Progress Entry</a>
+            <a class="nav-link" href="<?php echo SITE_URL; ?>pages/administration/progress_entry/addprogress.php">Step 2 - Progress Entry</a>
           </li>
         </ul>
       </div>
@@ -269,25 +269,25 @@ $objPD->getProject();
 <span class="menu-title">DMS</span>
 </a>
 </li>
-<li class="nav-item">
+<!--<li class="nav-item">
 <a class="nav-link" href="<?php echo SITE_URL; ?>GIS/" target="_blank">
 <i class="mdi mdi-chart-arc menu-icon"></i>
 <span class="menu-title">GIS</span>
 </a>
-</li>
+</li>-->
 
-<!--<li class="nav-item">
+<li class="nav-item">
 <a class="nav-link" href="#" onclick="return confirm('If You want GIS Module, Please contact us.')" target="_blank">
 <i class="mdi mdi-chart-arc menu-icon"></i>
 <span class="menu-title">GIS</span>
 </a>
-</li>-->
-<li class="nav-item">
+</li>
+<!--<li class="nav-item">
 <a class="nav-link" href="#" >
 <i class="mdi mdi-book-open menu-icon"></i>
 <span class="menu-title">Strategic Dashboard</span>
 </a>
-</li>
+</li>-->
 
     <li class="nav-item nav-category">Settings</li>
     <li class="nav-item">
@@ -343,13 +343,13 @@ $objPD->getProject();
 
             >
           </li>
-             <li class="nav-item">            <a
+            <!-- <li class="nav-item">            <a
               class="nav-link"
               href=""
               >EVA Dashboard</a
 
             >
-          </li>
+          </li>-->
           <li class="nav-item">            <a
               class="nav-link"
               href=""
@@ -409,7 +409,7 @@ $objPD->getProject();
             <a class="nav-link" href="">Non Conformity Notices</a>
           </li>
         </ul>
-		<ul class="nav flex-column sub-menu">
+		<!--<ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="">Drawing Register</a>
           </li>
@@ -418,7 +418,7 @@ $objPD->getProject();
           <li class="nav-item">
             <a class="nav-link" href="">Contractors</a>
           </li>
-        </ul>
+        </ul>-->
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="">Design Progress</a>
@@ -429,11 +429,11 @@ $objPD->getProject();
             <a class="nav-link" href="">Risk Register</a>
           </li>
         </ul>
-        <ul class="nav flex-column sub-menu">
+       <!-- <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="">Site Diary</a>
           </li>
-        </ul>
+        </ul>-->
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
             <a class="nav-link" href="">Request for Inspection</a>
@@ -563,29 +563,26 @@ $objPD->getProject();
 <span class="menu-title">DMS</span>
 </a>
 </li>
-<li class="nav-item">
+<!--<li class="nav-item">
 <a class="nav-link" href="<?php echo SITE_URL; ?>GIS/" target="_blank">
+<i class="mdi mdi-chart-arc menu-icon"></i>
+<span class="menu-title">GIS</span>
+</a>
+</li>-->
+
+<li class="nav-item">
+<a class="nav-link" href="#" onclick="return confirm('If You want GIS Module, Please contact us.')" target="_blank">
 <i class="mdi mdi-chart-arc menu-icon"></i>
 <span class="menu-title">GIS</span>
 </a>
 </li>
 
 <!--<li class="nav-item">
-<a class="nav-link" href="#" onclick="return confirm('If You want GIS Module, Please contact us.')" target="_blank">
-<i class="mdi mdi-chart-arc menu-icon"></i>
-<span class="menu-title">GIS</span>
-</a>
-</li>-->
-
-
-
-
-<li class="nav-item">
 <a class="nav-link" href="#" >
 <i class="mdi mdi-book-open menu-icon"></i>
 <span class="menu-title">Strategic Dashboard</span>
 </a>
-</li>
+</li>-->
 
     <li class="nav-item nav-category">Settings</li>
     <li class="nav-item">

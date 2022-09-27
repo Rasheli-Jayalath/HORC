@@ -3,10 +3,11 @@ include_once "../../../config/config.php";
 require_once('../../../rs_lang.admin.php');
 require_once('../../../rs_lang.eng.php');
 $module			= "ADD_IPC";
+$objDb  		= new Database();
 $objDb5  		= new Database();
-$objDb6  		= new Database();
-$objDb7  		= new Database();
-$objAdminUser1   = new AdminUser();
+$objDb6   		= new Database();
+$objDb7   		= new Database();
+$objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
 $uname 	= $_SESSION['ne_username'];
@@ -305,13 +306,13 @@ alert("Please add IPC data first whose status is active.");
 }
 </style>
 <style type="text/css">
-
+<!--
 .style1 {color: #3C804D;
 font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:18px;
 	font-weight:bold;
 	text-align:center;}
-
+-->
 </style>
 <style type="text/css"> 
 .imgA1 { position:absolute;  z-index: 3; } 
@@ -429,7 +430,7 @@ $(document).ready(function(){
             $('#level2').html('<option value="">Select Level 1 first</option>'); 
         }
     });
-    
+
     $('#level2').on('click', function(){
         var PCDLevel2 = $(this).val();
         if(PCDLevel2){
@@ -550,7 +551,7 @@ $(document).ready(function(){
             // Fetch  data based on the specific level 
             $query = "SELECT * FROM boqdata WHERE parentcd = ".$_POST['level2']." AND activitylevel = 3 "; 
             $result = $objDb6->dbQuery($query);
-            
+
             // Generate list
                   if( $objDb6->totalRecords()>0){ 
                       echo '<option value="">Select </option>'; 
@@ -564,7 +565,7 @@ $(document).ready(function(){
                   }else{ 
                       echo '<option value=""> not available</option>'; 
                   } 
-                          
+
                 }else{
                       ?>
                 <option value="">Select </option>
@@ -577,11 +578,11 @@ $(document).ready(function(){
               <select id="level4" name="level4" class="mt-2"style=" width: 100%; height: 35px; font-size: 14px;">
               <?php
                       if(isset($_POST['submit']) && $_POST['level3']>0 ){
-                        
+
                       // Fetch  data based on the specific level 
                       $query = "SELECT * FROM boqdata WHERE parentcd = ".$_POST['level3']." AND activitylevel = 4 "; 
                       $result = $objDb6->dbQuery($query);
-                      
+
                       // Generate list
                       if( $objDb6->totalRecords()>0){ 
                           echo '<option value="">Select </option>'; 
@@ -604,7 +605,7 @@ $(document).ready(function(){
                       </div>
                       <div class="col-1">         
         <div class="col-1">
-      
+
         <input type="submit" name="submit" class="btn btn-info bg-primary text-white px-3 mx-1 mt-4" value="Submit"/>
         </div>
                       </div>
@@ -615,8 +616,8 @@ $(document).ready(function(){
     <!-- <select id="level5" name="level5">
         <option value="">Select level5</option>
     </select> -->
-	
-   
+
+
 </form>
 
 
@@ -646,8 +647,8 @@ if(isset($_POST['submit'])){
 	//Calculating no of pages
   $sql = "";
 
- 
-	
+
+
 
   if(isset($_POST['submit']) && $_POST['level1']>0 ){
     $sqlCheck = "SELECT parentgroup, parentcd, activitylevel FROM boqdata where itemid= $pcd AND stage='BOQ' and isentry=0 ";	
@@ -661,11 +662,11 @@ if(isset($_POST['submit'])){
           $aLevel1 =  substr($pGroup,0,13);
           $aLevel2 =  substr($pGroup,0,20);
           $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
-        
+
         }else if($activitylevel==3){
           $aLevel1 =  substr($pGroup,0,13);
           $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
-        
+
         }else{
           $sql .= "SELECT * FROM boqdata WHERE itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'  AND stage='BOQ' and isentry=0 order by parentgroup, parentcd  ";
         }
@@ -677,7 +678,7 @@ if(isset($_POST['submit'])){
 	$count =  $objDb6->totalRecords();
 	$pages = ceil($count/$per_page)
 	?>		
-  
+
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
 
 <script type="text/javascript"> var pcd = "<?php if(isset($_POST['submit'])){echo $pcd; } ?>"; 
@@ -711,7 +712,7 @@ if(isset($_POST['submit']) && $_POST['level1']>0){
 		}
 		?> 
 		</ul> 
-  
+
 	</div>		
 <!--  -->
 

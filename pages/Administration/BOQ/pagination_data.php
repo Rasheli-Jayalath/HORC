@@ -167,18 +167,18 @@ if($_GET['pcd']) {
 	if($activitylevel==4){
 		$aLevel1 =  substr($pGroup,0,13);
 		$aLevel2 =  substr($pGroup,0,20);
-		$sSQL .= "SELECT * FROM boqdata where parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+		$sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
 	}else if($activitylevel==3){
 		$aLevel1 =  substr($pGroup,0,13);
-		$sSQL .= "SELECT * FROM boqdata where parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+		$sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
 	}else{
-		$sSQL .= "SELECT * FROM boqdata where  itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+		$sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR  itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
 	
 	}
 
 
 }else{
-	$sSQL .= "SELECT * FROM boqdata where stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
+	$sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR stage='BOQ' order by parentgroup, parentcd  limit $start,$per_page";
 }
     $sSQL;     // this is necessary, dont remove this line. 
 	$sqlresult = $objDb5->dbQuery($sSQL);

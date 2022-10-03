@@ -484,8 +484,10 @@ function doFilter(frm){
                         <td ><?php echo ++$counter; ?></td>                        
                        
                           <td ><?php echo $pdData['iss_no'];?></td>
-                          <td  style="text-align:left"><?php echo wordwrap($pdData['iss_title'],30,"<br>\n");?></td>
-                          <td ><?php echo wordwrap(substr($pdData['iss_detail'],0,50)."...",30,"<br>\n");?></td>
+                          <td  style="text-align:left"><?php echo wordwrap($pdData['iss_title'],30,"<br>\n");  ?></td>
+                          <!-- <td ><?php echo wordwrap(substr($pdData['iss_detail'],0,50)."...",30,"<br>\n");?></td> -->
+                          <td ><?php echo wordwrap($pdData['iss_detail'],30,"<br>\n"); ?></td>
+
                           <td >
                           <?php if($pdData['attachment']!=""){?>
                           <a href="<?php echo "issues/".$pdData['attachment'];?>" target="_blank">

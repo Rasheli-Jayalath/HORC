@@ -3,9 +3,10 @@ include_once "../../../config/config.php";
 require_once('../../../rs_lang.admin.php');
 require_once('../../../rs_lang.eng.php');
 $module			= "BASELINE Data";
-$objDb  		= new Database();
-$objDb1  		= new Database();
-$objDb2  		= new Database();
+$objDb5  		= new Database();
+$objDb6  		= new Database();
+$objDb7  		= new Database();
+$objDb8  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -73,7 +74,7 @@ if(isset($_REQUEST['save']))
 
 $sSQL = ("INSERT INTO baseline (base_desc,base_code,unit,quantity,unit_type,temp_id) VALUES ('$txtname ','$base_code','$txtunit','$txtquantity','1','1')");
 
-	$objDb1->dbQuery($sSQL);
+	$objDb7->dbQuery($sSQL);
 	$ipcid = $con->lastInsertId();
 	$msg="Saved!";
 	$log_module  = $module." Module";
@@ -81,7 +82,7 @@ $sSQL = ("INSERT INTO baseline (base_desc,base_code,unit,quantity,unit_type,temp
 	$log_ip      = $_SERVER['REMOTE_ADDR'];	
 	
 	// $sSQL = ("INSERT INTO ipc_log (log_module,log_title,log_ip,ipcno,ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status, transaction_id) VALUES ('$log_module','$log_title','$log_ip','$txtipcno ','$txtipcmonth','$txtipcstartdate','$txtipcenddate','$txtipcsubmitdate','$txtipcreceivedate','$txtstatus',$ipcid)");
-	// $objDb2->dbQuery($sSQL);
+	// $objDb8->dbQuery($sSQL);
 
   header("Location: addbaseline.php");
  
@@ -97,7 +98,7 @@ unit				= '$txtunit',
 quantity         		= '$txtquantity' 		
 			where rid	= '$edit'";
 		  
- 	if($objDb1->dbQuery($uSql)){
+ 	if($objDb7->dbQuery($uSql)){
 	
 	
 	$msg="Updated!";
@@ -106,7 +107,7 @@ quantity         		= '$txtquantity'
 	$log_ip      = $_SERVER['REMOTE_ADDR'];	
 	
 // $sSQL2 = ("INSERT INTO ipc_log (log_module,log_title,log_ip,ipcno,ipcmonth,ipcstartdate,ipcenddate,ipcsubmitdate,ipcreceivedate,status,transaction_id) VALUES ('$log_module','$log_title','$log_ip','$txtipcno ','$txtipcmonth','$txtipcstartdate','$txtipcenddate','$txtipcsubmitdate','$txtipcreceivedate','$txtstatus',$edit)");
-// 		$objDb2->dbQuery($sSQL2);
+// 		$objDb8->dbQuery($sSQL2);
 
 		
 	}
@@ -125,7 +126,7 @@ quantity         		= '$txtquantity'
 
 if($edit != ""){
  $eSql = "Select * from baseline where rid='$edit'";
-  $objDb -> dbQuery($eSql);
+  $objDb6 -> dbQuery($eSql);
   $eCount = $objDb->totalRecords();
 	if($eCount > 0){
 		$eRes = $objDb->dbFetchArray();
@@ -492,9 +493,9 @@ function group_checkbox()
 			  <?php 
 			  
 			 $sqlg="SELECT left(pd_date,7) as getmonths FROM project_days group by left(pd_date,7) order by left(pd_date,7)";
-			$resg=$objDb1->dbQuery($sqlg);
+			$resg=$objDb7->dbQuery($sqlg);
 			
-			while($row3g=$objDb1->dbFetchArray())
+			while($row3g=$objDb7->dbFetchArray())
 			{
 			echo $getmonth=$row3g['getmonths'];
 			if($getmonth==$pmonth)
@@ -519,76 +520,40 @@ function group_checkbox()
 <input type="text" name="valueipcreceivedate"  id="valueipcreceivedate"  title="Receive Date" placeholder="Receive Date" style="width:100px"    onchange="showResult(module.value,valueipcno.value,txtipcmonth.value,valueipcstartdate.value,valueipcenddate.value,valueipcsubmitdate.value, this.value)"/>
 <input name="submit" type="submit" value="Print List" formaction="reportipcdata.php"/>
 <div id="search"></div>
-	<div id="without_search"><?php */?>
-    
-	<table class="table table-striped" > 
-    <tr class="bg-form" style="font-size:12px; color:#CCC;">
-    
-      <th align="center" width="3%"><strong>Sr. No.</strong></th>
-    
-      <th width="20%"><strong>Name</strong></th>
-      <th width="20%"><strong>Baseline Item Code</strong></th>
-      <th width="20%"><strong>Baseline Unit</strong></th>
-	  <th width="20%"><strong>Baseline Quantity/Amount</strong></th>
-      <th align="center" width="15%"><strong>Action
-    </strong></th>
-	<!--<th align="center" width="10%"><strong>Log
-    </strong></th>-->
-    </tr>
-<strong>
-<?php
- $sSQL = "select * from baseline";
- $objDb2->dbQuery($sSQL);
- $iCount = $objDb2->totalRecords( );
- $j=0;
- if($iCount>0)
- {
-	while( $res_e2=$objDb2->dbFetchArray())
-	
-	{
-	
+<?php */?>
+    <div id="without_search">
 
-    $id=$res_e2['rid'];
-	  $txtname 								= $res_e2['base_desc'];
-	  $base_code 								= $res_e2['base_code'];
-	  $txtresource	 							= $res_e2['temp_id'];
-	  $txtunit							= $res_e2['unit'];
-	  $txtquantity 							= $res_e2['quantity'];
-	 
-	  
-	  
-	
-if ($i % 2 == 0) {
-	$style = ' style="background:#f1f1f1;"';
-} else {
-	$style = ' style="background:#ffffff;"';
-}
-?>
-</strong>
-<tr <?php echo $style; ?>>
-<td width="5px"><center> <?=$j+1;?> </center> </td>
+    <!--  only-->
+    <script type="text/javascript"> 
+var totalPages = "<?php if($pages>0){echo $pages; }else{echo 0 ;} ?>"; 
+</script>
+<script type="text/javascript" src="jquery_pagination.js"></script>
+<!--  -->
 
-<td width="345px"><?=$txtname;?></td>
-<td width="235px"><?=$base_code;?></td>
-<td width="340px"><?=$txtunit;?></td>
-<td width="230px"><?=$txtquantity;?></td>
-<td style="border-bottom:1px solid #cccccc" width="210px" >&nbsp;
-<button type="button" style="text-align:center;" class="btn btn-outline-info btn-sm" onclick="location.href='addbaseline.php?edit=<?php echo $id;?>'">EDIT</button>
-<button type="submit" title = "Delete" class="btn btn-outline-info btn-sm"  name="delete" id="delete" value="<?php echo $id ; ?>" onclick="return confirm('Are you sure?')" >DELETE</button>
-<!-- 
-<span style="float:right"><form action="addbaseline.php?rid=<?php echo $id ?>" method="post">
-<button type="submit" title = "Delete" class="btn btn-outline-danger btn-fw py-1"  name="delete" id="delete" value="<?php echo $id ; ?>" onclick="return confirm('Are you sure?')" >
-<i class="ti-trash btn-icon-prepend" ></i></button> </form></span> -->
-</td>
-<!-- <td width="210px" align="right" ><a href="log_ipcdata.php?trans_id=<?php echo $id ; ?>&module=<?php echo $module?>" target="_blank">Log</a></td>-->
-</tr>
-<?php 
-$j=$j+1;       
-	}
-	}
-  ?>
-</table>
-</div>
+    <?php
+	$per_page = 50;
+	//Calculating no of pages
+	$sql = "select * from baseline";
+  $objDb5->dbQuery($sql);
+  $count = $objDb5->totalRecords();
+
+
+	$pages = ceil($count/$per_page);
+	?>			
+	
+	<div id="content"></div>
+	<div id="pagination">
+		<ul class="pagination">
+		<?php
+		//Pagination Numbers
+		for($i=1; $i<=$pages; $i++)
+		{
+			echo '<li id="'.$i.'">'.$i.'</li>';
+		}
+		?>
+		</ul>
+	</div>	
+   </div>
 </form>
  </div>
 

@@ -306,13 +306,13 @@ alert("Please add IPC data first whose status is active.");
 }
 </style>
 <style type="text/css">
-
+<!--
 .style1 {color: #3C804D;
 font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:18px;
 	font-weight:bold;
 	text-align:center;}
-
+-->
 </style>
 <style type="text/css"> 
 .imgA1 { position:absolute;  z-index: 3; } 
@@ -661,11 +661,13 @@ if(isset($_POST['submit'])){
         if($activitylevel==4){
           $aLevel1 =  substr($pGroup,0,13);
           $aLevel2 =  substr($pGroup,0,20);
-          $sql .=  "SELECT * FROM boqdata WHERE  parentcd = 0 OR parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
+
+          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
 
         }else if($activitylevel==3){
           $aLevel1 =  substr($pGroup,0,13);
-          $sql .=  "SELECT * FROM boqdata WHERE  parentcd = 0 OR parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
+          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
+
 
         }else{
           $sql .= "SELECT * FROM boqdata WHERE  parentcd = 0 OR itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'  AND stage='BOQ' and isentry=0 order by parentgroup, parentcd  ";

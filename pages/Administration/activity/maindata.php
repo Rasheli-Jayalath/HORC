@@ -885,14 +885,14 @@ if(isset($_POST['submit'])){
         if($activitylevel==4){
           $aLevel1 =  substr($pGroup,0,13);
           $aLevel2 =  substr($pGroup,0,20);
-          $sql .=  "SELECT * FROM maindata   WHERE parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' order by parentgroup, parentcd ";
+          $sql .=  "SELECT * FROM maindata   WHERE  parentcd = 0 OR parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' order by parentgroup, parentcd ";
         
         }else if($activitylevel==3){
           $aLevel1 =  substr($pGroup,0,13);
-          $sql .=  "SELECT * FROM maindata   WHERE parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%'  order by parentgroup, parentcd ";
+          $sql .=  "SELECT * FROM maindata   WHERE  parentcd = 0 OR parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%'  order by parentgroup, parentcd ";
         
         }else{
-          $sql .= "SELECT * FROM maindata   WHERE itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'   order by parentgroup, parentcd  ";
+          $sql .= "SELECT * FROM maindata   WHERE  parentcd = 0 OR itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'   order by parentgroup, parentcd  ";
         }
 
     }else{

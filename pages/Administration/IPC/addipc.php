@@ -306,13 +306,13 @@ alert("Please add IPC data first whose status is active.");
 }
 </style>
 <style type="text/css">
-<!--
+
 .style1 {color: #3C804D;
 font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:18px;
 	font-weight:bold;
 	text-align:center;}
--->
+
 </style>
 <style type="text/css"> 
 .imgA1 { position:absolute;  z-index: 3; } 
@@ -651,7 +651,7 @@ if(isset($_POST['submit'])){
 
 
   if(isset($_POST['submit']) && $_POST['level1']>0 ){
-    $sqlCheck = "SELECT parentgroup, parentcd, activitylevel FROM boqdata where itemid= $pcd AND stage='BOQ' and isentry=0 ";	
+    $sqlCheck = "SELECT parentgroup, parentcd, activitylevel FROM boqdata where itemid= $pcd AND stage='BOQ'  ";	
     $objDb5->dbQuery($sqlCheck);
     $row = $objDb5->dbFetchArray();
     $pGroup = $row['parentgroup'];
@@ -661,19 +661,21 @@ if(isset($_POST['submit'])){
         if($activitylevel==4){
           $aLevel1 =  substr($pGroup,0,13);
           $aLevel2 =  substr($pGroup,0,20);
-          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
+          $sql .=  "SELECT * FROM boqdata WHERE  parentcd = 0 OR parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
 
         }else if($activitylevel==3){
           $aLevel1 =  substr($pGroup,0,13);
-          $sql .=  "SELECT * FROM boqdata WHERE parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
+          $sql .=  "SELECT * FROM boqdata WHERE  parentcd = 0 OR parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd ";
 
         }else{
-          $sql .= "SELECT * FROM boqdata WHERE itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'  AND stage='BOQ' and isentry=0 order by parentgroup, parentcd  ";
+          $sql .= "SELECT * FROM boqdata WHERE  parentcd = 0 OR itemid = $oneParentcd  OR  parentgroup LIKE '$pGroup%'  AND stage='BOQ' and isentry=0 order by parentgroup, parentcd  ";
         }
 
     }else{
-      $sql .= "SELECT * FROM boqdata where stage='BOQ' and isentry=0  ";
+      $sql .= "SELECT * FROM boqdata where  parentcd = 0 OR stage='BOQ' and isentry=0  ";
     }
+
+
 	$result = $objDb6->dbQuery($sql);
 	$count =  $objDb6->totalRecords();
 	$pages = ceil($count/$per_page)

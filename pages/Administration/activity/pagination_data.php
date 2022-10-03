@@ -264,12 +264,12 @@ if($_GET['pcd']) {
 	if($activitylevel==4){
 		$aLevel1 =  substr($pGroup,0,13);
 		$aLevel2 =  substr($pGroup,0,20);
-		$sSQL .= "SELECT * FROM maindata where parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' order by parentgroup, parentcd  limit $start,$per_page";
+		$sSQL .= "SELECT * FROM maindata where  parentcd = 0 OR parentgroup = '$aLevel1' OR parentgroup = '$aLevel2' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' order by parentgroup, parentcd  limit $start,$per_page";
 	}else if($activitylevel==3){
 		$aLevel1 =  substr($pGroup,0,13);
-		$sSQL .= "SELECT * FROM maindata where parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%'  order by parentgroup, parentcd  limit $start,$per_page";
+		$sSQL .= "SELECT * FROM maindata where  parentcd = 0 OR parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%'  order by parentgroup, parentcd  limit $start,$per_page";
 	}else{
-		$sSQL .= "SELECT * FROM maindata where  itemid = $oneParentcd OR parentgroup LIKE '$pGroup%'  order by parentgroup, parentcd  limit $start,$per_page";
+		$sSQL .= "SELECT * FROM maindata where   parentcd = 0 OR itemid = $oneParentcd OR parentgroup LIKE '$pGroup%'  order by parentgroup, parentcd  limit $start,$per_page";
 
 	}
 

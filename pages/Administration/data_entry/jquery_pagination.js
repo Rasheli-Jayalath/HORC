@@ -24,11 +24,9 @@ $(document).ready(function() {
         }
     
     }
-    if(pcd>0){
-        $("#content").load("pagination_data.php?pcd=" + pcd+"&page=1", Hide_Load());
-    }else{
+
         $("#content").load("pagination_data.php?page=1", Hide_Load());
-    }
+    
     
     //Pagination Click
     $("#pagination li").click(function(){
@@ -77,11 +75,8 @@ $(document).ready(function() {
             $("#pagination li:last").css({'display' : 'block'}).css({'color' : '#031b8f'}).css({'border' : 'solid #a3a5b5 1px'});
             $(this).css({'color' : '#031b8f'}).css({'border' : 'none'}).css({'box-shadow' : '5px 5px 5px #506dfb'});
     
-        if(pcd>0){
-            $("#content").load("pagination_data.php?pcd=" + pcd+"&page=" + pageNum, Hide_Load());
-            
-        }else{
+  
             $("#content").load("pagination_data.php?page=" + pageNum, Hide_Load());
-        }
+        
     });
     });

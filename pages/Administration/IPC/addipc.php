@@ -694,17 +694,52 @@ var totalPages = "<?php if($pages>0){echo $pages; }else{echo 0 ;} ?>";
 if(isset($_POST['submit']) && $_POST['level1']>0){ 
 
 ?>
-     <h6 class="text-primary"> <span>&nbsp;&nbsp;<br> &nbsp; Total Records for this filtered result  : 	<?php echo $count; ?></span> </h6>
+
+<div class="row">
+    <div class="col-11 row  ">
+        <h6 class="text-primary"> <span>&nbsp;&nbsp;<br> &nbsp; Total Records for this filtered result  : 	<?php echo $count; ?></span> </h6>
+    </div>
+    <div class="col-1">         
+    <div class="col-1">
+    <?php 
+    if($_POST['level3']>0 || $_POST['level4']>0){
+      
+     }
+
+    else if($_POST['level1']>0 || $_POST['level2']>0){ 
+
+?>
+        <a href="exportData.php?pcd=<?php echo $pcd?>"  class="btn btn-info bg-primary text-white px-3 mx-1 py-1" ><i class="dwn"></i> Export</a>
+        <?php 
+
+}
+  ?>
+ 
+      </div>
+     </div>
+ </div>
+    
 <?php 
 
 }else{
   echo "<hr>";
   ?>
-     <span class="text-muted p-0 m-0" style="margin-top: -25px;"> Total Records   : 	<?php echo $count; ?></span> 
-
+ 
+<div class="row">
+    <div class="col-11 row  ">
+       <span class="text-muted p-0 m-0" style="margin-top: -25px;"> Total Records   : 	<?php echo $count; ?></span> 
+    </div>
+    <div class="col-1">         
+        <div class="col-1">
+        <!-- <a href="exportData.php" class="btn btn-info bg-primary text-white px-3 mx-1 py-1" ><i class="dwn"></i> Export</a> -->
+        </div>
+     </div>
+ </div>
   <?php
 }
 ?>
+        <!-- <input type="subcmit" name="submit" class="btn btn-info bg-primary text-white px-3 mx-1 mt-4" value="Submit"/> -->
+
 	<div id="content" style=" border: none;"></div>
 	<div id="pagination">
 		<ul class="pagination " style="text-align: right;">

@@ -4,8 +4,10 @@
 
  $objDb3  		= new Database();
  $objDb4  		= new Database();
+
  $objDb5  		= new Database();
  $objDb6  		= new Database();
+
 
 // Load the database configuration file 
 // include_once 'dbConfig.php'; 
@@ -29,14 +31,17 @@ if($_GET['pcd']) {
 		$aLevel1 =  substr($pGroup,0,13);
 		$sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR parentgroup = '$aLevel1' OR itemid = $oneParentcd  OR parentgroup LIKE '$pGroup%' AND stage='BOQ' and isentry=0 order by parentgroup, parentcd  ";
 	}else{
+
 		// $sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ'and isentry=0  order by parentgroup, parentcd  ";
     $sSQL .= "SELECT a.*  , b.* FROM boqdata a inner join boq b on(a.itemid=b.itemid) where a.parentcd = 0 OR a.itemid = $oneParentcd OR a.parentgroup LIKE '$pGroup%' AND  a.isentry=1 order by a.parentgroup, a.parentcd";
     // echo    $sSQL;
+
 	}
 
 }else{
 	$sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR stage='BOQ' and isentry=0  order by parentgroup, parentcd ";
 }
+
 
 $sSQL;
 // Fetch records from database 
@@ -50,6 +55,7 @@ $maxActivityLevel = 0;
     if ($row['activitylevel'] > $maxActivityLevel )
     $maxActivityLevel = $row['activitylevel'];
   } 
+
 // if($query->num_rows > 0){ 
     $delimiter = ","; 
     $filename = "boqdata_" . date('Y-m-d') . ".csv"; 
@@ -58,6 +64,7 @@ $maxActivityLevel = 0;
     $f = fopen('php://memory', 'w'); 
      
     // Set column headers 
+
 
       $fields = array('itemid',  );
       foreach ($fields as $value) {
@@ -119,6 +126,7 @@ $maxActivityLevel = 0;
                 
             
           // }
+
 
         fputcsv($f, $lineData, $delimiter); 
     } 

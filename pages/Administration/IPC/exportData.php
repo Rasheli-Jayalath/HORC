@@ -34,6 +34,8 @@ if($_GET['pcd']) {
 
 		// $sSQL .= "SELECT * FROM boqdata where  parentcd = 0 OR itemid = $oneParentcd OR parentgroup LIKE '$pGroup%' AND stage='BOQ'and isentry=0  order by parentgroup, parentcd  ";
     $sSQL .= "SELECT a.*  , b.* FROM boqdata a inner join boq b on(a.itemid=b.itemid) where a.parentcd = 0 OR a.itemid = $oneParentcd OR a.parentgroup LIKE '$pGroup%' AND  a.isentry=1 order by a.parentgroup, a.parentcd";
+    $sSQL1 .= "SELECT a.*  , b.* FROM boqdata a inner join boq b on(a.itemid=b.itemid) where a.parentcd = 0 OR a.itemid = $oneParentcd OR a.parentgroup LIKE '$pGroup%' AND  a.isentry=1 order by a.parentgroup, a.parentcd";
+    
     // echo    $sSQL;
 
 	}
@@ -47,7 +49,7 @@ $sSQL;
 // Fetch records from database 
 // $query = $db->query("SELECT * FROM boqdata where  parentcd = 0 OR stage='BOQ' and isentry=0  order by parentgroup, parentcd "); 
   $objDb4->dbQuery($sSQL);
-  $objDb5->dbQuery($sSQL);
+  $objDb5->dbQuery($sSQL1);
 
 if($objDb4->totalRecords() > 0){ 
 $maxActivityLevel = 0;
@@ -74,7 +76,7 @@ $maxActivityLevel = 0;
         $header[] = "Level ";
       }
 
-      $fields = array( 'itemcode', 'itemname','boqcode', 'boqitem', 'boqunit', 'boq_base_currency', 'boqqty', 'boq_cur_1_rate', ' progress Month', 'Progress Qty'); 
+      $fields = array( 'itemcode', 'itemname' ,'boqid','boqcode', 'boqitem', 'boqunit', 'boq_base_currency', 'boqqty', 'boq_cur_1_rate', ' progress Month', 'Progress Qty'); 
 
       foreach ($fields as $value) {
         $header[] = $value;
@@ -117,7 +119,7 @@ $maxActivityLevel = 0;
 
 
 
-                $fields = array( $row['itemcode'], $row['itemname'], $row['boqcode'], $row['boqitem '], $row['boqunit'], $row['boq_base_currency'], $row['boqqty'], $row['boq_cur_1_rate'], ' ', ' '); 
+                $fields = array( $row['itemcode'], $row['itemname'], $row['boqid'], $row['boqcode'], $row['boqitem'], $row['boqunit'], $row['boq_base_currency'], $row['boqqty'], $row['boq_cur_1_rate'], ' ', ' '); 
                 
                 foreach ($fields as $value) {
                   array_push($lineData,$value);

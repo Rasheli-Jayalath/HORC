@@ -46,7 +46,9 @@ if(isset($_POST['importSubmit'])){
             
             // Skip the first line
             fgetcsv($csvFile);
-            
+
+            $ipcid ;
+
             // Parse data from CSV file line by line
             while(($line = fgetcsv($csvFile)) !== FALSE){
               $lastIndex= sizeof($line);
@@ -69,8 +71,11 @@ if(isset($_POST['importSubmit'])){
             fclose($csvFile);
             
             $qstring = '?status=succ';
+
+
             // Redirect to the listing page
-             header("Location: csvdata.php?msg=1");
+             header("Location: csvdata.php?msg=1&ipcid=".$ipcid);
+
         }else{
             $qstring = '?status=err';
         }
@@ -148,58 +153,60 @@ if(isset($_GET['edit'])){
             <div class="card bg-form">
                 <div class="col-md-8 m-auto py-4" style="color:#fff">
 
-                <h2 style="text-align:center">Import CSV File <span style="text-align:right; float:right"><a href="ipcdata.php">Back</a></span></h2>
-                <hr>
-	  <form name="frmstgoal" id="frmstgoal" action=""  method="post" onsubmit="" enctype="multipart/form-data" style="margin-top:10px;">
 
+                <h2 style="text-align:center">Import CSV File 
+                <span style="" >   </span>
+                <span style="text-align:right; float:right" ><a href="ipcdata.php" class="btn btn-secondary px-2 py-1" > 
+                  <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i>  Back</a></span>
+                </h2>
+                <hr>
+
+                <script>
+                      function checkFile(fileSubmit){
+
+                        var fileVal = fileSubmit.elements['file'].value;
+
+                        //RegEx for valid file name and extensions.
+                        var pathExpression = "[?:[a-zA-Z0-9-_\.]+(?:.csv)";
+
+
+                        if(fileVal != ""){
+                            // if(!fileVal.toString().match(pathExpression) && confirm("The file is not a valid image. Do you want to continue?")){
+                            //     fileSubmit.submit();
+                            // } else {
+                            //     return;
+                            // }
+
+                            if(!fileVal.toString().match(pathExpression) ){
+                              event.preventDefault();
+                              location.reload();
+                              alert("The file is not a CSV file. Please choose the correct CSV file !");
+                            }
+
+                        } else { 
+                            alert("Please add a File !");
+                            // if(confirm("Do you want to continue without adding image?")) {
+                            //     fileSubmit.submit();
+                            // } else {
+                            //     return;
+                            // }
+                          }
+                        }
+                 </script>
                
         <div class="container">
-
-                      
-                        
-    <div class="row">
-    <!-- Import link -->
-
-    <!-- CSV file upload form -->
-    <div class="col-md-12" id="importFrm" style="margin: 50px 50px 50px 50px;">
-        <form action="importData.php" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" />
-            <input type="submit" class="btn btn-success" name="importSubmit" value="IMPORT">
-        </form>
-    </div>
-
-   
-</div>  
-
-                       
-
-                       
-                      
-
-                        <div class="row">
-                            <div class="col">
-                              <div class=" row">
-                              <label for=""></label>
-                              <div class="col-sm-6">
-                              <?php
-                                  if($edit!=""){?>
-                                  <!-- <input type="submit" value="Update" name="update"  class="btn bg-success m-auto text-white btn-sm" /> -->
-                                  <?php } else { ?>
-                                  <!-- <input type="submit" value="Save" name="save" id="save"  class="btn bg-success m-auto text-white btn-sm"/> -->
-                                <!-- &nbsp;&nbsp;<input type="submit" value="Clear" name="clear" class="btn bg-success m-auto text-white btn-sm"/>-->
-                                  <?php } ?>
-                              
-
-                              </div>
-                              </div>
-                            </div>
-                            <div class="col">
-                            </div>
-                        </div>
+            <div class="row">
+            <!-- CSV file upload form -->
+            <div class="col-md-12" id="importFrm" style="margin: 50px 50px 50px 50px;">
+                <form action="" method="post" name="fileSubmit" enctype="multipart/form-data">
+                    <input type="file" name="file" />
+                    <input type="submit" class="btn btn-success" name="importSubmit"  onClick="checkFile(this.form)" value="IMPORT">
+                </form>
+            </div>
+            </div>  
+       </div>
 
 
-                    </div>
-     </form>
       </div>
             </div>
             </div>
@@ -210,21 +217,58 @@ if(isset($_GET['edit'])){
          <?php }else if(isset($_GET['msg'])&& $_GET['msg']==1){ ?>
 
          <div class="row"  style = "margin-top: 20px;margin-right:15px; align-items: center; justify-content: center;">
-     
-     
+
+     <?php 
+     $verifiedIPCId;
+     if(isset($_GET['ipcid'])){
+      $verifiedIPCId = $_GET['ipcid'];
+     }
+     ?>
+         <script>
+                      function confirmVerify(){
+                            if(confirm("Have you checked all these records?")) {
+                                fileSubmit.submit();
+                            } else {
+                              event.preventDefault();
+                            
+                            }
+                        }
+
+                         function confirmDelete(){
+                            if(confirm("Do you need to delete all these records?")) {
+                                fileSubmit.submit();
+                            } else {
+                              event.preventDefault();
+                             
+                            }
+                        }
+        </script>
 	 
-<form action="ipcdata.php" name="reports" id="reports"  method="post"   > 
+<form action="ipcdata.php?verifiedIPCId=<?php echo $verifiedIPCId; ?>" name="reports" id="reports"  method="post"   > 
+
 
 
 <div class="row pb-0 m-0">
-    <div class="col-10 text-end mt-2">
-      Please check the data and click VERIFY button to Save the data. 
+
+<div class="col-4">
+    <a href="ipcdata.php" > 
+   <button  style=" "  class="btn btn-primary  btn-md  py-2" name="">  <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i> Go Back to IPC data  </button>
+</a>
+    </div>
+    <div class="col-4 text-end mt-2" style="font-size: 15px;">
+      Please check all data and select the option. 
     </div>
 
     <div class="col-2">
-<!-- <button type="button" style="text-align:center; float: right; margin-bottom: 40px; " type="submit" class="btn btn-warning  btn-md mb-1" name="submitVerify">VERIFY</button> -->
-<input type="submit" value="Submit" style="text-align:center; float: right; margin-bottom: 40px; " class="btn btn-warning  btn-md mb-1" name="submitVerify">
+<input type="submit" value="VERIFY ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmVerify()" class="btn btn-warning  btn-md mb-1" name="submitVerify">
+
     </div>
+    <div class="col-2">
+<input type="submit" value="DELETE ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmVerify()" class="btn btn-danger  btn-md mb-1" name="submitDelete">
+
+    </div>
+
+
 </div>
 
 </form>
@@ -248,7 +292,9 @@ if(isset($_GET['edit'])){
     </tr>
 <strong>
 <?php
- $sSQL = "SELECT * FROM ipcv_copy";
+
+ $sSQL = "SELECT * FROM ipcv_copy where ipcid= $verifiedIPCId " ;
+
  $objDb2->dbQuery($sSQL);
  $iCount = $objDb2->totalRecords( );
  if($iCount>0)
@@ -269,7 +315,9 @@ if(isset($_GET['edit'])){
     $ipc_amount 								= $res_e2['ipc_amount'];
 	  
 	  
-	  $sSQL6 = "SELECT * FROM ipcv_copy where ipcvid=".$ipcvid;
+
+	  $sSQL6 = "SELECT * FROM ipcv_copy where ipcvid= $ipcvid " ;
+
  	$objDb3->dbQuery($sSQL6);
 	$res_e3=$objDb3->dbFetchArray();
 	  

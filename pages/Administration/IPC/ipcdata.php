@@ -9,6 +9,13 @@ $objDb2  		= new Database();
 $objDb3  		= new Database();
 $objDb4  		= new Database();
 $objDb5  		= new Database();
+
+$objDb6  		= new Database();
+$objDb7  		= new Database();
+$objDb8  		= new Database();
+$objDb9  		= new Database();
+$objDb10  		= new Database();
+
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -181,8 +188,32 @@ if($edit != ""){
 
 if (isset($_POST["submitVerify"])) {
 
-  $sql = "INSERT INTO ipcv_1 (ipcvid, ipcid, boqid,ipcqty) SELECT ipcvid, ipcid, boqid,ipcqty FROM ipcv_copy ";
+
+  $sql_tr = "TRUNCATE ipcv_archieve";
+  $objDb7->dbQuery($sql_tr);
+
+ $sql_i = "INSERT INTO ipcv_archieve (ipcvid, ipcid, boqid,ipcqty) SELECT ipcvid, ipcid, boqid,ipcqty FROM ipcv ";
+	$objDb6->dbQuery($sql_i);
+
+  $sql = "INSERT INTO ipcv (ipcid, boqid,ipcqty) SELECT ipcid, boqid,ipcqty FROM ipcv_copy ";
 	$objDb4->dbQuery($sql);
+
+  $sql1 = "TRUNCATE  ipcv_copy";
+	$objDb5->dbQuery($sql1);
+
+  if(isset($_GET['verifiedIPCId'])){
+    $verifiedIPCId = $_GET['verifiedIPCId'];
+    $sql2 = "UPDATE ipc  SET status=1 WHERE ipcid= $verifiedIPCId";
+    $objDb9->dbQuery($sql2);
+
+   }
+
+}
+
+if (isset($_POST["submitDelete"])) {
+
+
+
 
   $sql1 = "DELETE  FROM ipcv_copy";
 	$objDb5->dbQuery($sql1);
@@ -398,7 +429,10 @@ function group_checkbox()
             <div class="card bg-form">
                 <div class="col-md-8 m-auto py-4" style="color:#fff">
 
-                <h2 style="text-align:center">ADD IPC DATA <span style="text-align:right; float:right"><a href="addipc.php">Back</a></span></h2>
+                <h2 style="text-align:center">ADD IPC DATA 
+                <span style="text-align:right; float:right" ><a href="addipc.php" class="btn btn-secondary px-2 py-1" > 
+                  <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i>  Back</a></span>
+              </h2>
                 <hr>
 	  <form name="frmstgoal" id="frmstgoal" action=""  method="post" onsubmit="" enctype="multipart/form-data" style="margin-top:10px;">
 	  
@@ -609,19 +643,20 @@ function group_checkbox()
 
  <div class ="table-responsive" style="width: 105%;">
 	<table class="table table-striped " > 
-    <tr class="bg-form" style="font-size:12px; color:#CCC;">
+
+    <tr class="bg-form" style="font-size:12px; color:#CCC;  ">
     
-      <th align="center" width="3%"><strong>Sr. No.</strong></th>
-      
-          <th align="center" width="10%"><strong>Package</strong></th>
-      <th align="center" width="10%"><strong>IPC No</strong></th>
-      <th width="10%"><strong>IPC Month</strong></th>
-      <th width="15%"><strong>IPC Start Date</strong></th>
-	  <th width="15%"><strong>IPC End Date</strong></th>
-      <th width="15%"><strong>IPC Submit Date</strong></th>
-	  <th width="10%"><strong>IPC Receive Date</strong></th>
-	  <th width="5%"><strong>Status</strong></th>
-      <th class="center" width="15%"><strong>Action</strong></th>
+      <th align="center" ><strong><?php echo wordwrap("Sr. No",5,"<br><br>\n"); ?> </strong></th>
+      <th align="center" ><strong>Package</strong></th>
+      <th align="center" ><strong>IPC No</strong></th>
+      <th ><strong>IPC Month</strong></th>
+      <th ><strong> <?php echo wordwrap("IPC Start Date",10,"<br><br>\n"); ?> </strong></th>
+	    <th ><strong> <?php echo wordwrap("IPC End Date",10,"<br><br>\n"); ?>  </strong></th>
+      <th ><strong> <?php echo wordwrap("IPC Submit Date",10,"<br><br>\n"); ?> </strong></th>
+	    <th ><strong> <?php echo wordwrap("IPC Receive Date",15,"<br><br>\n"); ?> </strong></th>
+	    <th class="text-center"><strong>Status</strong></th>
+      <th style="text-align:center"><strong>Action</strong></th>
+
 	<!--<th align="center" width="10%"><strong>Log
     </strong></th>-->
     </tr>
@@ -669,23 +704,30 @@ if ($i % 2 == 0) {
 
 ?>
 </strong>
-<tr <?php echo $style; ?>>
+<tr <?php echo $style; ?> style="font-size:12px; ">
 <td width="5px"><center> <?php echo $j;?> </center> </td>
 
-<td width="210px"><?php echo $res_e3['itemname'];?></td>
-<td width="210px"><?=$ipcno;?></td>
-<td width="100px"><?=$ipcmonth;?></td>
-<td width="180px"  ><?=$ipcstartdate;?></td>
-<td width="210px"><?=$ipcenddate;?></td>
-<td width="100px"><?=$ipcsubmitdate;?></td>
-<td width="180px"  ><?=$ipcreceivedate;?></td>
-<td width="180px"  ><?=$status;?></td>
+<td> <?php echo wordwrap($res_e3['itemname'],15,"<br>\n"); ?> </td>
+<td><?=$ipcno;?></td>
+<td><?=$ipcmonth;?></td>
+<td><?=$ipcstartdate;?></td>
+<td><?=$ipcenddate;?></td>
+<td><?=$ipcsubmitdate;?></td>
+<td><?=$ipcreceivedate;?></td>
+<td><?=$status;?></td>
 
-<td style="border-bottom:1px solid #cccccc" width="210px" >&nbsp;
+<td style="border-bottom:1px solid #cccccc; " width="210px" >&nbsp;
 <button type="button" style="text-align:center;" class="btn btn-outline-info btn-sm" onclick="location.href='ipcdata.php?edit=<?php echo $ipcid;?>'">EDIT</button>
 
-<?php  
-if($status3=="0"){
+<?php
+ $sSQL4 = "SELECT * FROM ipcv_copy where ipcid= $ipcid " ;
+ $objDb10->dbQuery($sSQL4);
+ $iCount = $objDb10->totalRecords( );
+ if($iCount>0){ 
+  ?>
+    <button type="button" style="text-align:center; margin-left: 5px;" class=" btn-sm  btn btn-success" onclick="location.href='csvdata.php?msg=1&ipcid=<?php echo $ipcid;?>'">View</button>
+<?php } else if($status3=="0"){
+
 ?>
 <button type="button" style="text-align:center; margin-left: 5px;" class=" btn-sm  btn btn-warning" onclick="location.href='csvdata.php?edit=<?php echo $ipcid;?>'">IMPORT</button>
 <?php } ?>

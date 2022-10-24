@@ -7,6 +7,8 @@ $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
 $objDb3  		= new Database();
+$objDb4  		= new Database();
+$objDb5  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -170,6 +172,24 @@ if($edit != ""){
 	  $status								= $eRes['status'];
 	 }
 }
+
+
+
+
+////////
+//  ipcv_copy 
+
+if (isset($_POST["submitVerify"])) {
+
+  $sql = "INSERT INTO ipcv_1 (ipcvid, ipcid, boqid,ipcqty) SELECT ipcvid, ipcid, boqid,ipcqty FROM ipcv_copy ";
+	$objDb4->dbQuery($sql);
+
+  $sql1 = "DELETE  FROM ipcv_copy";
+	$objDb5->dbQuery($sql1);
+
+
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -586,43 +606,9 @@ function group_checkbox()
      
 	 
 <form name="reports" id="reports"  method="post"   onsubmit="return atleast_onecheckbox(event)" style="display:inline-block"> 
-	<?php /*?><input type="hidden" name="module" id="module" value="<?=$module ?>" onkeyup="showResult(this.value,valueipcno.value,txtipcmonth.value,valueipcstartdate.value,valueipcenddate.value,valueipcsubmitdate.value, valueipcreceivedate.value)"/>
-	<input type="text" name="valueipcno"  id="valueipcno" title="IPC NO" placeholder="IPC NO" style="width:100px"  onkeyup="showResult(module.value,this.value,txtipcmonth.value,valueipcstartdate.value,valueipcenddate.value,valueipcsubmitdate.value, valueipcreceivedate.value)"/>
-	<select name="txtipcmonth" id="txtipcmonth" onchange="showResult(module.value,valueipcno.value,this.value,valueipcstartdate.value,valueipcenddate.value,valueipcsubmitdate.value, valueipcreceivedate.value)">
-	<option value="">Select IPC Month</option>
-			  <?php 
-			  
-			 $sqlg="SELECT left(pd_date,7) as getmonths FROM project_days group by left(pd_date,7) order by left(pd_date,7)";
-			$resg=$objDb1->dbQuery($sqlg);
-			
-			while($row3g=$objDb1->dbFetchArray())
-			{
-			echo $getmonth=$row3g['getmonths'];
-			if($getmonth==$pmonth)
-			{
-			$sel =" selected='selected' ";
-			}
-			else
-			{
-			$sel ="";
-			}
-			
-			?>
-			  <option value="<?php echo $getmonth;?>" <?php echo  $sel; ?>  ><?php echo $getmonth; ?> </option>
-			  <?php
-			  }
-			  
-			  ?>
-			  </select>
-<input type="text" name="valueipcstartdate"  id="valueipcstartdate" title="Start Date" placeholder="Start Date" style="width:100px"  onchange="showResult(module.value,valueipcno.value,txtipcmonth.value,this.value,valueipcenddate.value,valueipcsubmitdate.value, valueipcreceivedate.value)"/>
-<input type="text" name="valueipcenddate"  id="valueipcenddate"  title="End Date" placeholder="End Date" style="width:100px"    onchange="showResult(module.value,valueipcno.value,txtipcmonth.value,valueipcstartdate.value,this.value,valueipcsubmitdate.value, valueipcreceivedate.value)"/>
-<input type="text" name="valueipcsubmitdate"  id="valueipcsubmitdate" title="Submit Date" placeholder="Submit Date" style="width:100px"  onchange="showResult(module.value,valueipcno.value,txtipcmonth.value,valueipcstartdate.value,valueipcenddate.value,this.value, valueipcreceivedate.value)"/>
-<input type="text" name="valueipcreceivedate"  id="valueipcreceivedate"  title="Receive Date" placeholder="Receive Date" style="width:100px"    onchange="showResult(module.value,valueipcno.value,txtipcmonth.value,valueipcstartdate.value,valueipcenddate.value,valueipcsubmitdate.value, this.value)"/>
-<input name="submit" type="submit" value="Print List" formaction="reportipcdata.php"/>
-<div id="search"></div>
-	<div id="without_search"><?php */?>
-    
-	<table class="table table-striped" > 
+
+ <div class ="table-responsive" style="width: 105%;">
+	<table class="table table-striped " > 
     <tr class="bg-form" style="font-size:12px; color:#CCC;">
     
       <th align="center" width="3%"><strong>Sr. No.</strong></th>
@@ -635,8 +621,7 @@ function group_checkbox()
       <th width="15%"><strong>IPC Submit Date</strong></th>
 	  <th width="10%"><strong>IPC Receive Date</strong></th>
 	  <th width="5%"><strong>Status</strong></th>
-      <th align="center" width="15%"><strong>Action
-    </strong></th>
+      <th class="center" width="15%"><strong>Action</strong></th>
 	<!--<th align="center" width="10%"><strong>Log
     </strong></th>-->
     </tr>
@@ -698,7 +683,14 @@ if ($i % 2 == 0) {
 
 <td style="border-bottom:1px solid #cccccc" width="210px" >&nbsp;
 <button type="button" style="text-align:center;" class="btn btn-outline-info btn-sm" onclick="location.href='ipcdata.php?edit=<?php echo $ipcid;?>'">EDIT</button>
+
+<?php  
+if($status3=="0"){
+?>
+<button type="button" style="text-align:center; margin-left: 5px;" class=" btn-sm  btn btn-warning" onclick="location.href='csvdata.php?edit=<?php echo $ipcid;?>'">IMPORT</button>
+<?php } ?>
  </td>
+
 <!-- <td width="210px" align="right" ><a href="log_ipcdata.php?trans_id=<?php echo $ipcid ; ?>&module=<?php echo $module?>" target="_blank">Log</a></td>-->
 </tr>
 <?php        
@@ -706,6 +698,7 @@ if ($i % 2 == 0) {
 	}
 ?>
 </table>
+</div>
 </div>
 </form>
  </div>

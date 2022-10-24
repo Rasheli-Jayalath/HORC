@@ -46,7 +46,9 @@ if(isset($_POST['importSubmit'])){
             
             // Skip the first line
             fgetcsv($csvFile);
+
             $ipcid ;
+
             // Parse data from CSV file line by line
             while(($line = fgetcsv($csvFile)) !== FALSE){
               $lastIndex= sizeof($line);
@@ -70,8 +72,10 @@ if(isset($_POST['importSubmit'])){
             
             $qstring = '?status=succ';
 
+
             // Redirect to the listing page
              header("Location: csvdata.php?msg=1&ipcid=".$ipcid);
+
         }else{
             $qstring = '?status=err';
         }
@@ -149,6 +153,7 @@ if(isset($_GET['edit'])){
             <div class="card bg-form">
                 <div class="col-md-8 m-auto py-4" style="color:#fff">
 
+
                 <h2 style="text-align:center">Import CSV File 
                 <span style="" >   </span>
                 <span style="text-align:right; float:right" ><a href="ipcdata.php" class="btn btn-secondary px-2 py-1" > 
@@ -201,7 +206,6 @@ if(isset($_GET['edit'])){
             </div>  
        </div>
 
-       
 
       </div>
             </div>
@@ -213,6 +217,7 @@ if(isset($_GET['edit'])){
          <?php }else if(isset($_GET['msg'])&& $_GET['msg']==1){ ?>
 
          <div class="row"  style = "margin-top: 20px;margin-right:15px; align-items: center; justify-content: center;">
+
      <?php 
      $verifiedIPCId;
      if(isset($_GET['ipcid'])){
@@ -263,7 +268,7 @@ if(isset($_GET['edit'])){
 
     </div>
 
-    
+
 </div>
 
 </form>
@@ -287,7 +292,9 @@ if(isset($_GET['edit'])){
     </tr>
 <strong>
 <?php
+
  $sSQL = "SELECT * FROM ipcv_copy where ipcid= $verifiedIPCId " ;
+
  $objDb2->dbQuery($sSQL);
  $iCount = $objDb2->totalRecords( );
  if($iCount>0)
@@ -308,7 +315,9 @@ if(isset($_GET['edit'])){
     $ipc_amount 								= $res_e2['ipc_amount'];
 	  
 	  
+
 	  $sSQL6 = "SELECT * FROM ipcv_copy where ipcvid= $ipcvid " ;
+
  	$objDb3->dbQuery($sSQL6);
 	$res_e3=$objDb3->dbFetchArray();
 	  

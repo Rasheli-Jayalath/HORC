@@ -9,11 +9,13 @@ $objDb2  		= new Database();
 $objDb3  		= new Database();
 $objDb4  		= new Database();
 $objDb5  		= new Database();
+
 $objDb6  		= new Database();
 $objDb7  		= new Database();
 $objDb8  		= new Database();
 $objDb9  		= new Database();
 $objDb10  		= new Database();
+
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -186,6 +188,7 @@ if($edit != ""){
 
 if (isset($_POST["submitVerify"])) {
 
+
   $sql_tr = "TRUNCATE ipcv_archieve";
   $objDb7->dbQuery($sql_tr);
 
@@ -208,6 +211,7 @@ if (isset($_POST["submitVerify"])) {
 }
 
 if (isset($_POST["submitDelete"])) {
+
 
 
 
@@ -639,6 +643,7 @@ function group_checkbox()
 
  <div class ="table-responsive" style="width: 105%;">
 	<table class="table table-striped " > 
+
     <tr class="bg-form" style="font-size:12px; color:#CCC;  ">
     
       <th align="center" ><strong><?php echo wordwrap("Sr. No",5,"<br><br>\n"); ?> </strong></th>
@@ -651,6 +656,7 @@ function group_checkbox()
 	    <th ><strong> <?php echo wordwrap("IPC Receive Date",15,"<br><br>\n"); ?> </strong></th>
 	    <th class="text-center"><strong>Status</strong></th>
       <th style="text-align:center"><strong>Action</strong></th>
+
 	<!--<th align="center" width="10%"><strong>Log
     </strong></th>-->
     </tr>
@@ -712,6 +718,7 @@ if ($i % 2 == 0) {
 
 <td style="border-bottom:1px solid #cccccc; " width="210px" >&nbsp;
 <button type="button" style="text-align:center;" class="btn btn-outline-info btn-sm" onclick="location.href='ipcdata.php?edit=<?php echo $ipcid;?>'">EDIT</button>
+
 <?php
  $sSQL4 = "SELECT * FROM ipcv_copy where ipcid= $ipcid " ;
  $objDb10->dbQuery($sSQL4);
@@ -720,6 +727,7 @@ if ($i % 2 == 0) {
   ?>
     <button type="button" style="text-align:center; margin-left: 5px;" class=" btn-sm  btn btn-success" onclick="location.href='csvdata.php?msg=1&ipcid=<?php echo $ipcid;?>'">View</button>
 <?php } else if($status3=="0"){
+
 ?>
 <button type="button" style="text-align:center; margin-left: 5px;" class=" btn-sm  btn btn-warning" onclick="location.href='csvdata.php?edit=<?php echo $ipcid;?>'">IMPORT</button>
 <?php } ?>

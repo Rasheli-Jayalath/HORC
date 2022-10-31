@@ -254,6 +254,11 @@ if(isset($_GET['edit'])){
     <a href="ipcdata.php" > 
    <button  style=" "  class="btn btn-primary  btn-md  py-2" name="">  <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i> Go Back to IPC data  </button>
 </a>
+
+    </div>
+    <div class="col-4 text-end mt-2" style="font-size: 15px;">
+      Please check all data and select the option. 
+
     </div>
     <div class="col-4 text-end mt-2" style="font-size: 15px;">
       Please check all data and select the option. 
@@ -264,7 +269,13 @@ if(isset($_GET['edit'])){
 
     </div>
     <div class="col-2">
+
+<input type="submit" value="VERIFY ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmVerify()" class="btn btn-warning  btn-md mb-1" name="submitVerify">
+
+    </div>
+    <div class="col-2">
 <input type="submit" value="DELETE ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmDelete()" class="btn btn-danger  btn-md mb-1" name="submitDelete">
+
 
     </div>
 

@@ -6,6 +6,14 @@ $module			= "Progress";
 $objDb  		= new Database();
 $objDb1  		= new Database();
 $objDb2  		= new Database();
+$objDb3  		= new Database();
+$objDb4  		= new Database();
+$objDb5  		= new Database();
+$objDb6  		= new Database();
+$objDb7  		= new Database();
+
+$objDb9  		= new Database();
+$objDb10  		= new Database();
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -127,6 +135,36 @@ if($edit != ""){
 }
 
 ?>
+<?php
+
+if (isset($_POST["submitVerify"])) {
+
+
+  $sql_tr = "TRUNCATE progress_archive";
+  $objDb7->dbQuery($sql_tr);
+
+ $sql_i = "INSERT INTO progress_archive ( itemid,  progressdate, progressqty) SELECT  itemid, progressdate, progressqty FROM progress ";
+ $objDb6->dbQuery($sql_i);
+
+  $sql = "INSERT INTO progress ( itemid,  progressdate, progressqty) SELECT  itemid, progressdate, progressqty FROM progress_copy ";
+	$objDb4->dbQuery($sql);
+
+  $sql1 = "TRUNCATE  progress_copy";
+	$objDb5->dbQuery($sql1);
+
+}
+
+if(isset($_GET['verifiedpmid'])){
+  $verifiedpmid = $_GET['verifiedpmid'];
+  $sql2 = "UPDATE progressmonth  SET status=1 WHERE pmid= $verifiedpmid";
+  $objDb9->dbQuery($sql2);
+
+}
+if (isset($_POST["submitDelete"])) {
+$sql1 = "DELETE  FROM progress_copy";
+$objDb5->dbQuery($sql1);
+}
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -134,7 +172,7 @@ if($edit != ""){
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Add IPC Entry</title>
+  <title>Add Progress Entry</title>
 
   <!-- plugins:css -->
   <link rel="stylesheet" href="../../../vendors/feather/feather.css">
@@ -306,8 +344,10 @@ function group_checkbox()
 			$action="Add ";
 			}
 			?>
-            <?php echo $action.$module; ?><span style="text-align:right; float:right"><a href="addprogress.php?temp_id=<?php echo $_REQUEST["temp_id"];?>">Back</a></span>
-			           
+            <?php echo $action.$module; ?>
+            <span style="text-align:right; float:right" ><a href="addprogress.php?temp_id=<?php echo $_REQUEST["temp_id"];?>p" class="btn btn-secondary px-2 py-1" > 
+                  <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i>  Back</a></span>
+               
                   </h2>
                 <hr>
 	  <form name="frmstgoal" id="frmstgoal" action=""  method="post" onsubmit="" enctype="multipart/form-data" style="margin-top:10px;">
@@ -507,7 +547,25 @@ if ($i % 2 == 0) {
 <td width="180px"  ><?php echo $remarks;?></td>
 
 <td style="border-bottom:1px solid #cccccc" width="210px" >&nbsp;
- <a href="progress.php?edit=<?php echo $pmid;?>&temp_id=<?php echo $_REQUEST["temp_id"];?>"  >EDIT</a></td>
+
+ <a href="progress.php?edit=<?php echo $pmid;?>&temp_id=<?php echo $_REQUEST["temp_id"];?>"  >
+ <button type="button" style="text-align:center;" class="btn btn-outline-info btn-sm" >EDIT</button>
+</a>
+
+<?php
+ $sSQL4 = "SELECT * FROM progress_copy where pgid= $pmid " ;
+ $objDb10->dbQuery($sSQL4);
+ $iCount = $objDb10->totalRecords( );
+ if($iCount>0){ 
+  ?>
+    <button type="button" style="text-align:center; margin-left: 5px;" class=" btn-sm  btn btn-success" onclick="location.href='csvdata.php?msg=1&pmid=<?php echo $pmid;?>'">View</button>
+<?php } else if($status3=="0"){
+
+?>
+<button type="button" style="text-align:center; margin-left: 5px;" class=" btn-sm  btn btn-warning" onclick="location.href='csvdata.php?edit=<?php echo $pmid;?>'">IMPORT</button>
+<?php } ?>
+
+</td>
 <!-- <td width="210px" align="right" ><a href="log_pm.php?trans_id=<?php// echo $pmid ; ?>&module=<?php //echo $module?>" target="_blank">Log</a></td>
 --></tr>  
     

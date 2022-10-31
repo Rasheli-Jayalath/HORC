@@ -94,7 +94,7 @@ $btem="SELECT * FROM baseline_template WHERE temp_id=$temp_id";
 
 <?php
 
-$per_page = 50;
+$per_page = 15;
 if($_GET) {
 	$page=$_GET['page'];
 }
@@ -382,3 +382,6 @@ function AddNewSizeProject<?php echo $itemid; ?>(){
 	</table>
 
     <h6 class="text-end mt-1"> Number of Records : <?php echo $recordsCount ?> </h6>
+    <script>	
+    hideSpinner();
+	</script>

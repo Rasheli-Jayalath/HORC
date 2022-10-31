@@ -47,20 +47,22 @@ if(isset($_POST['importSubmit'])){
             // Skip the first line
             fgetcsv($csvFile);
 
-            $ipcid ;
+            $pmid ;
 
             // Parse data from CSV file line by line
             while(($line = fgetcsv($csvFile)) !== FALSE){
               $lastIndex= sizeof($line);
                 // Get row data
-                $ipcid   = $_GET['edit'];
-                $boqid   = $line[$lastIndex-9];
-                $boqcode = $line[$lastIndex-8];
-                $boqdetail  =   preg_replace('/[^A-Za-z0-9\-]/',' ', $line[$lastIndex-7]);  
-                $boqrate = $line[$lastIndex-3];
-                $ipcqty = $line[$lastIndex-1];
-                $ipc_amount = $ipcqty*$boqrate ;
-                    $sql1 = "INSERT INTO ipcv_copy (ipcid, boqid, boqcode, boqdetail, boqrate,  ipcqty, ipc_amount) VALUES ('".$ipcid."', '".$boqid."','".$boqcode."', '".$boqdetail."', '".$boqrate."', '".$ipcqty."', '".$ipc_amount."' )";  
+                $pmid   = $_GET['edit'];
+                $itemid   = $line[$lastIndex-6];
+                // $pmid   = $line[$lastIndex-6];
+                // $pmid   = 1;
+                $progressdate   = $line[$lastIndex-5];
+                $itemcode = $line[$lastIndex-8];
+                $itemname  =   preg_replace('/[^A-Za-z0-9\-]/',' ', $line[$lastIndex-7]);  
+                $baseline = $line[$lastIndex-3];
+                $progressqty = $line[$lastIndex-1];
+                    $sql1 = "INSERT INTO  progress_copy (itemid, pmid, progressdate, itemcode,  itemname, baseline, progressqty) VALUES ( '".$itemid."','".$pmid."', '".$progressdate."', '".$itemcode."', '".$itemname."', '".$baseline."' , '".$progressqty."')";  
                     echo $sql1 ;                      
                     // $db->query($sql1 );
                     $objDb1->dbQuery($sql1);
@@ -74,7 +76,7 @@ if(isset($_POST['importSubmit'])){
 
 
             // Redirect to the listing page
-             header("Location: csvdata.php?msg=1&ipcid=".$ipcid);
+             header("Location: csvdata.php?msg=1&pmid=".$pmid);
 
         }else{
             $qstring = '?status=err';
@@ -156,7 +158,7 @@ if(isset($_GET['edit'])){
 
                 <h2 style="text-align:center">Import CSV File 
                 <span style="" >   </span>
-                <span style="text-align:right; float:right" ><a href="ipcdata.php" class="btn btn-secondary px-2 py-1" > 
+                <span style="text-align:right; float:right" ><a href="progress.php" class="btn btn-secondary px-2 py-1" > 
                   <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i>  Back</a></span>
                 </h2>
                 <hr>
@@ -219,9 +221,9 @@ if(isset($_GET['edit'])){
          <div class="row"  style = "margin-top: 20px;margin-right:15px; align-items: center; justify-content: center;">
 
      <?php 
-     $verifiedIPCId;
-     if(isset($_GET['ipcid'])){
-      $verifiedIPCId = $_GET['ipcid'];
+     $verifiedpmid;
+     if(isset($_GET['pmid'])){
+      $verifiedpmid = $_GET['pmid'];
      }
      ?>
          <script>
@@ -244,38 +246,27 @@ if(isset($_GET['edit'])){
                         }
         </script>
 	 
-<form action="ipcdata.php?verifiedIPCId=<?php echo $verifiedIPCId; ?>" name="reports" id="reports"  method="post"   > 
+<form action="progress.php?verifiedpmid=<?php echo $verifiedpmid; ?>" name="reports" id="reports"  method="post"   > 
 
 
 
 <div class="row pb-0 m-0">
 
 <div class="col-4">
-    <a href="ipcdata.php" > 
-   <button  style=" "  class="btn btn-primary  btn-md  py-2" name="">  <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i> Go Back to IPC data  </button>
+    <a href="progress.php" > 
+   <button  style=" "  class="btn btn-primary  btn-md  py-2" name="">  <i  class="mdi mdi-keyboard-backspace mb-5 text-bold" style="vertical-align: top;"></i> Go Back to Progress data  </button>
 </a>
-
-    </div>
-    <div class="col-4 text-end mt-2" style="font-size: 15px;">
-      Please check all data and select the option. 
-
     </div>
     <div class="col-4 text-end mt-2" style="font-size: 15px;">
       Please check all data and select the option. 
     </div>
 
     <div class="col-2">
-<input type="submit" value="VERIFY ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmVerify()" class="btn btn-warning  btn-md mb-1" name="submitVerify">
-
-    </div>
-    <div class="col-2">
-
 <input type="submit" value="VERIFY ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmVerify()" class="btn btn-warning  btn-md mb-1" name="submitVerify">
 
     </div>
     <div class="col-2">
 <input type="submit" value="DELETE ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmDelete()" class="btn btn-danger  btn-md mb-1" name="submitDelete">
-
 
     </div>
 
@@ -288,15 +279,15 @@ if(isset($_GET['edit'])){
 	<table class="table table-striped" > 
     <tr class="bg-form" style="font-size:12px; color:#CCC;">
     
-      <th align="center" width="3%"><strong>ipcvid</strong></th>
+      <th align="center" width="3%"><strong>pgid</strong></th>
       
-          <th align="center" width="10%"><strong>ipcid</strong></th>
-      <th align="center" width="10%"><strong>boqid</strong></th>
-      <th width="10%"><strong>BOQ Code</strong></th>
-      <th width="15%"><strong>BOQ Details</strong></th>
-      <th width="7%"><strong>BOQ Rate</strong></th>
-	  <th width="7%"><strong>IPC QTY</strong></th>
-    <th width="7%"><strong>ipc amount</strong></th>
+          <th align="center" width="10%"><strong>itemid</strong></th>
+      <th align="center" width="10%"><strong>pmid</strong></th>
+      <th width="10%"><strong>progressdate</strong></th>
+      <th width="15%"><strong>itemcode</strong></th>
+      <th width="7%"><strong>itemname</strong></th>
+	  <th width="7%"><strong>baseline</strong></th>
+    <th width="7%"><strong>progressqty</strong></th>
     <th width="7%"><strong>Action</strong></th>
       
 	<!--<th align="center" width="10%"><strong>Log
@@ -305,7 +296,7 @@ if(isset($_GET['edit'])){
 <strong>
 <?php
 
- $sSQL = "SELECT * FROM ipcv_copy where ipcid= $verifiedIPCId " ;
+ $sSQL = "SELECT * FROM  progress_copy where pmid= $verifiedpmid " ;
 
  $objDb2->dbQuery($sSQL);
  $iCount = $objDb2->totalRecords( );
@@ -317,18 +308,18 @@ if(isset($_GET['edit'])){
 	{
 	 $j++;
 		
-	  $ipcvid 								= $res_e2['ipcvid'];
-	  $ipcid 								= $res_e2['ipcid'];
-    $boqid 								= $res_e2['boqid'];
-    $boqcode 								= $res_e2['boqcode'];
-    $boqdetail 								= $res_e2['boqdetail'];
-    $boqrate 								= $res_e2['boqrate'];
-    $ipcqty 								= $res_e2['ipcqty'];
-    $ipc_amount 								= $res_e2['ipc_amount'];
+	  $pgid 								= $res_e2['pgid'];
+	  $itemid 								= $res_e2['itemid'];
+    $pmid 								= $res_e2['pmid'];
+    $progressdate 								= $res_e2['progressdate'];
+    $itemcode 								= $res_e2['itemcode'];
+    $itemname 								= $res_e2['itemname'];
+    $baseline 								= $res_e2['baseline'];
+    $progressqty 								= $res_e2['progressqty'];
 	  
 	  
 
-	  $sSQL6 = "SELECT * FROM ipcv_copy where ipcvid= $ipcvid " ;
+	  $sSQL6 = "SELECT * FROM  progress_copy where pgid= $pgid " ;
 
  	$objDb3->dbQuery($sSQL6);
 	$res_e3=$objDb3->dbFetchArray();
@@ -351,31 +342,23 @@ if ($i % 2 == 0) {
 ?>
 </strong>
 <tr <?php echo $style; ?>>
-<td width="5px"><center> <?php echo $ipcvid ;?> </center> </td>
+<td width="5px"><center> <?php echo $pgid ;?> </center> </td>
 
-<td width="210px"><?php echo $ipcid ;?></td>
-<td width="210px"><?=$boqid ;?></td>
-<td width="100px"><?=$boqcode;?></td>
-<td width="180px"  > <?php echo wordwrap($boqdetail,30,"<br>\n"); ?> </td>
-<td width="80px"><?=$boqrate;?></td>
-<td width="80px"><?=$ipcqty;?></td>
-<td width="80px"><?=$ipc_amount;?></td>
+<td width="210px"><?php echo $itemid ;?></td>
+<td width="210px"><?=$pmid ;?></td>
+<td width="100px"><?=$progressdate;?></td>
+<td width="180px"  > <?php echo wordwrap($itemname,30,"<br>\n"); ?> </td>
+<td width="80px"><?=$itemcode;?></td>
+<td width="80px"><?=$baseline;?></td>
+<td width="80px"><?=$progressqty;?></td>
 <td width="80px" style="text-align:center">
 <button  title="Edit" href="javascript:void(null);" class="btn btn-outline-primary btn-fw px-1 py-1 " 
-						   onClick="window.open('edit_before_verify.php?ipcvid=<?php echo $ipcvid; ?>', 'Manage drawings ','width=800px,height=400px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=100,top=100');"  style=" font-size: 100%;">
+						   onClick="window.open('edit_before_verify.php?pgid=<?php echo $pgid; ?>', 'Manage drawings ','width=870px,height=800px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  style=" font-size: 100%;">
 						   <i class="ti-pencil btn-icon-prepend" style="font-size: 15px;"></i>  </button>
 
-               <!-- <button  title="Edit" href="javascript:void(null);" class="btn btn-outline-warning btn-fw px-1 py-1 " 
-						   onClick="window.open('sp_drawing_album_input.php?dwgid=<?php echo $pdData['dwgid']; ?>&album_id=<?php echo $pdData['album_id']; ?>', 'Manage drawings ','width=870px,height=800px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  style=" font-size: 100%;">
-						   <i class="ti-pencil btn-icon-prepend" style="font-size: 15px;"></i>  </button> -->
 
 </td>
 
-
-<!-- <td style="border-bottom:1px solid #cccccc" width="210px" >&nbsp;
-<button type="button" style="text-align:center;" class="btn btn-outline-info btn-sm" onclick="location.href='ipcdata.php?edit=<?php echo $ipcid;?>'">EDIT</button>
- </td> -->
-<!-- <td width="210px" align="right" ><a href="log_ipcdata.php?trans_id=<?php echo $ipcid ; ?>&module=<?php echo $module?>" target="_blank">Log</a></td>-->
 </tr>
 <?php        
 	}

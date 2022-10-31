@@ -437,64 +437,6 @@ function add_sd(fieldid)
 
   }
 </script>
-
-</head>
-<body>
-  <div class="container-scroller">
-
-     <!-- partial:partials/_navbar.html -->
-     <div id="partials-navbar"></div>
-     <!-- partial -->
-
-     <div class="container-fluid page-body-wrapper" id="pagebodywraper">
-
-
-       <!-- partial:partials/_sidebar.html -->
-       <div class="sidebar sidebar-offcanvas" id="partials-sidebar-offcanvas"></div>
-       <!-- partial -->
-
-      <div class="main-panel" id="mainpanel">
-      <div class="content-wrapper">
-        <div class="row">
-
-        <div class="col-md-12" style="margin-bottom:10px;">
-   
-
-
-      </div>
-
-          <div class="col-md-12 stretch-card" style="padding-left:0px;">
-
-              <!-- Table All Data DIV-->
-              <div class="col-md-12" id="table_all_data">
-             <!-- <h1> <?php //echo $module; ?> Entry Control Panel</h1>-->
-<form name="reports" id="reports"  method="post"   style="display:inline-block; width:100%;" enctype="multipart/form-data"> 
-		<div style="margin-bottom:12px; width:100%">
-		<!--<input type="submit" value="Add IPC Data" formaction="ipcdata.php"/>-->
-		
-        
-        <?php  if($spgentry_flag==1 || $spgadm_flag==1)
-		{
-		?>
-		<a href="progress.php?temp_id=<?php echo $temp_id;?>"  class=" btn btn-warning  btn-md">Add Progress Month</a>
-		<?php
-		}
-		else
-		{
-		?>
-		<a href="javascript:void(0);" style="opacity: 0.5;" class=" btn btn-warning  btn-md" >Add Progress Month</a>
-		<?php
-		}
-		?>
-		</div>
-<?php /*?>		
-<input type="hidden" name="module" id="module" value="<?=$module ?>" onkeyup="showResult(this.value,valuestage.value,valueitemcode.value,valueitemname.value,valueisentry.value)"/>
-<input type="text" name="valuestage"  id="valuestage" title="Stage" placeholder="Stage" style="width:100px"  onkeyup="showResult(module.value,this.value,valueitemcode.value,valueitemname.value,valueisentry.value)"/>
-<input type="text" name="valueitemcode"  id="valueitemcode"  title="Item Code" placeholder="Item Code" style="width:100px"    onkeyup="showResult(module.value,valuestage.value,this.value,valueitemname.value,valueisentry.value)"/>
-<input type="text" name="valueitemname"  id="valueitemname" title="Item Name" placeholder="Item Name" style="width:100px"    onkeyup="showResult(module.value,valuestage.value,valueitemcode.value,this.value,valueisentry.value)"/>
-<input type="text" name="valueisentry"  id="valueisentry" title="Is Entry" placeholder="Is Entry" style="width:100px"    onkeyup="showResult(module.value,valuestage.value,valueitemcode.value,valueitemname.value,this.value)"/>
-<input name="submit" type="submit" value="Print List" formaction="reportipc.php"/><?php */?>
-<div id="search"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
@@ -566,8 +508,107 @@ $(document).ready(function(){
         }
     });
 });
+
+// Function to hide the Spinner
+            function hideSpinner() {
+                document.getElementById('spinner')
+                        .style.display = 'none';
+            }
+
+
+
+                 // Function to hide the Spinner
+            function showSpinner() {
+
+
+
+                   document.getElementById('spinner').style.display = 'block';
+
+
+
+                   function refreshTime() {
+
+
+
+                       if($('#collapseWidthExample').hasClass('collapse'))
+                        {
+                          document.getElementById('spinner').style.display = 'none';
+                        }
+
+
+
+                 }
+
+
+
+                 setInterval(refreshTime, 10);
+
+
+
+               
+            }
 </script>
+</head>
+<body>
+  <div class="container-scroller">
+
+     <!-- partial:partials/_navbar.html -->
+     <div id="partials-navbar"></div>
+     <!-- partial -->
+
+     <div class="container-fluid page-body-wrapper" id="pagebodywraper">
+
+
+       <!-- partial:partials/_sidebar.html -->
+       <div class="sidebar sidebar-offcanvas" id="partials-sidebar-offcanvas"></div>
+       <!-- partial -->
+
+      <div class="main-panel" id="mainpanel">
+      <div class="content-wrapper">
+        <div class="row">
+
+        <div class="col-md-12" style="margin-bottom:10px;">
+   
+
+
+      </div>
+
+          <div class="col-md-12 stretch-card" style="padding-left:0px;">
+
+              <!-- Table All Data DIV-->
+              <div class="col-md-12" id="table_all_data">
+             <!-- <h1> <?php //echo $module; ?> Entry Control Panel</h1>-->
+<form name="reports" id="reports"  method="post"   style="display:inline-block; width:100%;" enctype="multipart/form-data"> 
+		<div style="margin-bottom:12px; width:100%">
+		<!--<input type="submit" value="Add IPC Data" formaction="ipcdata.php"/>-->
+		
+        
+        <?php  if($spgentry_flag==1 || $spgadm_flag==1)
+		{
+		?>
+		<a href="progress.php?temp_id=<?php echo $temp_id;?>"  class=" btn btn-warning  btn-md">Add Progress Month</a>
+		<?php
+		}
+		else
+		{
+		?>
+		<a href="javascript:void(0);" style="opacity: 0.5;" class=" btn btn-warning  btn-md" >Add Progress Month</a>
+		<?php
+		}
+		?>
+		</div>
+<div id="search"></div>
+
 <div id="main-filter">
+<!-- Spinner -->
+  <div class="text-center" style="  position: absolute; left: 50%; top: 50%; z-index: 1;">
+      <div id="spinner" style="width: 60px; height: 60px;" class="spinner-border text-primary" role="status">
+           <span class="sr-only"></span>
+      </div>
+  </div>
+<!-- Spinner -->
+</div>
+</form>
 <form action="" method="post" style="margin-top: 20px;" class="pb-2">
 
 
@@ -703,13 +744,6 @@ $(document).ready(function(){
         <option value="">Select level5</option>
     </select> -->
 
-
-</form>
-
-
-</div>
-
-
 <div id="without_search" class="pt-0">
 <?php 
 if(isset($_POST['submit'])){ 
@@ -729,7 +763,7 @@ if(isset($_POST['submit'])){
 
 
 <?php
-	$per_page = 50;
+	$per_page = 15;
 	//Calculating no of pages
   $sql = "";
 
@@ -778,7 +812,30 @@ var totalPages = "<?php if($pages>0){echo $pages; }else{echo 0 ;} ?>";
 if(isset($_POST['submit']) && $_POST['level1']>0){ 
 
 ?>
-     <h6 class="text-primary"> <span>&nbsp;&nbsp;<br> &nbsp; Total Records for this filtered result  : 	<?php echo $count; ?></span> </h6>
+  <div class="row">
+    <div class="col-11 row  ">
+        <h6 class="text-primary"> <span>&nbsp;&nbsp;<br> &nbsp; Total Records for this filtered result  : 	<?php echo $count; ?></span> </h6>
+    </div>
+    <div class="col-1">         
+    <div class="col-1">
+    <?php 
+    if($_POST['level3']>0 || $_POST['level4']>0){
+
+     }
+
+    else if($_POST['level1']>0 || $_POST['level2']>0){ 
+
+?>
+        <a href="exportData.php?pcd=<?php echo $pcd?>"  class="btn btn-info bg-primary text-white px-3 mx-1 py-1" ><i class="dwn"></i> Export</a>
+        <?php 
+
+}
+  ?>
+
+      </div>
+     </div>
+ </div>
+
 <?php 
 
 }else{

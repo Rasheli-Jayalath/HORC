@@ -11,21 +11,9 @@ $objDb4  		= new Database();
 $objDb5  		= new Database();
 $objDb6  		= new Database();
 $objDb7  		= new Database();
-<<<<<<< HEAD
-$objDb8  		= new Database();
-$objDb9  		= new Database();
-$objDb10  		= new Database();
-$objDb11  		= new Database();
-$objDb12  		= new Database();
-$objDb13  		= new Database();
-$objDb14  		= new Database();
-$objDb15  		= new Database();
-$objDb16  		= new Database();
-=======
 
 $objDb9  		= new Database();
 $objDb10  		= new Database();
->>>>>>> 4e51d52fc2c1dcdca258df7aab7043efa389a57b
 $objAdminUser   = new AdminUser();
 $user_cd=$_SESSION['ne_user_cd'];
 $user_type=$_SESSION['ne_user_type'];
@@ -151,37 +139,12 @@ if($edit != ""){
 
 if (isset($_POST["submitVerify"])) {
 
-<<<<<<< HEAD
-$sql_tr1 = "TRUNCATE activity_archive";
-  $objDb8->dbQuery($sql_tr1);
-
- $sql_i1 = "INSERT INTO activity_archive(aid, itemid, startdate, enddate, rid, baseline, temp_id, progressmonth, total_progress, required_rate, actual_rate, expected_date, total_days, days_elapsed, isdelay, isdelayed) SELECT aid, itemid, startdate, enddate, rid, baseline, temp_id, progressmonth, total_progress, required_rate, actual_rate, expected_date, total_days, days_elapsed, isdelay, isdelayed FROM activity";
- $objDb11->dbQuery($sql_i1);
- 
- $sql_tr2 = "TRUNCATE activity0_archive";
-  $objDb12->dbQuery($sql_tr2);
-
- $sql_i2 = "INSERT INTO activity0_archive(said, itemid, budgetdate, total_baseline, commulative_baseline, total_progress, commulative_progress) SELECT said, itemid, budgetdate, total_baseline, commulative_baseline, total_progress, commulative_progress FROM activity0";
- $objDb13->dbQuery($sql_i2);
- 
- $sql_tr3 = "TRUNCATE planned_archive";
-  $objDb14->dbQuery($sql_tr3);
-
- $sql_i3 = "INSERT INTO planned_archive(plid, itemid, budgetdate, mwdays, budgetqty, commulative_qty, percentage, commulative_percentage, budgetamount, actual_qty, actual_commulative_qty, actual_percentage, actual_commulative_percentage) SELECT plid, itemid, budgetdate, mwdays, budgetqty, commulative_qty, percentage, commulative_percentage, budgetamount, actual_qty, actual_commulative_qty, actual_percentage, actual_commulative_percentage FROM planned";
- $objDb15->dbQuery($sql_i3);
-=======
->>>>>>> 4e51d52fc2c1dcdca258df7aab7043efa389a57b
 
   $sql_tr = "TRUNCATE progress_archive";
   $objDb7->dbQuery($sql_tr);
 
  $sql_i = "INSERT INTO progress_archive ( itemid,  progressdate, progressqty) SELECT  itemid, progressdate, progressqty FROM progress ";
  $objDb6->dbQuery($sql_i);
-<<<<<<< HEAD
- 
- 
-=======
->>>>>>> 4e51d52fc2c1dcdca258df7aab7043efa389a57b
 
   $sql = "INSERT INTO progress ( itemid,  progressdate, progressqty) SELECT  itemid, progressdate, progressqty FROM progress_copy ";
 	$objDb4->dbQuery($sql);

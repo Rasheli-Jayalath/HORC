@@ -57,19 +57,16 @@ if(isset($_POST['importSubmit'])){
                 $itemid   = $line[$lastIndex-6];
                 // $pmid   = $line[$lastIndex-6];
                 // $pmid   = 1;
-                $progressdate   = date('Y-m-d',strtotime($line[$lastIndex-2]));
+                $progressdate   = $line[$lastIndex-5];
                 $itemcode = $line[$lastIndex-8];
                 $itemname  =   preg_replace('/[^A-Za-z0-9\-]/',' ', $line[$lastIndex-7]);  
-               $baseline = $line[$lastIndex-3];
+                $baseline = $line[$lastIndex-3];
                 $progressqty = $line[$lastIndex-1];
-				if($progressqty!=0 && $progressqty!='' && $progressqty!=NULL)
-				{
                     $sql1 = "INSERT INTO  progress_copy (itemid, pmid, progressdate, itemcode,  itemname, baseline, progressqty) VALUES ( '".$itemid."','".$pmid."', '".$progressdate."', '".$itemcode."', '".$itemname."', '".$baseline."' , '".$progressqty."')";  
                     echo $sql1 ;                      
-                 
+                    // $db->query($sql1 );
                     $objDb1->dbQuery($sql1);
-               
-			}
+                // }
             }
             
             // Close opened CSV file
@@ -287,8 +284,8 @@ if(isset($_GET['edit'])){
           <th align="center" width="10%"><strong>itemid</strong></th>
       <th align="center" width="10%"><strong>pmid</strong></th>
       <th width="10%"><strong>progressdate</strong></th>
-      <th width="15%"><strong>Item Name </strong></th>
-      <th width="7%"><strong> item Code</strong></th>
+      <th width="15%"><strong>itemcode</strong></th>
+      <th width="7%"><strong>itemname</strong></th>
 	  <th width="7%"><strong>baseline</strong></th>
     <th width="7%"><strong>progressqty</strong></th>
     <th width="7%"><strong>Action</strong></th>
@@ -356,7 +353,7 @@ if ($i % 2 == 0) {
 <td width="80px"><?=$progressqty;?></td>
 <td width="80px" style="text-align:center">
 <button  title="Edit" href="javascript:void(null);" class="btn btn-outline-primary btn-fw px-1 py-1 " 
-						   onClick="window.open('edit_before_verify.php?pgid=<?php echo $pgid; ?>', 'Manage drawings ','width=800px,height=400px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=100,top=100');"  style=" font-size: 100%;">
+						   onClick="window.open('edit_before_verify.php?pgid=<?php echo $pgid; ?>', 'Manage drawings ','width=870px,height=800px,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=0,left=0,top=0');"  style=" font-size: 100%;">
 						   <i class="ti-pencil btn-icon-prepend" style="font-size: 15px;"></i>  </button>
 
 

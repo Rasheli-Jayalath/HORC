@@ -60,11 +60,14 @@ if(isset($_POST['importSubmit'])){
                 $boqrate = $line[$lastIndex-3];
                 $ipcqty = $line[$lastIndex-1];
                 $ipc_amount = $ipcqty*$boqrate ;
+				if($ipcqty!=0||$ipcqty!=""||$ipcqty!=NULL)
+				{
                     $sql1 = "INSERT INTO ipcv_copy (ipcid, boqid, boqcode, boqdetail, boqrate,  ipcqty, ipc_amount) VALUES ('".$ipcid."', '".$boqid."','".$boqcode."', '".$boqdetail."', '".$boqrate."', '".$ipcqty."', '".$ipc_amount."' )";  
                     echo $sql1 ;                      
-                    // $db->query($sql1 );
+                  
                     $objDb1->dbQuery($sql1);
-                // }
+               
+			}
             }
             
             // Close opened CSV file
@@ -269,6 +272,9 @@ if(isset($_GET['edit'])){
 
     </div>
     <div class="col-2">
+<<<<<<< HEAD
+<input type="submit" value="DELETE ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmDelete()" class="btn btn-danger  btn-md mb-1" name="submitDelete">
+=======
 
 <input type="submit" value="VERIFY ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmVerify()" class="btn btn-warning  btn-md mb-1" name="submitVerify">
 
@@ -276,6 +282,7 @@ if(isset($_GET['edit'])){
     <div class="col-2">
 <input type="submit" value="DELETE ALL" style="text-align:center; float: right; margin-bottom: 40px; " onClick="confirmDelete()" class="btn btn-danger  btn-md mb-1" name="submitDelete">
 
+>>>>>>> 4e51d52fc2c1dcdca258df7aab7043efa389a57b
 
     </div>
 

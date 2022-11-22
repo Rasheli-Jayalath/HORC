@@ -15,7 +15,7 @@
 		$dbCfg['host']			= "localhost";
 		$dbCfg['db_user']		= "root";
 		$dbCfg['db_passwd']		= "";
-		$dbCfg['db_name']		= "che_pmis";
+		$dbCfg['db_name']		= "mpsip_new_pmis_live";
 	}
 	
 		/*********** Define the values *********/

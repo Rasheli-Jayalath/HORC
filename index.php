@@ -248,27 +248,6 @@ if($total_amount!=0)
     overflow: auto;
 }
 </style>
-
-<style>
-		.header {
-			position: sticky;
-			top:0;
-      background: #000;
-      text-align:center;
-		}
-		.containerForTable {
-			width: 102.5%;
-			height: 600px;
-			overflow: auto;
-		}
-		h1{
-			color: green;
-		}
-    table, th, td {
-  border: 1px solid #ebe8e8;
-  /* border-collapse: collapse; */
-}
-	</style>
 <link rel="shortcut icon" href="images/favicon.png" />
   
 <script type="text/javascript">
@@ -436,44 +415,49 @@ if($total_amount!=0)
                     </div> 
                     
                     <div class="row">
-<!-- progress table -->
-        <div class="">
-        <?php if(isset($_REQUEST['progressmonth'])&&$_REQUEST['progressmonth']!=''&&$_REQUEST['progressmonth']!=NULL&&$_REQUEST['progressmonth']=='2022-09-30')
-        {?>
-            <div class="table-responsive containerForTable">
-                    <table class="table" >
-                      <thead style=" position: sticky;top: 0;  background: #A9D2F8;" class="thead-dark">
-                                  <tr  style="text-align:center;" >
-                                    <th class="header px-1" scope="col" colspan="11"><a>Progress as of September 2022</a></th>
+                    <div class="col-lg-12 d-flex flex-column">
+                        <div class="row flex-grow" >
+                         <div class="col-12 grid-margin stretch-card">
+                          <div class="card card-rounded">
+                              <div class="card-body">
+                                 <div class="table-responsive pt-1">
+<?php if(isset($_REQUEST['progressmonth'])&&$_REQUEST['progressmonth']!=''&&$_REQUEST['progressmonth']!=NULL&&$_REQUEST['progressmonth']=='2022-09-30')
+{?>
+                    <table class="table table-bordered" width="100%" align="center">
+                      <thead style="text-align:center; background-color:#A9D2F8">
+
+
+                                  <tr>
+                                    <th colspan="11"><a>Progress as of September 2022</a></th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col" rowspan="4" align="center">Contractor</th>
-                                    <th class="header px-1" scope="col" rowspan="4">PKG</th>
-                                    <th class="header px-1" scope="col" rowspan="4">Lot</th>
-                                    <th class="header px-1" scope="col" rowspan="4" >Original<br>
+                                    <th rowspan="4" align="center">Contractor</th>
+                                    <th rowspan="4">PKG</th>
+                                    <th rowspan="4">Lot</th>
+                                    <th rowspan="4" >Original<br>
                                       Contract<br/>Amount<br>
                                       (INR)</th>
-                                    <th class="header px-1" scope="col" rowspan="4" >Effective<br>
+                                    <th rowspan="4" >Effective<br>
                                       Date</th>
-                                    <th class="header px-1" scope="col" rowspan="2" >Closing<br>
+                                    <th rowspan="2" >Closing<br>
                                       Date</th>
-                                    <th class="header px-1" scope="col" colspan="3">Physical Progress (%)</th>
-                                    <th class="header px-1" scope="col" colspan="2" rowspan="2" >Financial Progress (%)</th>
+                                    <th colspan="3">Physical Progress (%)</th>
+                                    <th colspan="2" rowspan="2" >Financial Progress (%)</th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col" rowspan="3" >Cum.<br/>Progress</th>
-                                    <th class="header px-1" scope="col" >Target*</th>
-                                    <th class="header px-1" scope="col" rowspan="3" >This <br>Month<br/>Progress</th>
+                                    <th rowspan="3" >Cum.<br/>Progress</th>
+                                    <th>Target*</th>
+                                    <th rowspan="3" >This <br>Month<br/>Progress</th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col" >Original</th>
-                                    <th class="header px-1" scope="col" >Original</th>
-                                    <th class="header px-1" scope="col" rowspan="2" >Actual.<br/>Expndit.</th>
-                                    <th class="header px-1" scope="col" rowspan="2" >Disb.</th>
+                                    <th>Original</th>
+                                    <th>Original</th>
+                                    <th rowspan="2" >Actual.<br/>Expndit.</th>
+                                    <th rowspan="2" >Disb.</th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col" >Revised</th>
-                                    <th class="header px-1" scope="col" >Revised</th>
+                                    <th>Revised</th>
+                                    <th>Revised</th>
                                   </tr>
                                   </thead>
                                     <tbody>
@@ -978,46 +962,44 @@ if($total_amount!=0)
                                   </tr>
                                   </tbody>
                                 </table>
-          </div>
                                 <?php }
 								else
 								{?>
-                         <div class="containerForTable table-responsive">
-                                <table class="table">
-                      <thead  style=" position: sticky;top: 0;  background: #A9D2F8;" class="thead-dark" >
+                                <table class="table table-bordered" width="100%" align="center" style="position:relative; min-height:100px; overflow:auto">
+                      <thead style="text-align:center; background-color:#A9D2F8">
 
 
-                                  <tr style="text-align:center;" >
-                                    <th colspan="11" class="header px-1" scope="col"><a>Progress as of October 2022</a></th>
+                                  <tr>
+                                    <th colspan="11" style="position:sticky;top:0;"><a>Progress as of October 2022</a></th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col" rowspan="4" align="center">Contractor</th>
-                                    <th class="header px-1" scope="col" rowspan="4">PKG</th>
-                                    <th class="header px-1" scope="col" rowspan="4">Lot</th>
-                                    <th class="header px-1" scope="col" rowspan="4" >Original<br>
+                                    <th style="position:sticky;top:0;"  rowspan="4" align="center">Contractor</th>
+                                    <th style="position:sticky;top:0;"  rowspan="4">PKG</th>
+                                    <th style="position:sticky;top:0;"  rowspan="4">Lot</th>
+                                    <th style="position:sticky;top:0;"  rowspan="4" >Original<br>
                                       Contract<br/>Amount<br>
                                       (INR)</th>
-                                    <th class="header px-1" scope="col" rowspan="4" >Effective<br>
+                                    <th style="position:sticky;top:0;"  rowspan="4" >Effective<br>
                                       Date</th>
-                                    <th class="header px-1" scope="col" rowspan="2" >Closing<br>
+                                    <th style="position:sticky;top:0;"  rowspan="2" >Closing<br>
                                       Date</th>
-                                    <th class="header px-1" scope="col" colspan="3">Physical Progress (%)</th>
-                                    <th class="header px-1" scope="col" colspan="2" rowspan="2" >Financial Progress (%)</th>
+                                    <th style="position:sticky;top:0;"  colspan="3">Physical Progress (%)</th>
+                                    <th style="position:sticky;top:0;"  colspan="2" rowspan="2" >Financial Progress (%)</th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col" rowspan="3" >Cum.<br/>Progress</th>
-                                    <th class="header px-1" scope="col">Target*</th>
-                                    <th class="header px-1" scope="col" rowspan="3" >This <br>Month<br/>Progress</th>
+                                    <th style="position:sticky;top:0;"  rowspan="3" >Cum.<br/>Progress</th>
+                                    <th style="position:sticky;top:0;" >Target*</th>
+                                    <th style="position:sticky;top:0;"  rowspan="3" >This <br>Month<br/>Progress</th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col">Original</th>
-                                    <th class="header px-1" scope="col">Original</th>
-                                    <th class="header px-1" scope="col" rowspan="2" >Actual.<br/>Expndit.</th>
-                                    <th class="header px-1" scope="col" rowspan="2" >Disb.</th>
+                                    <th style="position:sticky;top:0;" >Original</th>
+                                    <th style="position:sticky;top:0;" >Original</th>
+                                    <th style="position:sticky;top:0;"  rowspan="2" >Actual.<br/>Expndit.</th>
+                                    <th style="position:sticky;top:0;"  rowspan="2" >Disb.</th>
                                   </tr>
                                   <tr>
-                                    <th class="header px-1" scope="col">Revised</th>
-                                    <th class="header px-1" scope="col">Revised</th>
+                                    <th style="position:sticky;top:0;" >Revised</th>
+                                    <th style="position:sticky;top:0;" >Revised</th>
                                   </tr>
                                   </thead>
                                     <tbody>
@@ -1522,10 +1504,151 @@ if($total_amount!=0)
                                     </tr>
                                   </tbody>
                                 </table>
-                       </div>
                                 <?php }?>
-      </div>
-<!-- end of progress table -->
+                                </div>
+                            </div>
+                        </div>
+						</div>
+                        </div>
+                       
+                      </div>
+                      <?php /*?><div class="col-lg-8 d-flex flex-column">
+                        
+                        <div class="row flex-grow" >
+                         <div class="col-12 grid-margin stretch-card">
+
+                         <!-- %%%%%%%%%%%%%%%% -->
+
+                          <!-- Start  BODY section -->
+                          <div id="wowslider-container1">
+
+                          <div class="ws_images" style="width:1200px">
+                          <ul>
+                         
+                          <?php
+                                
+                          $SqlB="SELECT * FROM banner where visible_status = 1";
+	                      $objDbB->dbQuery($SqlB);
+                          $ICount = $objDbB->totalRecords();
+                          if($ICount>0)
+                          {
+	                      while($brows=$objDbB->dbFetchArray()) 
+                              {  
+                               
+                          ?>
+                          <div >
+                          <li><img src="pages/project-tools/photo_slider/<?php echo 'banner/'.$brows['banner_image'];?>"  />
+                          <div class="centered">
+                          <!-- <h3>
+                            <?php 
+                          echo $brows['banner_title']; 
+                          ?>
+                          </h3> -->
+                          </div>
+                           </li>
+                          </div>
+                         
+                            
+                            <?php  
+                                
+                                  }
+                                  } 
+                          ?>
+
+                          </ul>
+                          </div> 
+
+                          <div class="ws_bullets">
+                            
+                            
+                          </div>
+
+
+                          </div>	
+                        
+
+
+<!-- <div class="ws_shadow"></div> -->
+  <script src="lightbox/js/lightbox.min.js"></script>
+  <link href="lightbox/css/lightbox.css" rel="stylesheet"> 
+</div>	
+
+<!-- End WOWSlider.com BODY section -->
+						</div>
+                       
+                      </div><?php */?>
+                     <!-- <div class="col-lg-4 d-flex flex-column">-->
+                            
+                          <?php /*?><div class="col-md-6 col-lg-12 grid-margin stretch-card">
+                            <div class="card card-rounded">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-sm-6">
+                                    <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
+                                      <div class="circle-progress-width">
+                                        <div id="totalVisitors" class="progressbar-js-circle pr-2"></div>
+                                      </div>
+                                      <div>
+                                        <p class="text-small mb-2"><strong>CPI</strong></p>
+                                        <h4 class="mb-0 fw-bold">0</h4>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <div class="circle-progress-width">
+                                        <div id="visitperday" class="progressbar-js-circle pr-2"></div>
+                                      </div>
+                                      <div>
+                                        <p class="text-small mb-2"><strong>SPI</strong></p>
+                                        <h4 class="mb-0 fw-bold">0</h4>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div><?php */?>
+                         <?php /*?><div class="col-md-6 col-lg-12 grid-margin stretch-card">
+                            <div class="card card-rounded">
+                              <div class="card-body">
+                                <h4 class="card-title  card-title-dash">Recent Events</h4>
+                                <?php
+ 	$objNews->setProperty("status", "Y");
+	$objNews->setProperty("orderby", "newsdate desc");
+	$objNews->setProperty("limit", 6);
+	$objNews->lstNews();
+	$Sql = $objNews->getSQL();
+	if($objNews->totalRecords() >= 1){
+		$sno = 1;
+		while($rows = $objNews->dbFetchArray(1)){
+			
+			?>
+                                <div class="list align-items-center border-bottom py-2">
+                                  <div class="wrapper w-100">
+                                    <p class="mb-2 font-weight-medium">
+                                      <?php echo $rows['title'];?>
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-calendar text-muted me-1"></i>
+                                        <p class="mb-0 text-small text-muted"><?php echo $rows['newsdate'];?></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <?php } }?>
+                                                                <div class="list align-items-center pt-3">
+                                  <div class="wrapper w-100">
+                                    <p class="mb-0">
+                                      <a href="#" class="fw-bold text-primary">Show all <i class="mdi mdi-arrow-right ms-2"></i></a>
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div><?php */?> 
+                     <!-- </div>-->
                     </div>
                   </div>
                   <div class="tab-pane fade show" id="audiences" role="tabpanel" aria-labelledby="audiences"> 
@@ -1679,52 +1802,64 @@ if($total_amount!=0)
                      
                     <div class="row">
             
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <!-- <h4 class="card-title">User Logs</h4> -->
+                 
+                  <div class="template-demo">
+                   <div class="chartjs-bar-wrapper mt-3">
+                                
+                    <!-- logs -->
+                    <div>
 
-                    <h4><strong><?php echo "Procurement Plan"?></strong><span style="text-align:right; float:right"><a href="<?php echo "index.php"; ?>">Back</a></span></h4>
-<div class="containerForTable table-responsive">
-                    <table class="table" >
-                      <thead style=" position: sticky;top: 0;  background: #A9D2F8;" class="thead-dark">
 
-  <tr >
-    <td class="header py-2" style="text-align:left;" scope="col" colspan="21"><strong>Project Name: P000315 - India Assam Distribution System    Enhancement</strong></td>
+
+<h4><?php echo "Procurement Plan"?> <span style="text-align:right; float:right"><a href="<?php echo "index.php"; ?>">Back</a></span></h4>
+<div class="table-responsive">
+                    <table class="table table-bordered" width="100%" >
+                      <thead style="text-align:center; background-color:#A9D2F8">
+
+  <tr>
+    <td colspan="21"><strong>Project Name: P000315 - India Assam Distribution System    Enhancement</strong></td>
   </tr>
   <tr>
-    <td class="header py-2" style="text-align:left;" scope="col" colspan="21"><strong>Procurement Plan</strong></td>
+    <td colspan="21"><strong>Procurement Plan</strong></td>
   </tr>
   <tr>
-    <td class="header py-2" style="text-align:left;" scope="col" colspan="14"><strong>Project    Implementation Entity: Assam Power Distribution Company Limited</strong></td>
-    <td class="header py-2"  scope="col" colspan="4"><strong>Revision No:03</strong></td>
-    <td class="header px-1 py-2" scope="col" colspan="3"><strong>Revision Date: 14/09/2022</strong></td>
+    <td colspan="14"><strong>Project    Implementation Entity: Assam Power Distribution Company Limited</strong></td>
+    <td colspan="4"><strong>Revision No:03</strong></td>
+    <td colspan="3"><strong>Revision Date: 14/09/2022</strong></td>
   </tr>
   <tr>
-    <td class="header px-1" scope="col" colspan="11"><strong>Specific Procurement Arrangements</strong></td>
-    <td class="header px-1" scope="col" colspan="2" ><strong>Scheduled Dates</strong></td>
-    <td class="header px-1" scope="col" colspan="6" ><strong>Contract Award Details</strong></td>
-    <td class="header px-1" scope="col" rowspan="2"  style="line-height: 1.6;"><strong>Contract <br>Implementation<br> Status</strong></td>
-    <td class="header px-1" scope="col" rowspan="2"  style="line-height: 1.6;"><strong>Remarks</strong><br>
+    <td colspan="11"><strong>Specific Procurement Arrangements</strong></td>
+    <td colspan="2" ><strong>Scheduled Dates</strong></td>
+    <td colspan="6" ><strong>Contract Award Details</strong></td>
+    <td rowspan="2" ><strong>Contract Implementation Status</strong></td>
+    <td rowspan="2" ><strong>Remarks</strong><br>
       <strong>(such as Advance Contracting)</strong></td>
   </tr>
   <tr>
-    <td class="header px-1" scope="col" ><strong>Sl No.</strong></td>
-    <td class="header px-1" scope="col" ><strong>Contract    No.</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;"><strong>Package<br>No</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Description    of Contract</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Cost <br> Estimate <br>in INR crores</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Cost <br> Estimate in <br> USD (million)</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Funding<br>Source by <br>AIIB (%)</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Funding<br>Source by<br>Others (%)</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Procurement<br>Category</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Procurement<br> Method</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Review<br>by Bank</strong><br>
+    <td><strong>Sl No.</strong></td>
+    <td><strong>Contract    No.</strong></td>
+    <td><strong>Package    No</strong></td>
+    <td><strong>Description    of Contract</strong></td>
+    <td><strong>Cost Estimate in INR crores</strong></td>
+    <td><strong>Cost    Estimate in USD (million)</strong></td>
+    <td><strong>Funding    Source by AIIB (%)</strong></td>
+    <td><strong>Funding    Source by Others (%)</strong></td>
+    <td><strong>Procurement    Category</strong></td>
+    <td><strong>Procurement    Method</strong></td>
+    <td><strong>Review    by Bank</strong><br>
      <strong> (Prior or Post)</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Tender <br> Invitation<br> (MM/YY)</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Contract <br> Signing<br>(MM/YY)</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Contract<br> Price in <br>Local Currency</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Contract<br> Price<br>(US$ millions)</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Contractor&rsquo;s Name</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Origin    of<br> Country</strong></td>
-    <td class="header px-1" scope="col style="line-height: 1.6;"" ><strong>Contract<br> Signing Date</strong></td>
-    <td class="header px-1" scope="col" style="line-height: 1.6;" ><strong>Contract <br> Period<br> (Months)</strong></td>
+    <td><strong>Tender    Invitation (MM/YY)</strong></td>
+    <td><strong>Contract    Signing (MM/YY)</strong></td>
+    <td ><strong>Contract    Price in Local Currency</strong></td>
+    <td ><strong>Contract    Price (US$ millions)</strong></td>
+    <td ><strong>Contractor&rsquo;s    Name</strong></td>
+    <td><strong>Origin    of Country</strong></td>
+    <td ><strong>Contract    Signing Date</strong></td>
+    <td ><strong>Contract    Period (Months)</strong></td>
   </tr>
   </thead>
   <tbody>
@@ -3556,6 +3691,36 @@ if($total_amount!=0)
   </tr>
   </tbody>
 </table></div>
+                    </div>  
+                    <!-- logs -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-md-6 d-flex align-items-stretch">
+              <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Dashbaord Logs</h4>
+                       
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Project Tools Logs</h4>
+                     
+                      <div class="row">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
             
             
           </div>
